@@ -1,4 +1,4 @@
-# CYBABO Wallet APP SDK for Android - Sample
+# CYBABO Wallet APP SDK for iOS - Sample
 
 Sample app for integrating Cybavo Wallet App SDK, https://www.cybavo.com/wallet-app-sdk/
 
