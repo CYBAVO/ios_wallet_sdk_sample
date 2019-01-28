@@ -1,0 +1,91 @@
+//Copyright (c) 2019 Cybavo. All rights reserved.
+
+import UIKit
+import CYBAVOWallet
+import GoogleSignIn
+import SwiftyUserDefaults
+
+class SettingsController : UITableViewController {
+    @IBOutlet var settingTableView: UITableView!
+    @IBOutlet weak var avatarImageView: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var endpointLabel: UILabel!
+    @IBOutlet weak var versionCell: UITableViewCell!
+    @IBOutlet weak var accounCell: UITableViewCell!
+    
+    override func viewDidLoad() {
+        settingTableView.delegate = self
+        endpointLabel.text = CYBAVOWallet.shared.endPoint
+        versionCell.selectionStyle = .none
+        accounCell.selectionStyle = .none
+        guard let userData = UserDefaults.standard.value(forKey: "googlesignin_user") as? Data else {
+            NSLog("no googlesignin_user")
+            return
+        }
+        
+        guard let user = try! NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(userData) else {
+            NSLog("unable to unarchive")
+            return
+        }
+        
+        if let user = user as? GIDGoogleUser {
+            nameLabel.text = user.profile.name
+            emailLabel.text = user.profile.email
+            
+            getData(from: user.profile.imageURL(withDimension: 50)) { data, response, error in
+                guard let data = data, error == nil else { return }
+                DispatchQueue.main.async() {
+                    self.avatarImageView.image = UIImage(data: data)
+                }
+            }
+        }
+    }
+    
+    @IBAction func onSignOut(_ sender: Any) {
+        let alert = UIAlertController(title: "Sign out", message: "Are you sure you want to sign out?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {action in
+            GIDSignIn.sharedInstance().signOut()
+            Auth.shared.signOut()
+            self.dismiss(animated: true)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {action in
+           
+        }))
+        self.present(alert, animated: true)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("select \(indexPath.section)")
+        switch (indexPath.section, indexPath.row) {
+        case (2, 0):
+            onSetEndpoint()
+        default:
+            break
+        }
+        settingTableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    
+    func onSetEndpoint() {
+        let alert = UIAlertController(title: "Wallet service endpoint", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addTextField(configurationHandler: { textField in
+            textField.keyboardType = .URL
+            textField.isSecureTextEntry = false
+            textField.text = CYBAVOWallet.shared.endPoint
+            textField.becomeFirstResponder()
+        })
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            if let endpoint = alert.textFields?.first?.text {
+                CYBAVOWallet.shared.endPoint = endpoint
+                Defaults[.endpoint] = endpoint
+            }
+        }))
+        
+        self.present(alert, animated: true)
+    }
+}

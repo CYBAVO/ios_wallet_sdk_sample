@@ -1,0 +1,76 @@
+PODS:
+  - Alamofire (4.8.1)
+  - AlamofireObjectMapper (5.2.0):
+    - Alamofire (~> 4.7)
+    - ObjectMapper (~> 3.4)
+  - CryptoSwift (0.13.1)
+  - CYBAVOWallet (1.0.1):
+    - Alamofire (~> 4.8)
+    - AlamofireObjectMapper (~> 5.2)
+    - CryptoSwift
+    - ObjectMapper (~> 3.4)
+    - SwiftyUserDefaults (= 4.0.0-alpha.1)
+  - GoogleSignIn (4.4.0):
+    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
+    - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
+    - GTMSessionFetcher/Core (~> 1.1)
+  - GoogleToolboxForMac/DebugUtils (2.2.0):
+    - GoogleToolboxForMac/Defines (= 2.2.0)
+  - GoogleToolboxForMac/Defines (2.2.0)
+  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.0)":
+    - GoogleToolboxForMac/DebugUtils (= 2.2.0)
+    - GoogleToolboxForMac/Defines (= 2.2.0)
+    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.0)"
+  - "GoogleToolboxForMac/NSString+URLArguments (2.2.0)"
+  - GTMSessionFetcher/Core (1.2.1)
+  - ObjectMapper (3.4.2)
+  - SwiftEventBus (3.0.1)
+  - SwiftyUserDefaults (4.0.0-alpha.1)
+  - Toast-Swift (4.0.1)
+
+DEPENDENCIES:
+  - CYBAVOWallet (~> 1.0.1)
+  - GoogleSignIn
+  - SwiftEventBus (from `https://github.com/cesarferreira/SwiftEventBus.git`, tag `3.0.1`)
+  - Toast-Swift (~> 4.0.0)
+
+SPEC REPOS:
+  https://bitbucket.org/cybavo/Specs.git:
+    - CYBAVOWallet
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - AlamofireObjectMapper
+    - CryptoSwift
+    - GoogleSignIn
+    - GoogleToolboxForMac
+    - GTMSessionFetcher
+    - ObjectMapper
+    - SwiftyUserDefaults
+    - Toast-Swift
+
+EXTERNAL SOURCES:
+  SwiftEventBus:
+    :git: https://github.com/cesarferreira/SwiftEventBus.git
+    :tag: 3.0.1
+
+CHECKOUT OPTIONS:
+  SwiftEventBus:
+    :git: https://github.com/cesarferreira/SwiftEventBus.git
+    :tag: 3.0.1
+
+SPEC CHECKSUMS:
+  Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
+  AlamofireObjectMapper: 92b6ce2423a9d159e686f6a1d514a009bf903ddc
+  CryptoSwift: ff68c35a53e03177d31aaa2c1e8b3e010aeed6cb
+  CYBAVOWallet: 3dc952be9972668ebb42b8fdbec15393a54544f4
+  GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
+  GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
+  GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
+  ObjectMapper: 0d4402610f4e468903ae64629eec4784531e5c51
+  SwiftEventBus: 87ccaeceff91b748775e37751ae3a81ec815b3d5
+  SwiftyUserDefaults: cebe0ff9472f52699772a514b6f7155861d8069b
+  Toast-Swift: e42a638589a2f95036b4bb7626cfbdde7daf0393
+
+PODFILE CHECKSUM: ebc2cc49bb5b7bbe785fd74bfb4ae748a593a7d1
+
+COCOAPODS: 1.5.3
