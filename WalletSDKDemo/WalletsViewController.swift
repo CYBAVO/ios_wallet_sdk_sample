@@ -105,7 +105,11 @@ extension WalletsViewController : UITableViewDataSource {
                         for (walletId, balance) in result.balance {
                             if let (wallet, labelView) = callbackData[walletId]{
                                 DispatchQueue.main.async {
-                                    labelView.text = "\(balance.balance) \(wallet.currencyName)"
+                                    if wallet.tokenAddress.count > 0 {
+                                        labelView.text = "\(balance.tokenBalance) \(wallet.currencyName)"
+                                    } else {
+                                        labelView.text = "\(balance.balance) \(wallet.currencyName)"
+                                    }
                                 }
                             }
                         }

@@ -179,11 +179,11 @@
         <scene sceneID="NjC-j7-LdE">
             <objects>
                 <viewController title="New wallet" id="p1X-1h-a2L" customClass="AddWalletController" customModule="WalletSDKDemo" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="B9v-Ju-3Fu">
+                    <view key="view" contentMode="scaleToFill" id="B9v-Ju-3Fu">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkA-8M-8ny">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkA-8M-8ny">
                                 <rect key="frame" x="29" y="594" width="317" height="41"/>
                                 <color key="backgroundColor" red="0.2470588235" green="0.31764705879999999" blue="0.70980392160000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -208,14 +208,14 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <pickerView contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qdR-Lb-Ucc">
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qdR-Lb-Ucc">
                                 <rect key="frame" x="16" y="141" width="320" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="1h4-wZ-Wne"/>
                                     <constraint firstAttribute="width" constant="320" id="mMA-Ss-brv"/>
                                 </constraints>
                             </pickerView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" text="Parent Wallet" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bnk-8L-yWa" userLabel="Parent Wallet">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Parent Wallet" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bnk-8L-yWa" userLabel="Parent Wallet">
                                 <rect key="frame" x="16" y="249" width="179" height="36"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -224,15 +224,15 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <pickerView contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vhU-RO-2Dw" userLabel="Parent picker">
-                                <rect key="frame" x="16" y="284" width="320" height="100"/>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vhU-RO-2Dw" userLabel="Parent picker">
+                                <rect key="frame" x="16" y="141" width="320" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="csS-wI-kNt"/>
                                     <constraint firstAttribute="width" constant="320" id="jT8-9m-aXO"/>
                                 </constraints>
                             </pickerView>
-                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name this wallet" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xoD-3P-P9d">
-                                <rect key="frame" x="16" y="408" width="250" height="30"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name this wallet" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xoD-3P-P9d">
+                                <rect key="frame" x="16" y="265" width="250" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="4KV-He-Fxc"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="DtL-Or-eGI"/>
@@ -296,7 +296,6 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="428" id="GAL-zY-q35"/>
-                                    <constraint firstAttribute="width" constant="375" id="j7n-4W-kUJ"/>
                                 </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="idTransactionItem" rowHeight="80" id="zyH-ss-OhE" customClass="TransactionItemCell" customModule="WalletSDKDemo" customModuleProvider="target">
@@ -326,8 +325,11 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qxb-o9-MTv" userLabel="Address">
-                                                    <rect key="frame" x="307.5" y="49" width="26.5" height="12"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qxb-o9-MTv" userLabel="TxID">
+                                                    <rect key="frame" x="133.5" y="49" width="200.5" height="12"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="200.5" id="4L0-yd-Shh"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>

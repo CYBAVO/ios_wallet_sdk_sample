@@ -386,42 +386,6 @@
             </objects>
             <point key="canvasLocation" x="2133.5999999999999" y="178.56071964017991"/>
         </scene>
-        <!--Answer List Controller-->
-        <scene sceneID="WAE-kY-BvR">
-            <objects>
-                <tableViewController id="4x1-pT-lBH" customClass="AnswerListController" customModule="WalletSDKDemo" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="3pX-e4-ebi">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="aV5-IN-edS">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="aV5-IN-edS" id="HK2-t3-uif">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="4x1-pT-lBH" id="kIt-yX-LMQ"/>
-                            <outlet property="delegate" destination="4x1-pT-lBH" id="2Ie-tu-lJ4"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="TMt-To-b4Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <navigationBar contentMode="scaleToFill" id="xGX-va-GKE">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <items>
-                        <navigationItem title="Questions" id="Tsy-Ud-6XU">
-                            <barButtonItem key="backBarButtonItem" title="Back" id="CPG-Nc-epc"/>
-                        </navigationItem>
-                    </items>
-                </navigationBar>
-            </objects>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="d8D-bg-grU">
             <objects>

@@ -54,7 +54,8 @@ class MainViewController: UIViewController {
                     self.present(vc, animated: false)
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                print("getUserStateResult failed \(error)")
                 break
             }
         }

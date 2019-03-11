@@ -29,7 +29,6 @@ class WalletDetailController : UIViewController {
         historyTableView.addSubview(refreshControl)
         
         walletAddressTextView.text = w.address
-        refreshHistory()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -126,7 +125,11 @@ class WalletDetailController : UIViewController {
             switch result {
             case .success(let result):
                 print("getBalance \(result)")
-                self.balanceTextView.text = "\(result.balance[w.walletId]?.balance ?? "") \(w.currencyName)"
+                if w.tokenAddress.count > 0 {
+                    self.balanceTextView.text = "\(result.balance[w.walletId]?.tokenBalance ?? "") \(w.currencyName)"
+                } else {
+                    self.balanceTextView.text = "\(result.balance[w.walletId]?.balance ?? "") \(w.currencyName)"
+                }
                 break
             case .failure(let error):
                 print("getBalance \(error)")
@@ -165,7 +168,7 @@ extension WalletDetailController : UITableViewDataSource {
             cell.directionLabel.layer.cornerRadius = 8
 
             cell.amountLabel.text = tx.amount
-            cell.addressLabel.text = tx.toAddress
+            cell.addressLabel.text = tx.txId
             cell.contentView.alpha = tx.pending ? 0.5 : 1.0
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy/MM/dd"

@@ -4,7 +4,7 @@ PODS:
     - Alamofire (~> 4.7)
     - ObjectMapper (~> 3.4)
   - CryptoSwift (0.13.1)
-  - CYBAVOWallet (1.0.1):
+  - CYBAVOWallet (1.0.5):
     - Alamofire (~> 4.8)
     - AlamofireObjectMapper (~> 5.2)
     - CryptoSwift
@@ -29,7 +29,7 @@ PODS:
   - Toast-Swift (4.0.1)
 
 DEPENDENCIES:
-  - CYBAVOWallet (~> 1.0.1)
+  - CYBAVOWallet (~> 1.0.5)
   - GoogleSignIn
   - SwiftEventBus (from `https://github.com/cesarferreira/SwiftEventBus.git`, tag `3.0.1`)
   - Toast-Swift (~> 4.0.0)
@@ -62,7 +62,7 @@ SPEC CHECKSUMS:
   Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
   AlamofireObjectMapper: 92b6ce2423a9d159e686f6a1d514a009bf903ddc
   CryptoSwift: ff68c35a53e03177d31aaa2c1e8b3e010aeed6cb
-  CYBAVOWallet: 3dc952be9972668ebb42b8fdbec15393a54544f4
+  CYBAVOWallet: 13835333a20e930399c3be69d38253a2e5dc0c8e
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
@@ -71,6 +71,6 @@ SPEC CHECKSUMS:
   SwiftyUserDefaults: cebe0ff9472f52699772a514b6f7155861d8069b
   Toast-Swift: e42a638589a2f95036b4bb7626cfbdde7daf0393
 
-PODFILE CHECKSUM: ebc2cc49bb5b7bbe785fd74bfb4ae748a593a7d1
+PODFILE CHECKSUM: 4837369240eb85e4758802925d83a1c246a35868
 
 COCOAPODS: 1.5.3

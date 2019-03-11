@@ -54,6 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     func initWalletSDK(){
         var endpoint = Defaults[.endpoint]
+        endpoint = "http://192.168.99.230:8080/v1/mw"
         if endpoint == nil || (endpoint?.isEmpty)! {
             endpoint = Bundle.main.object(forInfoDictionaryKey: "endpoint_default") as? String
             if let newValue = endpoint {
@@ -64,6 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         if let endpoint = endpoint {
             CYBAVOWallet.shared.endPoint = endpoint
         }
+        CYBAVOWallet.shared.apiCode = "{{your api code}}"
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
