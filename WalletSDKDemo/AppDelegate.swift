@@ -11,7 +11,6 @@ import GoogleSignIn
 import Foundation
 import SwiftEventBus
 import CYBAVOWallet
-import SwiftyUserDefaults
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
@@ -37,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        registerDefaultsFromSettingsBundle()
         
         UINavigationBar.appearance().barTintColor = UIColor(red: 63.0/255.0, green: 81.0/255.0, blue: 197.0/255.0, alpha: 1.0)
         UINavigationBar.appearance().tintColor = UIColor.white
@@ -53,19 +53,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     }
 
     func initWalletSDK(){
-        var endpoint = Defaults[.endpoint]
-        endpoint = "http://192.168.99.230:8080/v1/mw"
-        if endpoint == nil || (endpoint?.isEmpty)! {
-            endpoint = Bundle.main.object(forInfoDictionaryKey: "endpoint_default") as? String
-            if let newValue = endpoint {
-                Defaults[.endpoint] = newValue
+        guard let endpoints = UserDefaults.standard.string(forKey: "endpoints"), let apicode = UserDefaults.standard.string(forKey: "apicode") else {
+            print("missing settings")
+            return
+        }
+        print("endpoints [\(endpoints)]")
+        CYBAVOWallet.shared.endPoint = endpoints
+        print("apicode [\(apicode)]")
+        CYBAVOWallet.shared.apiCode = apicode
+    }
+    
+    func registerDefaultsFromSettingsBundle()
+    {
+        let settingsUrl = Bundle.main.url(forResource: "Settings", withExtension: "bundle")!.appendingPathComponent("Root.plist")
+        let settingsPlist = NSDictionary(contentsOf:settingsUrl)!
+        let preferences = settingsPlist["PreferenceSpecifiers"] as! [NSDictionary]
+        
+        var defaultsToRegister = Dictionary<String, Any>()
+        
+        for preference in preferences {
+            guard let key = preference["Key"] as? String else {
+                continue
             }
+            defaultsToRegister[key] = preference["DefaultValue"]
         }
-
-        if let endpoint = endpoint {
-            CYBAVOWallet.shared.endPoint = endpoint
-        }
-        CYBAVOWallet.shared.apiCode = "{{your api code}}"
+        UserDefaults.standard.register(defaults: defaultsToRegister)
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
@@ -76,6 +88,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        
+        Wallets.shared.clearSecureToken() { result in
+            print("clearSecureToken \(result)")
+        }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

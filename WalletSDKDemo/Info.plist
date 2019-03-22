@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>CYBAVOWalletDev</string>
+	<string>CYBAVOWallet</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -59,6 +59,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>endpoint_default</key>
-	<string>http://192.168.99.230:8080/v1/mw</string>
+	<string>https://mvault.cybavo.com/v1/mw</string>
 </dict>
 </plist>

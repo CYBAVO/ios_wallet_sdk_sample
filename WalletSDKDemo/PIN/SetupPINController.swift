@@ -37,7 +37,25 @@ extension SetupPINController : BackupChallengeDelegate {
             return
         }
         
-        Auth.shared.setupPinCode(pinCode: pc, challenge1: challenges[0], challenge2: challenges[1], challenge3: challenges[2]) { result in
+        Auth.shared.setupPinCode(pinCode: pc) { result in
+            switch result {
+            case .success(_):
+                self.setupBackupChallenge(challenges)
+                break
+            case .failure(let error):
+                self.onSetPINFailed(error: error)
+                break
+            }
+        }
+    }
+    
+    func setupBackupChallenge(_ challenges: [BackupChallenge]) {
+        guard let pc = pinCode, challenges.count == 3 else {
+            NavigationHelper.back(from: self)
+            return
+        }
+        
+        Auth.shared.setupBackupChallenge(pinCode: pc, challenge1: challenges[0], challenge2: challenges[1], challenge3: challenges[2]) { result in
             switch result {
             case .success(_):
                 self.onSetPINSuccessed(backNum: -1) {

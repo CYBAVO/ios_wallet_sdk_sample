@@ -11,7 +11,7 @@ target 'WalletSDKDemo' do
   pod 'GoogleSignIn'
   pod 'SwiftEventBus', :tag => '3.0.1', :git => 'https://github.com/cesarferreira/SwiftEventBus.git'
   pod 'Toast-Swift', '~> 4.0.0'
-  pod 'CYBAVOWallet', '~> 1.0.5'
+  pod 'CYBAVOWallet', '~> 1.1.0'
 
   target 'WalletSDKDemoTests' do
     inherit! :search_paths

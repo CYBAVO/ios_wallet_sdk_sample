@@ -444,7 +444,7 @@
                                 <color key="backgroundColor" red="0.2470588235" green="0.31764705879999999" blue="0.70980392160000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" editable="NO" text="0 ETH" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gau-50-Zqc">
                                 <rect key="frame" x="87" y="140" width="203" height="38"/>
@@ -882,51 +882,8 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Development" id="pad-fE-3T6">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="96" id="AkW-pY-xlJ">
-                                        <rect key="frame" x="0.0" y="372" width="375" height="96"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AkW-pY-xlJ" id="iMg-nX-QMS">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="95.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wallet service endpoint" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nhc-O7-O5F" userLabel="title enpoint">
-                                                    <rect key="frame" x="80" y="19" width="179" height="20.5"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="20.5" id="wU1-gZ-G73"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_endpoint.png" translatesAutoresizingMaskIntoConstraints="NO" id="WJW-AY-WJv">
-                                                    <rect key="frame" x="16" y="24" width="48" height="48"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="48" id="9I8-Xl-bK8"/>
-                                                        <constraint firstAttribute="width" constant="48" id="wE1-Cq-pOp"/>
-                                                    </constraints>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gxs-4V-rRg" userLabel="url">
-                                                    <rect key="frame" x="80" y="53" width="42" height="24"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="24" id="6az-Fn-SiU"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="Nhc-O7-O5F" firstAttribute="top" secondItem="iMg-nX-QMS" secondAttribute="topMargin" constant="8" id="5US-aJ-9tX"/>
-                                                <constraint firstItem="Nhc-O7-O5F" firstAttribute="leading" secondItem="WJW-AY-WJv" secondAttribute="trailing" constant="16" id="HOG-qM-oPK"/>
-                                                <constraint firstItem="Gxs-4V-rRg" firstAttribute="leading" secondItem="WJW-AY-WJv" secondAttribute="trailing" constant="16" id="OWx-o3-QAw"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="Gxs-4V-rRg" secondAttribute="bottom" constant="8" id="bDQ-sI-CnX"/>
-                                                <constraint firstItem="WJW-AY-WJv" firstAttribute="leading" secondItem="iMg-nX-QMS" secondAttribute="leading" constant="16" id="cgP-60-rbn"/>
-                                                <constraint firstItem="WJW-AY-WJv" firstAttribute="centerY" secondItem="iMg-nX-QMS" secondAttribute="centerY" id="g1S-GJ-RNb"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="96" id="HNE-YU-D5v">
-                                        <rect key="frame" x="0.0" y="468" width="375" height="96"/>
+                                        <rect key="frame" x="0.0" y="372" width="375" height="96"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="HNE-YU-D5v" id="4VB-Gk-6Jc">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="95.5"/>
@@ -980,7 +937,6 @@
                         <outlet property="accounCell" destination="e0T-a5-cw4" id="QlL-QM-3bn"/>
                         <outlet property="avatarImageView" destination="Id1-PD-YTN" id="oip-4O-qUN"/>
                         <outlet property="emailLabel" destination="xIv-Eg-A4T" id="vQ8-ic-Dhm"/>
-                        <outlet property="endpointLabel" destination="Gxs-4V-rRg" id="k3f-oi-d5W"/>
                         <outlet property="nameLabel" destination="ftt-a7-KNX" id="VZ6-l3-nrr"/>
                         <outlet property="settingTableView" destination="3lE-fP-NmD" id="14H-kA-cQC"/>
                         <outlet property="versionCell" destination="HNE-YU-D5v" id="Y14-Dc-Oa0"/>
@@ -1144,7 +1100,6 @@
         <image name="ic_change_pin.png" width="72" height="72"/>
         <image name="ic_create_wallet.png" width="25" height="25"/>
         <image name="ic_edit.png" width="25" height="25"/>
-        <image name="ic_endpoint.png" width="72" height="72"/>
         <image name="ic_forgot_pin.png" width="72" height="72"/>
         <image name="ic_more.png" width="24" height="24"/>
         <image name="ic_qr_code_scan.png" width="72" height="72"/>

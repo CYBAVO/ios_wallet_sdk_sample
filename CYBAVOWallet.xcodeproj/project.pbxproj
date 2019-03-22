@@ -15,6 +15,7 @@
 		BF2E1AC321EDBF530034EBDF /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E1AC221EDBF530034EBDF /* SettingsController.swift */; };
 		BF2E1AC521EDE6E00034EBDF /* RecoveryRequestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E1AC421EDE6E00034EBDF /* RecoveryRequestController.swift */; };
 		BF2E1AC921EF06410034EBDF /* NavigationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E1AC821EF06410034EBDF /* NavigationHelper.swift */; };
+		BF2E67012244911600A6B671 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BF2E67002244911600A6B671 /* Settings.bundle */; };
 		BF47F1A321E6E9FD004A3849 /* WalletDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF47F1A221E6E9FD004A3849 /* WalletDetailController.swift */; };
 		BF47F1A521E6EA51004A3849 /* DepositController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF47F1A421E6EA51004A3849 /* DepositController.swift */; };
 		BF47F1A721E6EA70004A3849 /* WithdrawController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF47F1A621E6EA70004A3849 /* WithdrawController.swift */; };
@@ -33,7 +34,6 @@
 		BF8B1CBD21D5C88C00C593C2 /* WalletSDKDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8B1CBC21D5C88C00C593C2 /* WalletSDKDemoUITests.swift */; };
 		BF8B1CCB21D5F03100C593C2 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8B1CCA21D5F03100C593C2 /* MainViewController.swift */; };
 		BF8B1CCD21D5F26200C593C2 /* WalletsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8B1CCC21D5F26200C593C2 /* WalletsViewController.swift */; };
-		BF9B364F21F04DED00187C4F /* DefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9B364E21F04DED00187C4F /* DefaultsKeys.swift */; };
 		BFA8DD7821DEF9080057E545 /* InputPINController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA8DD7721DEF9080057E545 /* InputPINController.swift */; };
 		BFA8DD7A21DEFBD10057E545 /* SetupAnswerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA8DD7921DEFBD10057E545 /* SetupAnswerController.swift */; };
 		BFA8DD7C21DEFC6B0057E545 /* PIN.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFA8DD7B21DEFC6B0057E545 /* PIN.storyboard */; };
@@ -82,6 +82,7 @@
 		BF2E1AC221EDBF530034EBDF /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		BF2E1AC421EDE6E00034EBDF /* RecoveryRequestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryRequestController.swift; sourceTree = "<group>"; };
 		BF2E1AC821EF06410034EBDF /* NavigationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationHelper.swift; sourceTree = "<group>"; };
+		BF2E67002244911600A6B671 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		BF47F1A221E6E9FD004A3849 /* WalletDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletDetailController.swift; sourceTree = "<group>"; };
 		BF47F1A421E6EA51004A3849 /* DepositController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepositController.swift; sourceTree = "<group>"; };
 		BF47F1A621E6EA70004A3849 /* WithdrawController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawController.swift; sourceTree = "<group>"; };
@@ -106,7 +107,6 @@
 		BF8B1CBE21D5C88C00C593C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BF8B1CCA21D5F03100C593C2 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		BF8B1CCC21D5F26200C593C2 /* WalletsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsViewController.swift; sourceTree = "<group>"; };
-		BF9B364E21F04DED00187C4F /* DefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsKeys.swift; sourceTree = "<group>"; };
 		BFA8DD7721DEF9080057E545 /* InputPINController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputPINController.swift; sourceTree = "<group>"; };
 		BFA8DD7921DEFBD10057E545 /* SetupAnswerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupAnswerController.swift; sourceTree = "<group>"; };
 		BFA8DD7B21DEFC6B0057E545 /* PIN.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PIN.storyboard; sourceTree = "<group>"; };
@@ -223,7 +223,6 @@
 				BFF3E20821FADF1B008D9A22 /* Debouncer.swift */,
 				BF2E1A9E21ECBC9C0034EBDF /* CurrencyHelper.swift */,
 				BF2E1AC821EF06410034EBDF /* NavigationHelper.swift */,
-				BF9B364E21F04DED00187C4F /* DefaultsKeys.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -231,6 +230,7 @@
 		BF8B1C9721D5C88A00C593C2 /* WalletSDKDemo */ = {
 			isa = PBXGroup;
 			children = (
+				BF2E67002244911600A6B671 /* Settings.bundle */,
 				BF9B364B21F04C1600187C4F /* Extensions */,
 				BFCDE08D21EF242200695243 /* View */,
 				BF47F1B321E87F56004A3849 /* Helpers */,
@@ -417,6 +417,7 @@
 				BF8B1CA721D5C88B00C593C2 /* LaunchScreen.storyboard in Resources */,
 				BF8B1CA421D5C88B00C593C2 /* Assets.xcassets in Resources */,
 				BF8B1CA221D5C88A00C593C2 /* Main.storyboard in Resources */,
+				BF2E67012244911600A6B671 /* Settings.bundle in Resources */,
 				BFCDE08F21EF244300695243 /* CurrencyView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -498,6 +499,7 @@
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftEventBus/SwiftEventBus.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftOTP/SwiftOTP.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyUserDefaults/SwiftyUserDefaults.framework",
 				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
 			);
@@ -512,6 +514,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftEventBus.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftOTP.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyUserDefaults.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
 			);
@@ -568,7 +571,6 @@
 				BF2E1A9F21ECBC9C0034EBDF /* CurrencyHelper.swift in Sources */,
 				BF47F1B721E8836E004A3849 /* UITextField.swift in Sources */,
 				BF2E1AC521EDE6E00034EBDF /* RecoveryRequestController.swift in Sources */,
-				BF9B364F21F04DED00187C4F /* DefaultsKeys.swift in Sources */,
 				BF47F1AE21E726A1004A3849 /* Currency.swift in Sources */,
 				BF8B1C9921D5C88A00C593C2 /* AppDelegate.swift in Sources */,
 				BF47F1A721E6EA70004A3849 /* WithdrawController.swift in Sources */,

@@ -22,6 +22,7 @@ class WithdrawController : UIViewController {
             textField?.setBottomBorder()
             textField?.delegate = self
         }
+        amountTextField.addDoneCancelToolbar()
         feePicker.dataSource = self
         feePicker.delegate = self
         sendButton.isUserInteractionEnabled = false
@@ -87,11 +88,40 @@ class WithdrawController : UIViewController {
     }
     
     @IBAction func onSend(_ sender: Any) {
+        createTransactionBySecureToken()
+    }
+    
+    func createTransactionBySecureToken(){
         guard let w = wallet, let toAddress = addressTextField.text, let amount = amountTextField.text, let fee = transactionFee[safe: feePicker.selectedRow(inComponent: 0)]?.amount else {
             return
         }
-        print("createTransaction toAddress: \(toAddress), amount: \(amount)")
         
+        Wallets.shared.createTransaction(fromWalletId: w.walletId, toAddress: toAddress, amount: amount, transactionFee: fee, description: "") { result in
+            switch result {
+            case .success(_):
+                let successAlert = UIAlertController(title: "Withdraw successed", message: nil, preferredStyle: .alert)
+                successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
+                    self.navigationController?.popViewController(animated: true)
+                }))
+                self.present(successAlert, animated: true)
+                print("createTransaction onSuccess")
+                break
+            case .failure(let error):
+                if error == ApiError.ErrDestinationNotInOutgoingAddress {
+                    let failedAlert = UIAlertController(title: "Withdraw failed", message: error.description, preferredStyle: .alert)
+                    failedAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
+                        self.navigationController?.popViewController(animated: true)
+                    }))
+                    self.present(failedAlert, animated: true)
+                }
+                self.requestSecureToken()
+                print("createTransaction onFailed")
+                break
+            }
+        }
+    }
+    
+    func requestSecureToken(){
         let alert = UIAlertController(title: "Input PIN code", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addTextField(configurationHandler: { textField in
@@ -101,21 +131,17 @@ class WithdrawController : UIViewController {
         })
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
             if let pincode = alert.textFields?.first?.text {
-                Wallets.shared.createTransaction(fromWalletId: w.walletId, toAddress: toAddress, amount: amount, transactionFee: fee, description: "", pinCode: pincode) { result in
+                Wallets.shared.requestSecureToken(pinCode: pincode) { result in
                     switch result {
                     case .success(_):
-                        let successAlert = UIAlertController(title: "Withdraw successed", message: nil, preferredStyle: .alert)
-                        successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
-                            self.navigationController?.popViewController(animated: true)
-                        }))
-                        self.present(successAlert, animated: true)
-                        print("createTransaction onSuccess")
+                        print("requestSecureToken onSuccess")
+                        self.createTransactionBySecureToken()
                         break
                     case .failure(let error):
                         let failAlert = UIAlertController(title: "Withdraw failed", message: error.description, preferredStyle: .alert)
                         failAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                         self.present(failAlert, animated: true)
-                        print("createTransaction onFailed")
+                        print("requestSecureToken onFailed")
                         break
                     }
                 }
@@ -123,7 +149,6 @@ class WithdrawController : UIViewController {
         }))
         
         self.present(alert, animated: true)
-        
     }
 }
 

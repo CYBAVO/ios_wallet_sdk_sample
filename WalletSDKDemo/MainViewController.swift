@@ -43,7 +43,6 @@ class MainViewController: UIViewController {
         Auth.shared.getUserState { result in
             switch result {
             case .success(let getUserStateResult):
-                print("getUserStateResult \(getUserStateResult.userState.setPin)")
                 if getUserStateResult.userState.setPin {
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let vc = storyboard.instantiateViewController(withIdentifier: "idWalletsNavi") as! UINavigationController
@@ -73,7 +72,7 @@ class MainViewController: UIViewController {
     
     func doSignIn(token: String) {
         print("cybavo doSignIn")
-        Auth.shared.signIn(token: token) { result in
+        Auth.shared.signIn(token: token, identityProvider: "Google") { result in
             switch result {
             case .success(_):
                 print("cybavo signed in")
@@ -90,7 +89,7 @@ class MainViewController: UIViewController {
     }
     
     func doSignUp(token: String) {
-        Auth.shared.signUp(token: token) { result in
+        Auth.shared.signUp(token: token, identityProvider: "Google") { result in
             switch result {
             case .success(_):
                 print("cybavo signed up")
