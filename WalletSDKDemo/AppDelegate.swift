@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         
         //redirectLogToDocuments()
         
-        GIDSignIn.sharedInstance().clientID = "992053546599-7d8jrjpq7o8nfu0hbr6hib18pshug5u2.apps.googleusercontent.com"
+        GIDSignIn.sharedInstance().clientID = "MY_GOOGLE_SIGN_IN_WEB_CLI_ID"
         GIDSignIn.sharedInstance().delegate = self
         
         initWalletSDK()
