@@ -92,7 +92,7 @@ class AddWalletController : UIViewController {
                         print("createWallet onSuccess")
                         break
                     case .failure(let error):
-                        let failAlert = UIAlertController(title: "Create wallet failed", message: error.description, preferredStyle: .alert)
+                        let failAlert = UIAlertController(title: "Create wallet failed", message: error.name, preferredStyle: .alert)
                         failAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                         self.present(failAlert, animated: true)
                         print("createWallet onFailed")

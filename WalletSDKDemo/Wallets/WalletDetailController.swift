@@ -108,6 +108,16 @@ class WalletDetailController : UIViewController {
             self.dismiss(animated: true)
             return
         }
+        Wallets.shared.getWallet(walletId: w.walletId) { result in 
+            switch result {
+            case .success(let result):
+                print("getWallet \(result)")
+                break
+            case .failure(let error):
+                print("getWallet \(error)")
+                break
+            }
+        }
         Wallets.shared.getHistory(currency: w.currency, tokenAddress: w.tokenAddress, walletAddress: w.address, start: 0, count: 20) { result in
             switch result {
             case .success(let result):
@@ -121,14 +131,14 @@ class WalletDetailController : UIViewController {
             }
             self.refreshControl.endRefreshing()
         }
-        Wallets.shared.getBalance(addresses: [w.walletId:w]) { result in
+        Wallets.shared.getBalances(addresses: [w.walletId:w]) { result in
             switch result {
             case .success(let result):
                 print("getBalance \(result)")
                 if w.tokenAddress.count > 0 {
-                    self.balanceTextView.text = "\(result.balance[w.walletId]?.tokenBalance ?? "") \(w.currencyName)"
+                    self.balanceTextView.text = "\(result.balance[w.walletId]?.tokenBalance ?? "") \(w.currencySymbol)"
                 } else {
-                    self.balanceTextView.text = "\(result.balance[w.walletId]?.balance ?? "") \(w.currencyName)"
+                    self.balanceTextView.text = "\(result.balance[w.walletId]?.balance ?? "") \(w.currencySymbol)"
                 }
                 break
             case .failure(let error):
@@ -168,7 +178,7 @@ extension WalletDetailController : UITableViewDataSource {
             cell.directionLabel.layer.cornerRadius = 8
 
             cell.amountLabel.text = tx.amount
-            cell.addressLabel.text = tx.txId
+            cell.addressLabel.text = tx.txid
             cell.contentView.alpha = tx.pending ? 0.5 : 1.0
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy/MM/dd"

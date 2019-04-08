@@ -1,10 +1,10 @@
 PODS:
-  - Alamofire (4.8.1)
+  - Alamofire (4.8.2)
   - AlamofireObjectMapper (5.2.0):
     - Alamofire (~> 4.7)
     - ObjectMapper (~> 3.4)
-  - CryptoSwift (0.13.1)
-  - CYBAVOWallet (1.1.0):
+  - CryptoSwift (1.0.0)
+  - CYBAVOWallet (1.1.34):
     - Alamofire (~> 4.8)
     - AlamofireObjectMapper (~> 5.2)
     - CryptoSwift
@@ -63,10 +63,10 @@ CHECKOUT OPTIONS:
     :tag: 3.0.1
 
 SPEC CHECKSUMS:
-  Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   AlamofireObjectMapper: 92b6ce2423a9d159e686f6a1d514a009bf903ddc
-  CryptoSwift: ff68c35a53e03177d31aaa2c1e8b3e010aeed6cb
-  CYBAVOWallet: bcc99a3be257f701708b85e7fa19208afcae20b7
+  CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
+  CYBAVOWallet: d7d32b651d0a799bf6c6265a0a61fb8e4dff0f1d
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
@@ -78,4 +78,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 7b21388d48d417a35a052d949b6ecde5c48c8190
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.1

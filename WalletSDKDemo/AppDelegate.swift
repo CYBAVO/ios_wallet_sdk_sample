@@ -58,9 +58,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             return
         }
         print("endpoints [\(endpoints)]")
-        CYBAVOWallet.shared.endPoint = endpoints
+        WalletSdk.shared.endPoint = endpoints
         print("apicode [\(apicode)]")
-        CYBAVOWallet.shared.apiCode = apicode
+        WalletSdk.shared.apiCode = apicode
     }
     
     func registerDefaultsFromSettingsBundle()

@@ -30,7 +30,7 @@ class WithdrawController : UIViewController {
             self.navigationController?.popViewController(animated: true)
             return
         }
-        currencyView.setSymbol(w.currencyName)
+        currencyView.setSymbol(w.currencySymbol)
 
         print("WithdrawController wallet \(w)")
         
@@ -49,11 +49,11 @@ class WithdrawController : UIViewController {
             }
         }
         
-        Wallets.shared.getBalance(addresses: [w.walletId: w]) { result in
+        Wallets.shared.getBalances(addresses: [w.walletId: w]) { result in
             switch result {
             case .success(let result):
                 print("getBalance \(result)")
-                self.balanceTextView.text = "\(result.balance[w.walletId]?.balance ?? "") \(w.currencyName)"
+                self.balanceTextView.text = "\(result.balance[w.walletId]?.balance ?? "") \(w.currencySymbol)"
                 break
             case .failure(let error):
                 print("getBalance \(error)")
@@ -65,8 +65,8 @@ class WithdrawController : UIViewController {
             switch result {
             case .success(let result):
                 print("getWalletUsage \(result)")
-                self.amountUsageTextView.text = "\(result.dailyTransactionAmountUsage) \(w.currencyName) Today"
-                self.amountQuotaTextView.text = "\(result.dailyTransactionAmountQuota) \(w.currencyName) Daily"
+                self.amountUsageTextView.text = "\(result.dailyTransactionAmountUsage) \(w.currencySymbol) Today"
+                self.amountQuotaTextView.text = "\(result.dailyTransactionAmountQuota) \(w.currencySymbol) Daily"
                 break
             case .failure(let error):
                 print("getWalletUsage \(error)")
@@ -108,7 +108,7 @@ class WithdrawController : UIViewController {
                 break
             case .failure(let error):
                 if error == ApiError.ErrDestinationNotInOutgoingAddress {
-                    let failedAlert = UIAlertController(title: "Withdraw failed", message: error.description, preferredStyle: .alert)
+                    let failedAlert = UIAlertController(title: "Withdraw failed", message: error.name, preferredStyle: .alert)
                     failedAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
                         self.navigationController?.popViewController(animated: true)
                     }))
@@ -138,7 +138,7 @@ class WithdrawController : UIViewController {
                         self.createTransactionBySecureToken()
                         break
                     case .failure(let error):
-                        let failAlert = UIAlertController(title: "Withdraw failed", message: error.description, preferredStyle: .alert)
+                        let failAlert = UIAlertController(title: "Withdraw failed", message: error.name, preferredStyle: .alert)
                         failAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                         self.present(failAlert, animated: true)
                         print("requestSecureToken onFailed")

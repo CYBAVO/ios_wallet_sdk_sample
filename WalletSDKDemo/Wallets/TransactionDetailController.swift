@@ -22,7 +22,7 @@ class TransactionDetailController : UIViewController {
             labelToAddress.text = item.toAddress
             labelAmount.text = item.amount
             labelFee.text = item.transactionFee
-            labelTxId.text = item.txId
+            labelTxId.text = item.txid
           
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy/MM/dd hh:mm:ss"
@@ -39,14 +39,14 @@ class TransactionDetailController : UIViewController {
             directionLabel.layer.cornerRadius = 8
         }
         if let wallet = wallet {
-            currencyView.setSymbol(wallet.currencyName)
+            currencyView.setSymbol(wallet.currencySymbol)
             currencyView.contentView.backgroundColor = UIColor.white
             currencyView.currencyLabel.textColor = UIColor.black
         }
     }
     @IBAction func onExplore(_ sender: Any) {
         if let w = wallet, let item = transaction {
-            let uri = CurrencyHelper.getBlockExplorerUri(currency: w.currency, tokenAddress: w.tokenAddress, txid: item.txId)
+            let uri = CurrencyHelper.getBlockExplorerUri(currency: w.currency, tokenAddress: w.tokenAddress, txid: item.txid)
             if let url = URL(string: uri){
                 UIApplication.shared.open(url, options: [:])
             }

@@ -42,7 +42,7 @@ class RestorePINController : InputPINUI {
                 break
             case .failure(let error):
                 print("getRestoreQuestions \(error)")
-                let failAlert = UIAlertController(title: "Unable to get questions", message: error.description, preferredStyle: .alert)
+                let failAlert = UIAlertController(title: "Unable to get questions", message: error.name, preferredStyle: .alert)
                 failAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                 self.present(failAlert, animated: true)
                 break
@@ -69,7 +69,7 @@ class RestorePINController : InputPINUI {
                     break
                 case .failure(let error):
                     print("verifyRestoreQuestions \(error)")
-                    let failAlert = UIAlertController(title: "Verify failed", message: error.description, preferredStyle: .alert)
+                    let failAlert = UIAlertController(title: "Verify failed", message: error.name, preferredStyle: .alert)
                     failAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self.present(failAlert, animated: true)
                     break

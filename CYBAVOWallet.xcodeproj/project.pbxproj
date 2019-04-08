@@ -447,7 +447,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -458,7 +458,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		5D461930148810ED23952611 /* [CP] Check Pods Manifest.lock */ = {
@@ -491,7 +491,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireObjectMapper/AlamofireObjectMapper.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
@@ -520,7 +520,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AC4AD099E25A7E5A60AE613E /* [CP] Check Pods Manifest.lock */ = {

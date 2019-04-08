@@ -17,7 +17,7 @@ class InputPINUI : UIViewController {
         self.present(successAlert, animated: true)
     }
     func onSetPINFailed(error: ApiError){
-        let failAlert = UIAlertController(title: "Setup PIN failed", message: error.description, preferredStyle: .alert)
+        let failAlert = UIAlertController(title: "Setup PIN failed", message: error.name, preferredStyle: .alert)
         failAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         self.present(failAlert, animated: true)
     }

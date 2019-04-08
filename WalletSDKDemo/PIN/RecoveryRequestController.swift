@@ -21,7 +21,7 @@ class RecoveryRequestController : InputPINUI {
             switch result {
             case .success(let result):
                 print("forgotPinCode \(result)")
-                self.handleLabel.text = "Handle number \(result.handleNumer)"
+                self.handleLabel.text = "Handle number \(result.handleNum)"
                 self.forgotButton.isUserInteractionEnabled = false
                 break
             case .failure(let error):
@@ -45,7 +45,7 @@ class RecoveryRequestController : InputPINUI {
             case .failure(let error):
                 print("verifyRecoveryCode \(error)")
                 DispatchQueue.main.async {
-                    let failAlert = UIAlertController(title: "Invalid recovery code", message: error.description, preferredStyle: .alert)
+                    let failAlert = UIAlertController(title: "Invalid recovery code", message: error.name, preferredStyle: .alert)
                     failAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self.present(failAlert, animated: true)
                 }
@@ -96,7 +96,7 @@ extension RecoveryRequestController : BackupChallengeDelegate {
             return
         }
         
-        Auth.shared.recoverPinCode(pinCode: pc, challenge1: challenges[0], challenge2: challenges[1], challenge3: challenges[2], recoveryCode: recoveryCode) { result in
+        Auth.shared.recoverPinCode(pinCode: pc, recoveryCode: recoveryCode) { result in
             switch result {
             case .success(_):
                 print("recovery pin code result")

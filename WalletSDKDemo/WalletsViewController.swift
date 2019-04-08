@@ -80,8 +80,8 @@ extension WalletsViewController : UITableViewDataSource {
         
         if let wallet = wallets[safe: indexPath.row] {
             cell.walletNameLabel.text = wallet.name
-            cell.currencyNameLabel.text = wallet.currencyName
-            cell.currencyImageView.image = UIImage(named: wallet.currencyName.replacingOccurrences(of: "-", with: "_").lowercased())
+            cell.currencyNameLabel.text = wallet.currencySymbol
+            cell.currencyImageView.image = UIImage(named: wallet.currencySymbol.replacingOccurrences(of: "-", with: "_").lowercased())
         }
 
         return cell
@@ -99,16 +99,16 @@ extension WalletsViewController : UITableViewDataSource {
                     }
                     self.pendingBalanceRequest = [:]
                 }
-                Wallets.shared.getBalance(addresses: balanceRequest) { result in
+                Wallets.shared.getBalances(addresses: balanceRequest) { result in
                     switch result {
                     case .success(let result):
                         for (walletId, balance) in result.balance {
                             if let (wallet, labelView) = callbackData[walletId]{
                                 DispatchQueue.main.async {
                                     if wallet.tokenAddress.count > 0 {
-                                        labelView.text = "\(balance.tokenBalance) \(wallet.currencyName)"
+                                        labelView.text = "\(balance.tokenBalance) \(wallet.currencySymbol)"
                                     } else {
-                                        labelView.text = "\(balance.balance) \(wallet.currencyName)"
+                                        labelView.text = "\(balance.balance) \(wallet.currencySymbol)"
                                     }
                                 }
                             }

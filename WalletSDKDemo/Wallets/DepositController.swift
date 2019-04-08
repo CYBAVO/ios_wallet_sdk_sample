@@ -16,7 +16,7 @@ class DepositController : UIViewController {
     
     override func viewDidLoad() {
         if let wallet = wallet {
-            currencyView.setSymbol(wallet.currencyName)
+            currencyView.setSymbol(wallet.currencySymbol)
             
             let data = wallet.address.data(using: String.Encoding.isoLatin1, allowLossyConversion: false)
             
@@ -26,7 +26,7 @@ class DepositController : UIViewController {
             filter?.setValue("Q", forKey: "inputCorrectionLevel")
             
             walletAddressLabel.text = wallet.address
-            descriptionLabel.text = "Send only \(wallet.currencyName) to this deposit address. Sending any other coin or token to the address may result in the loss of your deposit"
+            descriptionLabel.text = "Send only \(wallet.currencySymbol) to this deposit address. Sending any other coin or token to the address may result in the loss of your deposit"
             if let sourceImage = filter?.outputImage {
                 let scaleX = 200 / sourceImage.extent.size.width
                 let scaleY = 200 / sourceImage.extent.size.height
