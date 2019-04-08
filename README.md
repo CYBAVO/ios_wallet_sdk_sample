@@ -44,8 +44,9 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
     ```
 2. Run ```pod install``` to install all dependencies.
 3. Open ```CYBAVOWallet.xcworkspace``` in xcode.
-4. Edit ```endpoint_default``` in ```info.plist``` to point to your Wallet Service endpoont.
-5. Now you can run it on your device!
+4. Edit ```Default Value``` in ```Settings.bundle``` -> ```Root.plist``` -> ```Preference Items``` -> ```Item 1``` to point to your Wallet Service endpoont. (or you can edit it later in Settings)
+5. Edit ```Default Value``` in ```Settings.bundle``` -> ```Root.plist``` -> ```Preference Items``` -> ```Item 2``` to API Code. (or you can edit it later in Settings)
+6. Now you can run it on your device!
 
 # Features
 - Sign in / Sign up with 3rd-party account system - Google Account
