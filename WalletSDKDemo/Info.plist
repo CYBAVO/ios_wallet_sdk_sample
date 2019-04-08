@@ -58,7 +58,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>endpoint_default</key>
-	<string>https://mvault.cybavo.com/v1/mw</string>
 </dict>
 </plist>
