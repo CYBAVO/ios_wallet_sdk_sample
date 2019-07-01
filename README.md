@@ -37,7 +37,7 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
 # Setup
 1. In ~/.ssh/ create a file called config with contents based on this:
     ```
-    Host bitbucket.org-cybavo
+    Host bitbucket.org
     HostName bitbucket.org
     User git
     IdentityFile ~/.ssh/{{your private key}}
