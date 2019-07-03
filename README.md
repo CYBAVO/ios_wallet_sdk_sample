@@ -52,6 +52,18 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
 7. Edit `AppDelegate.swift` ➜ `MY_GOOGLE_SIGN_IN_WEB_CLI_ID` to your Google sign-in client ID
 8. Now you can run it on your device!
 
+# Initialization
+Add the following code to your AppDelegate.swift file.
+```
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+       
+        WalletSdk.shared.endPoint = <Your endpoint url>
+        WalletSdk.shared.apiCode = <Your API code>
+
+        return true
+    }
+```    
+
 # Features
 - Sign in / Sign up with 3rd-party account system - Google Account
 - Wallet Creation / Editing
