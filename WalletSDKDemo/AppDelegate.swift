@@ -16,7 +16,8 @@ import CYBAVOWallet
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if let error = error {
-            print("\(error.localizedDescription)")
+            print("Google signin delegate error: \(error.localizedDescription)")
+            SwiftEventBus.post("google_signed_in_failed")
         } else {
             // Perform any operations on signed in user here.
             let userId = user.userID                  // For client-side use only!

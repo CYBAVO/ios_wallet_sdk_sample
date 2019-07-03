@@ -29,6 +29,10 @@ class MainViewController: UIViewController {
             self.doSignIn(token: idToken)
         }
         
+        SwiftEventBus.onMainThread(self, name: "google_signed_in_failed") { result in
+            self.showSignIn()
+        }
+        
         let transform = CGAffineTransform(scaleX: 2.0, y: 2.0);
         indicatorView.transform = transform
     }
@@ -83,6 +87,7 @@ class MainViewController: UIViewController {
                 if error == .ErrRegistrationRequired {
                     self.doSignUp(token: token)
                 }
+                self.showSignIn()
                 break
             }
         }
