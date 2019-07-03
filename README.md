@@ -34,7 +34,7 @@ A group of cybersecurity experts making crypto-currency wallet secure and usable
 
 We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exchanges and stable-coin ico teams, please feel free to contact us when your company or business need any help in cryptocurrency operation.
 
-# Setup
+# Run the demo app
 1. In ~/.ssh/ create a file called config with contents based on this:
     ```
     Host bitbucket.org
@@ -52,7 +52,7 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
 7. Edit `AppDelegate.swift` ➜ `MY_GOOGLE_SIGN_IN_WEB_CLI_ID` to your Google sign-in client ID
 8. Now you can run it on your device!
 
-# Initialization
+# Initialization in your app
 Add the following code to your AppDelegate.swift file.
 ```
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
