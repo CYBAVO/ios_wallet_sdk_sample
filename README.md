@@ -42,12 +42,15 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
     User git
     IdentityFile ~/.ssh/{{your private key}}
     ```
-2. Run ```pod install``` to install all dependencies.
-3. Open ```CYBAVOWallet.xcworkspace``` in xcode.
-4. Edit `Settings.bundle`/`Root.plist` ➜ `SERVICE_ENDPOINT` to your Wallet Service endpoont. (or edit it later in Settings)
-5. Edit `Settings.bundle`/`Root.plist` ➜ `SERVICE_API_CODE` to fill in your API Code. (or edit it later in Settings)
-6. Edit `AppDelegate.swift` ➜ `MY_GOOGLE_SIGN_IN_WEB_CLI_ID` to your Google sign-in client ID
-7. Now you can run it on your device!
+2. Edit `Podfile`, Replace `source 'https://bitbucket.org/cybavo/Specs.git'` with
+  * ➜ `https://bitbucket.org/cybavo/Specs.git` if using Xcode 10.1
+  * ➜ `https://bitbucket.org/cybavo/Specs_501.git` if using Xcode 10.2.1
+3. Run ```pod install``` to install all dependencies.
+4. Open ```CYBAVOWallet.xcworkspace``` in xcode.
+5. Edit `Settings.bundle`/`Root.plist` ➜ `SERVICE_ENDPOINT` to your Wallet Service endpoont. (or edit it later in Settings)
+6. Edit `Settings.bundle`/`Root.plist` ➜ `SERVICE_API_CODE` to fill in your API Code. (or edit it later in Settings)
+7. Edit `AppDelegate.swift` ➜ `MY_GOOGLE_SIGN_IN_WEB_CLI_ID` to your Google sign-in client ID
+8. Now you can run it on your device!
 
 # Features
 - Sign in / Sign up with 3rd-party account system - Google Account
