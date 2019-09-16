@@ -20,7 +20,7 @@
 			<key>Key</key>
 			<string>endpoints</string>
 			<key>DefaultValue</key>
-			<string>SERVICE_ENDPOINT</string>
+			<string>https://mvault.cybavo.com/v1/mw</string>
 			<key>IsSecure</key>
 			<false/>
 			<key>KeyboardType</key>
@@ -38,7 +38,7 @@
 			<key>Key</key>
 			<string>apicode</string>
 			<key>DefaultValue</key>
-			<string>SERVICE_API_CODE</string>
+			<string></string>
 		</dict>
 	</array>
 </dict>

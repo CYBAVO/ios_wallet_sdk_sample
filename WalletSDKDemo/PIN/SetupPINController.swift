@@ -40,7 +40,16 @@ extension SetupPINController : BackupChallengeDelegate {
         Auth.shared.setupPinCode(pinCode: pc) { result in
             switch result {
             case .success(_):
-                self.setupBackupChallenge(challenges)
+                Wallets.shared.createWallet(currency: 0, tokenAddress: "", parentWalletId: 0, name: "BTC", pinCode: pc) {result in
+                    switch result {
+                    case .success(_):
+                        self.setupBackupChallenge(challenges)
+                    case .failure(let error):
+                        self.onSetPINFailed(error: error)
+                        break
+                    }
+                }
+                
                 break
             case .failure(let error):
                 self.onSetPINFailed(error: error)

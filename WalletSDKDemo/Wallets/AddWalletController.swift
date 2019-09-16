@@ -11,6 +11,7 @@ protocol PickerWalletSource {
 class AddWalletController : UIViewController {
     @IBOutlet weak var currenciesPicker: UIPickerView!
     @IBOutlet weak var walletName: UITextField!
+    @IBOutlet weak var accountName: UITextField!
     @IBOutlet weak var parentLabel: UITextView!
     @IBOutlet weak var parentPicker: UIPickerView!
     @IBOutlet var noParrentConstraint: NSLayoutConstraint!
@@ -25,8 +26,10 @@ class AddWalletController : UIViewController {
     
     override func viewDidLoad() {
         walletName.delegate = self
+        accountName.delegate = self
         parentLabel.isHidden = true
         parentPicker.isHidden = true
+        accountName.isHidden = true
         noParrentConstraint.isActive = true
         hasParentConstraint.isActive = false
         parentPickerDataSource = ParentPickerDataSource(source: self)
@@ -64,12 +67,49 @@ class AddWalletController : UIViewController {
             }
         }
     }
-    
-    @IBAction func onSubmit(_ sender: Any) {
-        guard let currency = supportedCurrencies[safe: currenciesPicker.selectedRow(inComponent: 0)], let name = walletName.text else {
-            print("onsubmit currency or name not ready")
+    private func validateForEos(currency: Currency){
+        guard let accountNameStr = accountName.text else {
             return
         }
+        if let regex = try? NSRegularExpression(pattern: "^[a-z1-5]{12}+$", options: .caseInsensitive) {
+            let result = regex.matches(in: accountNameStr, options: .withoutAnchoringBounds, range: NSMakeRange(0, accountNameStr.count))
+            if (result.count == 0) {
+                let alert = UIAlertController(title: "Account Name only allow a-z, 1-5. length 12", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                self.present(alert, animated: true)
+                return
+            }
+        }
+
+        Wallets.shared.getEosAccountValid(accountName: accountNameStr) {  result in
+            switch result {
+            case .success(let result):
+                print("createWallet onSuccess")
+                guard result.valid else{
+                    let successAlert = UIAlertController(title: "EOS account invalid", message: nil, preferredStyle: .alert)
+                    successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(successAlert, animated: true)
+                    return
+                }
+                guard !result.exist else{
+                    let successAlert = UIAlertController(title: "EOS account already exists", message: nil, preferredStyle: .alert)
+                    successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(successAlert, animated: true)
+                    return
+                }
+                self.inputPinCode(currency: currency)
+                break
+            case .failure(let error):
+                let failAlert = UIAlertController(title: "validateEosAccount failed", message: error.name, preferredStyle: .alert)
+                failAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                self.present(failAlert, animated: true)
+                print("validateEosAccount onFailed")
+                break
+            }
+        }
+    }
+    
+    func inputPinCode(currency: Currency){
         let alert = UIAlertController(title: "Input PIN code", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addTextField(configurationHandler: { textField in
@@ -81,7 +121,11 @@ class AddWalletController : UIViewController {
             if let pincode = alert.textFields?.first?.text {
                 let parentWalletId = self.parentWallet?.walletId ?? Int64(0)
                 print("parentWalletId \(parentWalletId)")
-                Wallets.shared.createWallet(currency: currency.currency, tokenAddress: currency.tokenAddress, parentWalletId: parentWalletId, name: name, pinCode: pincode) {  result in
+                var extras: [String:String] = [:]
+                if currency.currency == CurrencyHelper.Coin.EOS.rawValue{
+                    extras["account_name"] = self.accountName.text
+                }
+                Wallets.shared.createWallet(currency: currency.currency, tokenAddress: currency.tokenAddress, parentWalletId: parentWalletId, name: self.walletName.text!, pinCode: pincode, extras: extras) {  result in
                     switch result {
                     case .success(_):
                         let successAlert = UIAlertController(title: "Create wallet successed", message: nil, preferredStyle: .alert)
@@ -101,8 +145,19 @@ class AddWalletController : UIViewController {
                 }
             }
         }))
-        
+
         self.present(alert, animated: true)
+    }
+    @IBAction func onSubmit(_ sender: Any) {
+        guard let currency = supportedCurrencies[safe: currenciesPicker.selectedRow(inComponent: 0)], let name = walletName.text else {
+            print("onsubmit currency or name not ready")
+            return
+        }
+        if currency.currency == CurrencyHelper.Coin.EOS.rawValue {
+            validateForEos(currency: currency)
+        }else{
+            inputPinCode(currency: currency)
+        }
     }
 }
 
@@ -154,12 +209,18 @@ extension AddWalletController : UIPickerViewDelegate {
             parentWallets = nil
             parentWallet = nil
         }
+        accountName.isHidden = currency.currency != CurrencyHelper.Coin.EOS.rawValue
     }
 }
 
 extension AddWalletController : UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        /**focus next UITextField*/
+        if textField == walletName && !accountName.isHidden{
+            accountName.becomeFirstResponder()
+        }else{
+            textField.resignFirstResponder()
+        }
         return true
     }
 }

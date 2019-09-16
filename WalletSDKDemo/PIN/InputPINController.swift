@@ -41,7 +41,7 @@ class InputPINController : UIViewController, PinCodeInputUI {
     }
 }
 
-let PINCODE_LENGTH = 8
+let PINCODE_LENGTH = 6
 extension InputPINController : UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let currentCharacterCount = textField.text?.count ?? 0

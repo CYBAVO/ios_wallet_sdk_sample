@@ -11,6 +11,8 @@ import GoogleSignIn
 import Foundation
 import SwiftEventBus
 import CYBAVOWallet
+import UserNotifications
+@_exported import PKHUD
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
@@ -50,6 +52,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         
         initWalletSDK()
 
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {[weak self] granted, error in
+                
+                print("Permission granted: \(granted)")
+                guard granted else { return }
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+        }
+        
         return true
     }
 
@@ -120,6 +131,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         return GIDSignIn.sharedInstance().handle(url as URL?,
                                                  sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
                                                  annotation: options[UIApplication.OpenURLOptionsKey.annotation])
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+        let token = tokenParts.joined()
+        
+        WalletSdk.shared.deviceToken = token
+        
+        print("Device Token: \(token)")
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("Failed to register: \(error)")
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
+        ) {
+        print("didReceiveRemoteNotification \(userInfo)")
+        guard let data = userInfo["data"] as? [String: AnyObject] else {
+            completionHandler(.failed)
+            return
+        }
+        
+        guard let jsonBody = data["jsonBody"] as? [String: String], let amount = jsonBody["amount"], let symbol = jsonBody["symbol"], let from = jsonBody["from"] else {
+            completionHandler(.failed)
+            return
+        }
+        
+        let content = UNMutableNotificationContent()
+        content.title = "New Transaction"
+        content.body = "Received \(amount) \(symbol) from \(from)"
+        content.badge = 1
+        content.sound = UNNotificationSound.default
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
+        let request = UNNotificationRequest(identifier: "notification1", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        
+        completionHandler(.newData)
     }
 }
 

@@ -3,11 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		41B9BC7205E695E548011E43 /* Pods_WalletSDKDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7C96D3D979BA983E2509E20 /* Pods_WalletSDKDemoTests.framework */; };
+		A65B629A232F99A5003269F2 /* SSRadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65B6297232F99A5003269F2 /* SSRadioButton.swift */; };
+		A65B629B232F99A5003269F2 /* SSRadioButtonsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65B6298232F99A5003269F2 /* SSRadioButtonsController.swift */; };
+		A65B629C232F99A5003269F2 /* PaddingLable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65B6299232F99A5003269F2 /* PaddingLable.swift */; };
 		BF2E1A9721EC7FC40034EBDF /* QRCodeScanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E1A9621EC7FC40034EBDF /* QRCodeScanController.swift */; };
 		BF2E1A9B21ECA6450034EBDF /* HistoryItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E1A9A21ECA6450034EBDF /* HistoryItemCell.swift */; };
 		BF2E1A9D21ECB6240034EBDF /* TransactionDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E1A9C21ECB6240034EBDF /* TransactionDetailController.swift */; };
@@ -74,6 +77,9 @@
 		901CDD0065C305BABDFBD1C7 /* Pods-WalletSDKDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WalletSDKDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		967B5095A904A1CA8FCE6654 /* Pods_WalletSDKDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WalletSDKDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A24E99302783636E3EB88836 /* Pods-WalletSDKDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WalletSDKDemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-WalletSDKDemoTests/Pods-WalletSDKDemoTests.release.xcconfig"; sourceTree = "<group>"; };
+		A65B6297232F99A5003269F2 /* SSRadioButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButton.swift; sourceTree = "<group>"; };
+		A65B6298232F99A5003269F2 /* SSRadioButtonsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButtonsController.swift; sourceTree = "<group>"; };
+		A65B6299232F99A5003269F2 /* PaddingLable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddingLable.swift; sourceTree = "<group>"; };
 		A7C96D3D979BA983E2509E20 /* Pods_WalletSDKDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WalletSDKDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF2E1A9621EC7FC40034EBDF /* QRCodeScanController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScanController.swift; sourceTree = "<group>"; };
 		BF2E1A9A21ECA6450034EBDF /* HistoryItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryItemCell.swift; sourceTree = "<group>"; };
@@ -298,6 +304,9 @@
 		BFCDE08D21EF242200695243 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A65B6299232F99A5003269F2 /* PaddingLable.swift */,
+				A65B6297232F99A5003269F2 /* SSRadioButton.swift */,
+				A65B6298232F99A5003269F2 /* SSRadioButtonsController.swift */,
 				BFF3E20621FADEFF008D9A22 /* ToastView.swift */,
 				BFCDE08E21EF244300695243 /* CurrencyView.xib */,
 				BFCDE09021EF246A00695243 /* CurrencyView.swift */,
@@ -445,16 +454,11 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-resources.sh",
-				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+				"${PODS_ROOT}/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"${PODS_ROOT}/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -489,34 +493,11 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/AlamofireObjectMapper/AlamofireObjectMapper.framework",
-				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
-				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftEventBus/SwiftEventBus.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftOTP/SwiftOTP.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyUserDefaults/SwiftyUserDefaults.framework",
-				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireObjectMapper.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftEventBus.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftOTP.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyUserDefaults.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -560,6 +541,7 @@
 				BF47F1A321E6E9FD004A3849 /* WalletDetailController.swift in Sources */,
 				BFA8DD7A21DEFBD10057E545 /* SetupAnswerController.swift in Sources */,
 				BFED87ED21F3146E006280D1 /* SetupPINController.swift in Sources */,
+				A65B629C232F99A5003269F2 /* PaddingLable.swift in Sources */,
 				BF47F1B221E868D3004A3849 /* Wallet.swift in Sources */,
 				BF8B1CCD21D5F26200C593C2 /* WalletsViewController.swift in Sources */,
 				BFCDE09121EF246A00695243 /* CurrencyView.swift in Sources */,
@@ -569,6 +551,7 @@
 				BFB84FD521E2F4F100221A08 /* PINInfo.swift in Sources */,
 				BFA8DD7821DEF9080057E545 /* InputPINController.swift in Sources */,
 				BF2E1A9F21ECBC9C0034EBDF /* CurrencyHelper.swift in Sources */,
+				A65B629B232F99A5003269F2 /* SSRadioButtonsController.swift in Sources */,
 				BF47F1B721E8836E004A3849 /* UITextField.swift in Sources */,
 				BF2E1AC521EDE6E00034EBDF /* RecoveryRequestController.swift in Sources */,
 				BF47F1AE21E726A1004A3849 /* Currency.swift in Sources */,
@@ -583,6 +566,7 @@
 				BF47F1A521E6EA51004A3849 /* DepositController.swift in Sources */,
 				BFCDE08C21EF230400695243 /* SetPINController.swift in Sources */,
 				BF7FADD621E44B1600688765 /* AnswerListController.swift in Sources */,
+				A65B629A232F99A5003269F2 /* SSRadioButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

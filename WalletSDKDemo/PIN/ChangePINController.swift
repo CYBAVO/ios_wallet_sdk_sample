@@ -20,11 +20,27 @@ class ChangePINController : UIViewController {
             textField?.setBottomBorder()
             textField?.delegate = self
         }
-        
+        sendButton.isUserInteractionEnabled = false
     }
     @IBAction func onSubmit(_ sender: Any) {
         guard let newPinCode = newCode.text, let currentPinCode = currentCode.text else {
             return
+        }
+        if currentPinCode.count != PINCODE_LENGTH {
+            let successAlert = UIAlertController(title: "Current PIN code length must be \(PINCODE_LENGTH)", message: nil, preferredStyle: .alert)
+            successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
+                self.currentCode.text = ""
+                self.currentCode.becomeFirstResponder()
+            }))
+            self.present(successAlert, animated: true)
+        }
+        if newPinCode.count != PINCODE_LENGTH {
+            let successAlert = UIAlertController(title: "New pin code length must be \(PINCODE_LENGTH)", message: nil, preferredStyle: .alert)
+            successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
+                self.newCode.text = ""
+                self.newCode.becomeFirstResponder()
+            }))
+            self.present(successAlert, animated: true)
         }
         Auth.shared.changePinCode(newPinCode: newPinCode, currentPinCode: currentPinCode) { result in
             switch result {

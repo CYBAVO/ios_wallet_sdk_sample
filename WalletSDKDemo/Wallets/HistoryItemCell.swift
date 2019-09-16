@@ -7,4 +7,5 @@ class TransactionItemCell : UITableViewCell {
     @IBOutlet weak var timestampLabel: UILabel!
     @IBOutlet weak var amountLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var failImage: UIImageView!
 }
