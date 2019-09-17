@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		41B9BC7205E695E548011E43 /* Pods_WalletSDKDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7C96D3D979BA983E2509E20 /* Pods_WalletSDKDemoTests.framework */; };
+		A650F8972330813700591FDD /* EosResourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A650F8962330813700591FDD /* EosResourceController.swift */; };
 		A65B629A232F99A5003269F2 /* SSRadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65B6297232F99A5003269F2 /* SSRadioButton.swift */; };
 		A65B629B232F99A5003269F2 /* SSRadioButtonsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65B6298232F99A5003269F2 /* SSRadioButtonsController.swift */; };
 		A65B629C232F99A5003269F2 /* PaddingLable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65B6299232F99A5003269F2 /* PaddingLable.swift */; };
@@ -77,6 +78,7 @@
 		901CDD0065C305BABDFBD1C7 /* Pods-WalletSDKDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WalletSDKDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		967B5095A904A1CA8FCE6654 /* Pods_WalletSDKDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WalletSDKDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A24E99302783636E3EB88836 /* Pods-WalletSDKDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WalletSDKDemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-WalletSDKDemoTests/Pods-WalletSDKDemoTests.release.xcconfig"; sourceTree = "<group>"; };
+		A650F8962330813700591FDD /* EosResourceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EosResourceController.swift; sourceTree = "<group>"; };
 		A65B6297232F99A5003269F2 /* SSRadioButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButton.swift; sourceTree = "<group>"; };
 		A65B6298232F99A5003269F2 /* SSRadioButtonsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButtonsController.swift; sourceTree = "<group>"; };
 		A65B6299232F99A5003269F2 /* PaddingLable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddingLable.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 		BF47F1A121E6E9DD004A3849 /* Wallets */ = {
 			isa = PBXGroup;
 			children = (
+				A650F8962330813700591FDD /* EosResourceController.swift */,
 				BF47F1A221E6E9FD004A3849 /* WalletDetailController.swift */,
 				BF47F1A421E6EA51004A3849 /* DepositController.swift */,
 				BF47F1A621E6EA70004A3849 /* WithdrawController.swift */,
@@ -554,6 +557,7 @@
 				A65B629B232F99A5003269F2 /* SSRadioButtonsController.swift in Sources */,
 				BF47F1B721E8836E004A3849 /* UITextField.swift in Sources */,
 				BF2E1AC521EDE6E00034EBDF /* RecoveryRequestController.swift in Sources */,
+				A650F8972330813700591FDD /* EosResourceController.swift in Sources */,
 				BF47F1AE21E726A1004A3849 /* Currency.swift in Sources */,
 				BF8B1C9921D5C88A00C593C2 /* AppDelegate.swift in Sources */,
 				BF47F1A721E6EA70004A3849 /* WithdrawController.swift in Sources */,
