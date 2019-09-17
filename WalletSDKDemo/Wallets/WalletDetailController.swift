@@ -8,7 +8,7 @@ class WalletDetailController : UIViewController {
     @IBOutlet weak var balanceTextView: UITextView!
     @IBOutlet weak var walletAddressTextView: UITextView!
     @IBOutlet weak var historyTableView: UITableView!
-
+    
     @IBOutlet weak var goEosResourceItem: UIBarButtonItem!
     var timeBtController: SSRadioButtonsController?
     var directionBtController: SSRadioButtonsController?
@@ -28,14 +28,14 @@ class WalletDetailController : UIViewController {
     var allFilterWidth: Int = 0;
     let NO_MORE_TEXT = "End of history"
     let LOADING_MORE_TEXT = "Loading more..."
-
+    
     func createMoreFilter(x: Int, y: Int) -> UIImageView{
         let image = UIImage(named: "ic_more_h")
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFit
         imageView.frame = CGRect(x: x, y: y, width: 45, height: 30)
         imageView.isUserInteractionEnabled = true
-
+        
         let singleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.showAllFilter(recognizer:)))
         singleTap.numberOfTapsRequired = 1
         imageView.addGestureRecognizer(singleTap)
@@ -43,7 +43,7 @@ class WalletDetailController : UIViewController {
     }
     @objc func showAllFilter(recognizer: UIGestureRecognizer) {
         moreFilterImgView?.isHidden = true
-        directionBtController?.toggleAllBtn(hide: false)
+        timeBtController?.toggleAllBtn(hide: false)
         statusBtController?.toggleAllBtn(hide: false)
         resultBtController?.toggleAllBtn(hide: false)
         scrollView.contentSize = CGSize(width: allFilterWidth, height: 46)
@@ -53,12 +53,12 @@ class WalletDetailController : UIViewController {
     var isLoading: Bool = false
     var hasMore: Bool = false
     func createFilter(titles: String...){
-
-        timeBtControllerDelegate = BtControllerDelegate(self)
+        
         directionBtControllerDelegate = BtControllerDelegate(self)
+        timeBtControllerDelegate = BtControllerDelegate(self)
         statusBtControllerDelegate = BtControllerDelegate(self)
         resultBtControllerDelegate = BtControllerDelegate(self)
-
+        
         let padding = 0
         let groupX = 25
         var xOffset = 10
@@ -72,14 +72,14 @@ class WalletDetailController : UIViewController {
                 moreFilterImgView = createMoreFilter(x: xOffset, y: 6)
                 scrollView.addSubview(moreFilterImgView!)
                 xOffset += groupX
-                timeBtController = initRatioButton(buttons: arr[0], arr[1], arr[2], delegate: timeBtControllerDelegate)
-                timeBtControllerDelegate?.controller = timeBtController
+                directionBtController = initRatioButton(buttons: arr[0], arr[1], arr[2], delegate: directionBtControllerDelegate)
+                directionBtControllerDelegate?.controller = directionBtController
                 arr.removeAll()
                 break;
             case 5:
                 xOffset += groupX
-                directionBtController = initRatioButton(hide: true, buttons: arr[0], arr[1], arr[2], delegate: directionBtControllerDelegate)
-                directionBtControllerDelegate?.controller = directionBtController
+                timeBtController = initRatioButton(hide: true, buttons: arr[0], arr[1], arr[2], delegate: timeBtControllerDelegate)
+                timeBtControllerDelegate?.controller = timeBtController
                 arr.removeAll()
                 break;
             case 8:
@@ -114,7 +114,7 @@ class WalletDetailController : UIViewController {
         label.layer.masksToBounds = true
         label.layer.cornerRadius = 20
         label.textAlignment = NSTextAlignment.center
-//        label.font = amount.font.withSize(14)
+        //        label.font = amount.font.withSize(14)
         return label
     }
     override func viewDidLoad() {
@@ -122,7 +122,7 @@ class WalletDetailController : UIViewController {
             self.dismiss(animated: true)
             return
         }
-        createFilter(titles: "ALL TIME","TODAY","YESTERDAY","ALL","RECEIVED","SENT","ALL","PENDING","DONE","ALL","SUCCESS","FAILED")
+        createFilter(titles: "ALL","RECEIVED","SENT","ALL TIME","TODAY","YESTERDAY","ALL","PENDING","DONE","ALL","SUCCESS","FAILED")
         title = w.name
         goEosResourceItem.isEnabled = w.currency == CurrencyHelper.Coin.EOS.rawValue
         historyTableView.dataSource = self
@@ -130,7 +130,7 @@ class WalletDetailController : UIViewController {
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(WalletDetailController.reloadHistory), for: .valueChanged)
         historyTableView.addSubview(refreshControl)
-
+        
         walletAddressTextView.text = w.address
     }
     func calWidth(byTitle: String) -> Int{
@@ -139,10 +139,10 @@ class WalletDetailController : UIViewController {
     func createLoadMoreHint(){
         var title = NO_MORE_TEXT
         let label = createLabel(title: title, x: Int(self.view.frame.width / 2) - calWidth(byTitle: title)/2, y: Int(self.view.frame.size.height - 70))
-//        button.backgroundColor = UIColor(red: 80.0/255.0, green: 104.0/255.0, blue: 194.0, alpha: 1.0)
-//        button.layer.masksToBounds = true
-//        button.layer.cornerRadius = 20
-//        button.tintColor = UIColor.white
+        //        button.backgroundColor = UIColor(red: 80.0/255.0, green: 104.0/255.0, blue: 194.0, alpha: 1.0)
+        //        button.layer.masksToBounds = true
+        //        button.layer.cornerRadius = 20
+        //        button.tintColor = UIColor.white
         self.navigationController?.view.addSubview(label)
         self.loadMoreHint = label
         self.loadMoreHint?.alpha = 0
@@ -157,11 +157,11 @@ class WalletDetailController : UIViewController {
     class BtControllerDelegate:SSRadioButtonControllerDelegate {
         var controller: SSRadioButtonsController?;
         weak var delegate: WalletDetailController?;
-
+        
         init(_ delegate: WalletDetailController) {
             self.delegate = delegate
         }
-
+        
         var select :Int = 0
         func didSelectButton(selectedButton: UIButton?) {
             guard controller != nil else{return }
@@ -177,20 +177,20 @@ class WalletDetailController : UIViewController {
             reloadHistory()
         }
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.loadMoreHint?.removeFromSuperview()
     }
-
+    
     @IBAction func onWithdrawClick(_ sender: Any) {
         performSegue(withIdentifier: "idWithdraw", sender: nil)
     }
-
+    
     @IBAction func onDepositClick(_ sender: Any) {
         performSegue(withIdentifier: "idDeposit", sender: nil)
     }
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "idWithdraw":
@@ -222,15 +222,15 @@ class WalletDetailController : UIViewController {
             self.dismiss(animated: true)
             return
         }
-
+        
         let alertController: UIAlertController = UIAlertController(title: "Rename wallet", message: nil, preferredStyle: .alert)
-
+        
         //cancel button
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
             //cancel code
         }
         alertController.addAction(cancelAction)
-
+        
         //Create an optional action
         let nextAction: UIAlertAction = UIAlertAction(title: "Confirm", style: .default) { action -> Void in
             if let text = alertController.textFields?.first?.text {
@@ -247,7 +247,7 @@ class WalletDetailController : UIViewController {
             }
         }
         alertController.addAction(nextAction)
-
+        
         //Add text field
         alertController.addTextField { (textField) -> Void in
             textField.setBottomBorder()
@@ -258,19 +258,19 @@ class WalletDetailController : UIViewController {
     func getParameter()->[String:Any]{
         var extras: [String:Any] = [:]
         var idx = timeBtController!.selectedButtonIndex()!
-
-        var gregorian = Calendar(identifier: .gregorian)
-        var now = Date()
-        let midnight = gregorian.date(bySettingHour: 0, minute: 0, second: 0, of: Date())
-        let nowSec = now.timeIntervalSince1970
+        
+        let gregorian = Calendar(identifier: .gregorian)
+        let now = gregorian.date(bySettingHour: 23, minute: 59, second: 59, of: Date())
+        let midnight = gregorian.date(bySettingHour: 0, minute: 0, second: 0, of: now!)
+        let nowSec = now?.timeIntervalSince1970
         let midnightSec = midnight!.timeIntervalSince1970
-
+        
         switch idx {
         case 0:
             break;
         case 1:
             extras["start_time"] = midnightSec
-            extras["end_time"] = now
+            extras["end_time"] = nowSec
             break;
         case 2:
             extras["start_time"] = midnightSec - 86400
@@ -283,10 +283,10 @@ class WalletDetailController : UIViewController {
         case 0:
             break;
         case 1:
-            extras["direction"] = Direction.IN.rawValue
+            extras["direction"] = Direction.IN
             break;
         case 2:
-            extras["direction"] = Direction.OUT.rawValue
+            extras["direction"] = Direction.OUT
             break;
         default: break;
         }
@@ -316,7 +316,7 @@ class WalletDetailController : UIViewController {
         }
         return extras
     }
-
+    
     func changeLoadMoreHint(hide: Bool, title: String = ""){
         if !hide {
             self.loadMoreHint?.text = title
@@ -326,7 +326,7 @@ class WalletDetailController : UIViewController {
         }
         hideViewWithAnimation(view: self.loadMoreHint!,hide: hide)
     }
-
+    
     func hideViewWithAnimation(view: UIView, hide: Bool){
         UIView.animate(withDuration: 0.2) {
             view.alpha = hide ? 0 : 1
@@ -405,13 +405,13 @@ extension WalletDetailController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return historyItems.count ?? 0
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if (historyItems.count-1) == indexPath.row {
             print("scrollToEnd")
             self.loadMoreHistory()
         }
-
+        
         if let tx = historyItems[safe: indexPath.row] {
             let cell = tableView.dequeueReusableCell(withIdentifier: "idTransactionItem", for: indexPath) as! TransactionItemCell
             if tx.direction == .IN {
@@ -431,7 +431,7 @@ extension WalletDetailController : UITableViewDataSource {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy/MM/dd"
             cell.timestampLabel.text = dateFormatter.string(from: Date(timeIntervalSince1970: Double(tx.timestamp)))
-
+            
             return cell
         }
         return UITableViewCell()
