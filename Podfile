@@ -13,7 +13,7 @@ target 'WalletSDKDemo' do
   pod 'AlamofireObjectMapper', '~> 5.2'
   pod 'Alamofire', '~> 4.8'
   pod 'CryptoSwift'
-  pod 'SwiftyUserDefaults', '4.0.0-alpha.1'
+  pod 'SwiftyUserDefaults', '4.0.0'
   pod 'GoogleSignIn', '4.4.0'
   pod 'SwiftEventBus', :tag => '3.0.1', :git => 'https://github.com/cesarferreira/SwiftEventBus.git'
   pod 'Toast-Swift', '~> 4.0.0'
