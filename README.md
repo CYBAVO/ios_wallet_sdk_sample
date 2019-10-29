@@ -81,7 +81,7 @@ Add the following code to your AppDelegate.swift file.
                             buttonWidth: 70,
                             buttonHeight: 70,
                             horizontalSpacing: 5,
-                            buttonTextFont: nil,//optional, will be calculated according botton size
+                            buttonTextFont: nil,//optional, set nil and text size will be calculated according to button size
                             verticalSpacing: 7,
                             buttonTextColor: UIColor.darkGray,
                             buttonTextColorPressed: UIColor.lightGray,
@@ -96,7 +96,7 @@ Add the following code to your AppDelegate.swift file.
                             buttonBorderColorDisabled: UIColor.orange,
                             backspaceButtonWidth: 70,
                             backspaceButtonHeight: 70,
-                            backspaceButtonTextFont: nil,//optional, will be calculated according botton size
+                            backspaceButtonTextFont: nil,//optional, set nil and text size will be calculated according to button size
                             backspaceButtonTextColor: UIColor.darkGray,
                             backspaceButtonTextColorPressed: UIColor.lightGray,
                             backspaceButtonTextColorDisabled: UIColor.yellow,
