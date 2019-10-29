@@ -17,7 +17,7 @@ target 'WalletSDKDemo' do
   pod 'GoogleSignIn', '4.4.0'
   pod 'SwiftEventBus', :tag => '3.0.1', :git => 'https://github.com/cesarferreira/SwiftEventBus.git'
   pod 'Toast-Swift', '~> 4.0.0'
-  pod 'CYBAVOWallet', '~> 1.1.0'
+  pod 'CYBAVOWallet', '~> 1.2.0'
   pod 'SwiftOTP'
   pod 'PKHUD', '~> 5.0'
 

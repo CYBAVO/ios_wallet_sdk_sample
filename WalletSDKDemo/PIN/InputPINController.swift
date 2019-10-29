@@ -2,7 +2,7 @@ import UIKit
 import CYBAVOWallet
 
 protocol PinCodeDelegate: class {
-    func onPin(code: String)
+    func onPin(pinSecret: PinSecret?)
 }
 
 protocol PinCodeInputUI {
@@ -10,15 +10,15 @@ protocol PinCodeInputUI {
 }
 
 class InputPINController : UIViewController, PinCodeInputUI {
+    var pinSecret: PinSecret?
     @IBOutlet weak var pincode: UITextField!
     @IBOutlet weak var nextButton: UIButton!
-    
     var recoveryCode: String?
     weak var delegate: PinCodeDelegate?
-    
+
     override func viewDidLoad() {
-        pincode.delegate = self
         nextButton.isEnabled = false
+        pincode.delegate = self
     }
     
     @IBAction func onNext(_ sender: Any) {
@@ -26,9 +26,8 @@ class InputPINController : UIViewController, PinCodeInputUI {
             return
         }
         nextButton.isUserInteractionEnabled = false
-        print("pin code \(code)")
         if let delegate = delegate {
-            delegate.onPin(code: code)
+            delegate.onPin(pinSecret: pinSecret)
             return
         } else {
             self.navigationController?.popViewController(animated: true)
@@ -37,24 +36,29 @@ class InputPINController : UIViewController, PinCodeInputUI {
 
     override func viewDidAppear(_ animated: Bool) {
         print("InputPINController viewDidAppear ")
-        pincode.becomeFirstResponder()
+    }
+
+    func refreshNext(){
+        let newLength = pincode.text?.count ?? 0
+        DispatchQueue.main.async {
+            self.nextButton.isEnabled = newLength == PINCODE_LENGTH
+        }
     }
 }
 
 let PINCODE_LENGTH = 6
 extension InputPINController : UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let currentCharacterCount = textField.text?.count ?? 0
-        if (range.length + range.location > currentCharacterCount){
-            return false
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder();
+        let pinInput = PinInputViewController(nibName: "PinInputViewController", bundle: nil)
+        pinInput.callback = { pinSecret in
+            print("SetupPINController onPin \(pinSecret)")
+            self.pinSecret = pinSecret
+            self.pincode.text = "******"
+            self.refreshNext()
         }
-        let newLength = currentCharacterCount + string.count - range.length
-        if newLength >= PINCODE_LENGTH {
-            DispatchQueue.main.async {
-                self.pincode.resignFirstResponder()
-                self.nextButton.isEnabled = true
-            }
-        }
-        return newLength <= PINCODE_LENGTH
+        pinInput.hideForgot = true
+        present(pinInput, animated: true, completion: nil)
+        return false
     }
 }

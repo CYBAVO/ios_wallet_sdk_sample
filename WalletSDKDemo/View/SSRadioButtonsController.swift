@@ -33,7 +33,8 @@ class SSRadioButtonsController : NSObject
     }
     /**
         Add a UIButton to Controller
-        - parameter button: Add the button to controller.
+        - parameter button:
+        Add the button to controller.
     */
     func addButton(_ aButton: UIButton) {
         buttonsArray.append(aButton)

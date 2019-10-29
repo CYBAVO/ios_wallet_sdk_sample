@@ -12,10 +12,11 @@ import Foundation
 import SwiftEventBus
 import CYBAVOWallet
 import UserNotifications
-@_exported import PKHUD
+
+var PushDeviceToken = ""
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
+ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if let error = error {
             print("Google signin delegate error: \(error.localizedDescription)")
@@ -73,6 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         WalletSdk.shared.endPoint = endpoints
         print("apicode [\(apicode)]")
         WalletSdk.shared.apiCode = apicode
+        WalletSdk.shared.apnsSandbox = true
     }
     
     func registerDefaultsFromSettingsBundle()
@@ -137,7 +139,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
         
-        WalletSdk.shared.deviceToken = token
+        PushDeviceToken = token
         
         print("Device Token: \(token)")
     }

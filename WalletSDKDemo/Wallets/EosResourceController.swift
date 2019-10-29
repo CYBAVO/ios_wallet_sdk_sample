@@ -4,7 +4,7 @@ import UIKit
 import CYBAVOWallet
 
 
-class EosResourceController : UIViewController, SSRadioButtonControllerDelegate {
+class EosResourceController : UIViewController, SSRadioButtonControllerDelegate{
 
     @IBOutlet weak var ramProgressView: UIProgressView!
     @IBOutlet weak var ramEos: UILabel!
@@ -274,46 +274,38 @@ class EosResourceController : UIViewController, SSRadioButtonControllerDelegate 
         default: break
         }
 
-        let alert = UIAlertController(title: "Input PIN code", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addTextField(configurationHandler: { textField in
-            textField.keyboardType = .numberPad
-            textField.isSecureTextEntry = true
-            textField.becomeFirstResponder()
-        })
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-            if let pincode = alert.textFields?.first?.text {
-//                let parentWalletId = self.parentWallet?.walletId ?? Int64(0)
-//                print("parentWalletId \(parentWalletId)")
-                HUD.show(.progress)
-                Wallets.shared.createTransaction(fromWalletId: w.walletId, toAddress: toAddress, amount: amount, transactionFee: ""
-                        , description: "", pinCode: pincode, extras:  extras) { result in
-                    HUD.hide();
-                    switch result {
-                    case .success(_):
-                        let successAlert = UIAlertController(title: "Transaction succeed", message: nil, preferredStyle: .alert)
-                        successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
-                            self.getEosResourceState(accountName:w.address)
-                        }))
-                        self.present(successAlert, animated: true)
-                        print("createTransaction onSuccess")
-                        break
-                    case .failure(let error):
-                        let failedAlert = UIAlertController(title: "Transaction failed", message: error.name, preferredStyle: .alert)
-                        failedAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
-//                                self.navigationController?.popViewController(animated: true)
-                        }))
-                        self.present(failedAlert, animated: true)
-//                        self.requestSecureToken()
-                        print("createTransaction onFailed")
-                        break
-                    }
+        
+        
+        let pinInput = PinInputViewController(nibName: "PinInputViewController", bundle: nil)
+        pinInput.callback = { pinSecret in
+            Wallets.shared.createTransaction(fromWalletId: w.walletId, toAddress: toAddress, amount: amount, transactionFee: ""
+                    , description: "", pinSecret: pinSecret, extras:  extras) { result in
+                switch result {
+                case .success(_):
+                    let successAlert = UIAlertController(title: "Transaction succeed", message: nil, preferredStyle: .alert)
+                    successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
+                        self.getEosResourceState(accountName:w.address)
+                    }))
+                    self.present(successAlert, animated: true)
+                    print("createTransaction onSuccess")
+                    break
+                case .failure(let error):
+                    let failedAlert = UIAlertController(title: "Transaction failed", message: error.name, preferredStyle: .alert)
+                    failedAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
+                        //                                self.navigationController?.popViewController(animated: true)
+                    }))
+                    self.present(failedAlert, animated: true)
+                    //                        self.requestSecureToken()
+                    print("createTransaction onFailed")
+                    break
                 }
             }
-        }))
+            
+        }
+        present(pinInput, animated: true, completion: nil)
         
-        self.present(alert, animated: true)
     }
+
 }
 
 extension EosResourceController : UITextFieldDelegate {

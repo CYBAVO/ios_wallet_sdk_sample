@@ -3,11 +3,12 @@
 import UIKit
 import CYBAVOWallet
 
-class WithdrawController : UIViewController {
+class WithdrawController : UIViewController{
     
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var feePicker: UIPickerView!
+    @IBOutlet weak var feeTitle: UITextView!
     @IBOutlet weak var balanceTextView: UITextView!
     @IBOutlet weak var amountUsageTextView: UITextView!
     @IBOutlet weak var amountQuotaTextView: UITextView!
@@ -25,6 +26,7 @@ class WithdrawController : UIViewController {
         amountTextField.addDoneCancelToolbar()
         feePicker.dataSource = self
         feePicker.delegate = self
+//        feePicker.isHidden = wallet.
         sendButton.isUserInteractionEnabled = false
         guard let w = wallet else {
             self.navigationController?.popViewController(animated: true)
@@ -33,20 +35,26 @@ class WithdrawController : UIViewController {
         currencyView.setSymbol(w.currencySymbol)
 
         print("WithdrawController wallet \(w)")
-        
-        Wallets.shared.getTransactionFee(currency: w.currency) { result in
-            switch result {
-            case .success(let result):
-                print("getTransactionFee \(result)")
-                self.transactionFee = [result.low, result.medium, result.high]
-                DispatchQueue.main.async {
-                    self.feePicker.reloadAllComponents()
+        if(hasTransactionFee()){
+            Wallets.shared.getTransactionFee(currency: w.currency) { result in
+                switch result {
+                case .success(let result):
+                    print("getTransactionFee \(result)")
+                    self.transactionFee = [result.low, result.medium, result.high]
+                    DispatchQueue.main.async {
+                        self.feePicker.reloadAllComponents()
+                    }
+                    break
+                case .failure(let error):
+                    print("getTransactionFee failed \(error)")
+                    break
                 }
-                break
-            case .failure(let error):
-                print("getTransactionFee failed \(error)")
-                break
             }
+            feePicker.isHidden = false
+            feeTitle.isHidden = false
+        }else{
+            feePicker.isHidden = true
+            feeTitle.isHidden = true
         }
         
         Wallets.shared.getBalances(addresses: [w.walletId: w]) { result in
@@ -77,7 +85,12 @@ class WithdrawController : UIViewController {
     @IBAction func onScanQRCode(_ sender: Any) {
         performSegue(withIdentifier: "idQRCodeScan", sender: nil)
     }
-    
+    func hasTransactionFee()->Bool{
+        if let currency = wallet?.currency {
+            return currency != CurrencyHelper.Coin.EOS.rawValue && currency != CurrencyHelper.Coin.TRX.rawValue
+        }
+        return true
+    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard segue.identifier == "idQRCodeScan" else {
             return
@@ -86,69 +99,42 @@ class WithdrawController : UIViewController {
             vc.delegate = self
         }
     }
-    
-    @IBAction func onSend(_ sender: Any) {
-        createTransactionBySecureToken()
+    func getTranscationFeeAsParam()->String?{
+        if(hasTransactionFee()){
+            return transactionFee[safe: feePicker.selectedRow(inComponent: 0)]?.amount
+        }else{
+            return ""
+        }
     }
-    
-    func createTransactionBySecureToken(){
-        guard let w = wallet, let toAddress = addressTextField.text, let amount = amountTextField.text, let fee = transactionFee[safe: feePicker.selectedRow(inComponent: 0)]?.amount else {
+    @IBAction func onSend(_ sender: Any) {
+        guard let w = wallet, let toAddress = addressTextField.text, let amount = amountTextField.text, let fee = getTranscationFeeAsParam() else {
             return
         }
         
-        Wallets.shared.createTransaction(fromWalletId: w.walletId, toAddress: toAddress, amount: amount, transactionFee: fee, description: "") { result in
-            switch result {
-            case .success(_):
-                let successAlert = UIAlertController(title: "Withdraw successed", message: nil, preferredStyle: .alert)
-                successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
-                    self.navigationController?.popViewController(animated: true)
-                }))
-                self.present(successAlert, animated: true)
-                print("createTransaction onSuccess")
-                break
-            case .failure(let error):
-                if error == ApiError.ErrDestinationNotInOutgoingAddress {
+        let pinInput = PinInputViewController(nibName: "PinInputViewController", bundle: nil)
+        pinInput.callback = { pinSecret in
+            Wallets.shared.createTransaction(fromWalletId: w.walletId, toAddress: toAddress, amount: amount, transactionFee: fee, description: "", pinSecret: pinSecret) { result in
+                switch result {
+                case .success(_):
+                    let successAlert = UIAlertController(title: "Withdraw successed", message: nil, preferredStyle: .alert)
+                    successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
+                        self.navigationController?.popViewController(animated: true)
+                    }))
+                    self.present(successAlert, animated: true)
+                    print("createTransaction onSuccess")
+                    break
+                case .failure(let error):
                     let failedAlert = UIAlertController(title: "Withdraw failed", message: error.name, preferredStyle: .alert)
                     failedAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
                         self.navigationController?.popViewController(animated: true)
                     }))
                     self.present(failedAlert, animated: true)
+                    print("createTransaction onFailed")
+                    break
                 }
-                self.requestSecureToken()
-                print("createTransaction onFailed")
-                break
             }
         }
-    }
-    
-    func requestSecureToken(){
-        let alert = UIAlertController(title: "Input PIN code", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addTextField(configurationHandler: { textField in
-            textField.keyboardType = .numberPad
-            textField.isSecureTextEntry = true
-            textField.becomeFirstResponder()
-        })
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-            if let pincode = alert.textFields?.first?.text {
-                Wallets.shared.requestSecureToken(pinCode: pincode) { result in
-                    switch result {
-                    case .success(_):
-                        print("requestSecureToken onSuccess")
-                        self.createTransactionBySecureToken()
-                        break
-                    case .failure(let error):
-                        let failAlert = UIAlertController(title: "Withdraw failed", message: error.name, preferredStyle: .alert)
-                        failAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                        self.present(failAlert, animated: true)
-                        print("requestSecureToken onFailed")
-                        break
-                    }
-                }
-            }
-        }))
-        
-        self.present(alert, animated: true)
+        present(pinInput, animated: true, completion: nil)
     }
 }
 

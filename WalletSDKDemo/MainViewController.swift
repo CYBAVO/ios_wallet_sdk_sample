@@ -80,11 +80,21 @@ class MainViewController: UIViewController {
             switch result {
             case .success(_):
                 print("cybavo signed in")
+                Auth.shared.setPushDeviceToken(deviceToken: PushDeviceToken) { result in
+                    switch result {
+                    case .success(_):
+                        print("cybavo setPushDeviceToken done")
+                        break
+                    case .failure(let error):
+                        print("cybavo setPushDeviceToken error \(error)")
+                        break
+                    }
+                }
                 self.dismiss(animated: true, completion: nil)
                 break
             case .failure(let error):
                 print("cybavo signIn error \(error)")
-                if error == .ErrRegistrationRequired {
+                if error.code == .ErrRegistrationRequired {
                     self.doSignUp(token: token)
                 }
                 self.showSignIn()

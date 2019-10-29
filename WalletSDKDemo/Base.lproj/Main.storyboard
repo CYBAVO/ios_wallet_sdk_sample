@@ -179,11 +179,11 @@
         <scene sceneID="NjC-j7-LdE">
             <objects>
                 <viewController title="New wallet" id="p1X-1h-a2L" customClass="AddWalletController" customModule="WalletSDKDemo" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="B9v-Ju-3Fu">
+                    <view key="view" contentMode="scaleToFill" id="B9v-Ju-3Fu">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkA-8M-8ny">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkA-8M-8ny">
                                 <rect key="frame" x="29" y="594" width="317" height="41"/>
                                 <color key="backgroundColor" red="0.2470588235" green="0.31764705879999999" blue="0.70980392160000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -618,6 +618,7 @@
                         <outlet property="balanceTextView" destination="Gau-50-Zqc" id="92R-Z8-0vu"/>
                         <outlet property="currencyView" destination="twA-gd-EXF" id="Zu9-xe-SxZ"/>
                         <outlet property="feePicker" destination="e3d-L6-6QJ" id="WSM-Eo-wnc"/>
+                        <outlet property="feeTitle" destination="huJ-D1-48K" id="6MT-Fm-92g"/>
                         <outlet property="sendButton" destination="Zh9-yd-EyI" id="Jwh-aL-mOM"/>
                         <segue destination="gca-ll-gHI" kind="show" identifier="idQRCodeScan" id="Lda-Iw-Uw1"/>
                     </connections>
@@ -1735,7 +1736,7 @@
         <image name="ic_change_pin.png" width="72" height="72"/>
         <image name="ic_create_wallet.png" width="25" height="25"/>
         <image name="ic_edit.png" width="25" height="25"/>
-        <image name="ic_eos_resources" width="24" height="24"/>
+        <image name="ic_eos_resources" width="36" height="36"/>
         <image name="ic_forgot_pin.png" width="72" height="72"/>
         <image name="ic_more.png" width="24" height="24"/>
         <image name="ic_qr_code_scan.png" width="72" height="72"/>

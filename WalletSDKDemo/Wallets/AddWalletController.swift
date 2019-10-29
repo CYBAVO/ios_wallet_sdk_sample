@@ -110,43 +110,34 @@ class AddWalletController : UIViewController {
     }
     
     func inputPinCode(currency: Currency){
-        let alert = UIAlertController(title: "Input PIN code", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addTextField(configurationHandler: { textField in
-            textField.keyboardType = .numberPad
-            textField.isSecureTextEntry = true
-            textField.becomeFirstResponder()
-        })
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-            if let pincode = alert.textFields?.first?.text {
-                let parentWalletId = self.parentWallet?.walletId ?? Int64(0)
-                print("parentWalletId \(parentWalletId)")
-                var extras: [String:String] = [:]
-                if currency.currency == CurrencyHelper.Coin.EOS.rawValue{
-                    extras["account_name"] = self.accountName.text
-                }
-                Wallets.shared.createWallet(currency: currency.currency, tokenAddress: currency.tokenAddress, parentWalletId: parentWalletId, name: self.walletName.text!, pinCode: pincode, extras: extras) {  result in
-                    switch result {
-                    case .success(_):
-                        let successAlert = UIAlertController(title: "Create wallet successed", message: nil, preferredStyle: .alert)
-                        successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
-                            self.navigationController?.popViewController(animated: true)
-                        }))
-                        self.present(successAlert, animated: true)
-                        print("createWallet onSuccess")
-                        break
-                    case .failure(let error):
-                        let failAlert = UIAlertController(title: "Create wallet failed", message: error.name, preferredStyle: .alert)
-                        failAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                        self.present(failAlert, animated: true)
-                        print("createWallet onFailed")
-                        break
-                    }
+        let pinInput = PinInputViewController(nibName: "PinInputViewController", bundle: nil)
+        pinInput.callback = { pinSecret in
+            let parentWalletId = self.parentWallet?.walletId ?? Int64(0)
+            print("parentWalletId \(parentWalletId)")
+            var extras: [String:String] = [:]
+            if currency.currency == CurrencyHelper.Coin.EOS.rawValue{
+                extras["account_name"] = self.accountName.text
+            }
+            Wallets.shared.createWallet(currency: currency.currency, tokenAddress: currency.tokenAddress, parentWalletId: parentWalletId, name: self.walletName.text!, pinSecret: pinSecret, extras: extras) {  result in
+                switch result {
+                case .success(_):
+                    let successAlert = UIAlertController(title: "Create wallet successed", message: nil, preferredStyle: .alert)
+                    successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
+                        self.navigationController?.popViewController(animated: true)
+                    }))
+                    self.present(successAlert, animated: true)
+                    print("createWallet onSuccess")
+                    break
+                case .failure(let error):
+                    let failAlert = UIAlertController(title: "Create wallet failed", message: error.name, preferredStyle: .alert)
+                    failAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(failAlert, animated: true)
+                    print("createWallet onFailed")
+                    break
                 }
             }
-        }))
-
-        self.present(alert, animated: true)
+        }
+        present(pinInput, animated: true, completion: nil)
     }
     @IBAction func onSubmit(_ sender: Any) {
         guard let currency = supportedCurrencies[safe: currenciesPicker.selectedRow(inComponent: 0)], let name = walletName.text else {

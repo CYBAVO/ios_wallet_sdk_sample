@@ -97,11 +97,14 @@ extension RestorePINController : UITextFieldDelegate {
 }
 
 extension RestorePINController : PinCodeDelegate {
-    func onPin(code: String) {
+    func onPin(pinSecret: PinSecret?) {
         guard let challenges = challenges, challenges.count == 3 else {
             return
         }
-        Auth.shared.restorePinCode(pinCode: code, challenge1: challenges[0], challenge2: challenges[1], challenge3: challenges[2]) { result in
+        guard let s = pinSecret else {
+            return
+        }
+        Auth.shared.restorePinCode(pinSecret: s, challenge1: challenges[0], challenge2: challenges[1], challenge3: challenges[2]) { result in
             switch result {
             case .success(_):
                 print("restorePinCode \(result)")

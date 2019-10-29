@@ -9,7 +9,7 @@ class RecoveryRequestController : InputPINUI {
     @IBOutlet weak var recoverCodeTextField: UITextField!
     @IBOutlet weak var nextButton: UIButton!
     
-    var pinCode: String?
+    var pinSecret: PinSecret?
 
     override func viewDidLoad() {
         recoverCodeTextField.addDoneCancelToolbar()
@@ -83,20 +83,20 @@ extension RecoveryRequestController : UITextFieldDelegate {
 }
 
 extension RecoveryRequestController : PinCodeDelegate {
-    func onPin(code: String) {
-        pinCode = code
+    func onPin(pinSecret: PinSecret?) {
+        self.pinSecret = pinSecret
         self.performSegue(withIdentifier: "idInputBackupChallenge", sender: self);
     }
 }
 
 extension RecoveryRequestController : BackupChallengeDelegate {
     func onChallenges(_ challenges: [BackupChallenge]) {
-        guard let pc = pinCode, let recoveryCode = recoverCodeTextField.text, challenges.count == 3 else {
+        guard let pc = pinSecret, let recoveryCode = recoverCodeTextField.text, challenges.count == 3 else {
             NavigationHelper.back(from: self)
             return
         }
         
-        Auth.shared.recoverPinCode(pinCode: pc, recoveryCode: recoveryCode) { result in
+        Auth.shared.recoverPinCode(pinSecret: pc, recoveryCode: recoveryCode) { result in
             switch result {
             case .success(_):
                 print("recovery pin code result")

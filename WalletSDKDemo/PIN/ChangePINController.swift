@@ -10,14 +10,26 @@ import UIKit
 import CYBAVOWallet
 
 class ChangePINController : UIViewController {
+    var currentPinSecret : PinSecret?
+    var newPinSecret : PinSecret?
+    
     @IBOutlet weak var currentCode: UITextField! 
     @IBOutlet weak var newCode: UITextField!
     @IBOutlet weak var sendButton: UIButton!
-    
+    func refreshSubmitButton(){
+        guard
+                let current = currentCode.text, !current.isEmpty,
+                let new = newCode.text, !new.isEmpty
+                else {
+            sendButton.isUserInteractionEnabled = false
+            return
+        }
+        sendButton.isUserInteractionEnabled = true
+    }
     override func viewDidLoad() {
         [currentCode, newCode].forEach{ textField in
-            textField?.addDoneCancelToolbar()
-            textField?.setBottomBorder()
+//            textField?.addDoneCancelToolbar()
+//            textField?.setBottomBorder()
             textField?.delegate = self
         }
         sendButton.isUserInteractionEnabled = false
@@ -67,19 +79,22 @@ class ChangePINController : UIViewController {
 }
 
 extension ChangePINController : UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        guard
-            let current = currentCode.text, !current.isEmpty,
-            let new = newCode.text, !new.isEmpty
-            else {
-                sendButton.isUserInteractionEnabled = false
-                return true
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder();
+        let pinInput = PinInputViewController(nibName: "PinInputViewController", bundle: nil)
+        pinInput.callback = { pinSecret in
+            textField.text = "******"
+            if(textField == self.currentCode){
+                self.currentPinSecret = pinSecret
+            }else{
+                self.newPinSecret = pinSecret
+            }
+            
+            self.refreshSubmitButton()
         }
-        sendButton.isUserInteractionEnabled = true
-        return true
-    }
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
+        pinInput.hideForgot = textField == self.newCode
+        pinInput.titleText = "Enter \(textField.placeholder!)"
+        present(pinInput, animated: true, completion: nil)
+        return false
     }
 }
