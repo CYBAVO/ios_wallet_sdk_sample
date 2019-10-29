@@ -54,7 +54,7 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
 
 # Initialization in your app
 Add the following code to your AppDelegate.swift file.
-```
+```swift
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
        
         WalletSdk.shared.endPoint = <Your endpoint url>
@@ -72,7 +72,7 @@ Add the following code to your AppDelegate.swift file.
 - PIN Code configuration: Setup / Change / Recovery
 - Secure PIN code input view
     1. Create a NumericPinCodeInputView simply
-        ```
+        ```swift
         pinInputView = NumericPinCodeInputView(frame: CGRect(x: 0, y: 0, width: 250, height: 400))
                     pinInputView.setMaxLength(length: 6)
                     pinInputView.styleAttr = CYBAVOWallet.StyleAttr(
@@ -81,7 +81,7 @@ Add the following code to your AppDelegate.swift file.
                             buttonWidth: 70,
                             buttonHeight: 70,
                             horizontalSpacing: 5,
-                            buttonTextFont: nil,//optional, will be calculate according botton size
+                            buttonTextFont: nil,//optional, will be calculated according botton size
                             verticalSpacing: 7,
                             buttonTextColor: UIColor.darkGray,
                             buttonTextColorPressed: UIColor.lightGray,
@@ -96,7 +96,7 @@ Add the following code to your AppDelegate.swift file.
                             buttonBorderColorDisabled: UIColor.orange,
                             backspaceButtonWidth: 70,
                             backspaceButtonHeight: 70,
-                            backspaceButtonTextFont: nil,//optional, will be calculate according botton size
+                            backspaceButtonTextFont: nil,//optional, will be calculated according botton size
                             backspaceButtonTextColor: UIColor.darkGray,
                             backspaceButtonTextColorPressed: UIColor.lightGray,
                             backspaceButtonTextColorDisabled: UIColor.yellow,
@@ -113,7 +113,7 @@ Add the following code to your AppDelegate.swift file.
 
     2. Set OnPinInputListener for onChanged callback
 
-        ```
+        ```swift
         extension ViewController: CYBAVOWallet.OnPinInputListener {
             func onChanged(length: Int) {
                 if(length == pinInputView!.getMaxLength()){
@@ -123,7 +123,7 @@ Add the following code to your AppDelegate.swift file.
         }
         ```
     3. Get PinSecret from NumericPinCodeInputView and pass it to Wallet and Auth API
-        ```
+        ```swift
          let pinSecret = pinInputView.submit()
          Wallets.shared.createTransaction(fromWalletId: w.walletId, toAddress: toAddress, amount: amount, transactionFee: ""
                             , description: "", pinSecret: pinSecret, extras:  extras) { result in }
@@ -131,12 +131,12 @@ Add the following code to your AppDelegate.swift file.
     4. PinSecret will be clear after Wallet and Auth API executed.
          If you want to use the same PinSecret with multiple API calls,
          please call pinSecret.retain() before call API.
-        ```
-        pinSecret.retain()// Retain for createWallet after setupPinCode
+        ```swift
+        pinSecret.retain()// Retain for createWallet() after setupPinCode()
         Auth.shared.setupPinCode(pinSecret: pinSecret) { result in
             switch result {
             case .success(_):
-                pinSecret.retain()// Retain so that pinSecret can be use after createWallet
+                pinSecret.retain()// Retain so that pinSecret can be used after createWallet()
                 Wallets.shared.createWallet(currency: 0, tokenAddress: "", parentWalletId: 0, name: "BTC", pinSecret: pinSecret) {result in}
                 break
             case .failure(let error):
@@ -145,6 +145,6 @@ Add the following code to your AppDelegate.swift file.
         }
         ```
     5. You can also clear NumericPinCodeInputView current input by clear()
-        ```
+        ```swift
         pinInputView.clear()
         ```
