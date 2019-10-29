@@ -71,7 +71,7 @@ Add the following code to your AppDelegate.swift file.
 - Transaction History query
 - PIN Code configuration: Setup / Change / Recovery
 - Secure PIN code input view
-    1. Create a NumericPinCodeInputView simply
+    1. Create a `NumericPinCodeInputView` simply
         ```swift
         pinInputView = NumericPinCodeInputView(frame: CGRect(x: 0, y: 0, width: 250, height: 400))
                     pinInputView.setMaxLength(length: 6)
@@ -111,7 +111,7 @@ Add the following code to your AppDelegate.swift file.
                             backspaceButtonText: "⌫")
         ```
 
-    2. Set OnPinInputListener for onChanged callback
+    2. Set `OnPinInputListener` for `onChanged` callback
 
         ```swift
         extension ViewController: CYBAVOWallet.OnPinInputListener {
@@ -122,15 +122,15 @@ Add the following code to your AppDelegate.swift file.
             }
         }
         ```
-    3. Get PinSecret from NumericPinCodeInputView and pass it to Wallet and Auth API
+    3. Get `PinSecret` by `NumericPinCodeInputView.submit()` and pass it to Wallet and Auth API
         ```swift
          let pinSecret = pinInputView.submit()
          Wallets.shared.createTransaction(fromWalletId: w.walletId, toAddress: toAddress, amount: amount, transactionFee: ""
                             , description: "", pinSecret: pinSecret, extras:  extras) { result in }
         ```
     4. PinSecret will be clear after Wallet and Auth API executed.
-         If you want to use the same PinSecret with multiple API calls,
-         please call pinSecret.retain() before call API.
+         If you want to use the same `PinSecret` with multiple API calls,
+         please call `pinSecret.retain()` before call API.
         ```swift
         pinSecret.retain()// Retain for createWallet() after setupPinCode()
         Auth.shared.setupPinCode(pinSecret: pinSecret) { result in
@@ -144,7 +144,7 @@ Add the following code to your AppDelegate.swift file.
             }
         }
         ```
-    5. You can also clear NumericPinCodeInputView current input by clear()
+    5. You can also use `NumericPinCodeInputView.clear()`to clear current input
         ```swift
         pinInputView.clear()
         ```
