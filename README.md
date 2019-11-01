@@ -43,8 +43,8 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
     IdentityFile ~/.ssh/{{your private key}}
     ```
 2. Edit `Podfile`, Replace `source 'https://bitbucket.org/cybavo/Specs.git'` with
-  * `https://bitbucket.org/cybavo/Specs.git` if using Xcode 10.1
-  * `https://bitbucket.org/cybavo/Specs_501.git` if using Xcode 10.2.1
+  * `https://bitbucket.org/cybavo/Specs_501.git` if using Xcode 10.2.1, Xcode 10.3
+  * `https://bitbucket.org/cybavo/Specs_510.git` if using >= Xcode 11
 3. Run ```pod install``` to install all dependencies.
 4. Open ```CYBAVOWallet.xcworkspace``` in xcode.
 5. Edit `Settings.bundle`/`Root.plist` ➜ `SERVICE_ENDPOINT` to your Wallet Service endpoont. (or edit it later in Settings)
