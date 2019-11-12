@@ -9,8 +9,9 @@
     ```swift
    WalletSdk.shared.apnsSandbox = true
     ```
-2. After receive the push token, call Auth.setPushDeviceToken
+2. Please remember to call `Auth.setPushDeviceToken(token)` after signin. Otherwise the device won't be able to receive notification successfully. 
     ```swift
+    //Keep the token after receive
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
@@ -18,7 +19,7 @@
         PushDeviceToken = token
     }
    
-   //This function should be called once signin
+   //Make sure call setPushDeviceToken after signin. 
    Auth.shared.setPushDeviceToken(deviceToken: PushDeviceToken) { result in
        switch result {
        case .success(_):
