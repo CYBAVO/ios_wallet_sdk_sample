@@ -16,7 +16,7 @@ import UserNotifications
 var PushDeviceToken = ""
 
 @UIApplicationMain
- class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
+ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate, UNUserNotificationCenterDelegate {
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if let error = error {
             print("Google signin delegate error: \(error.localizedDescription)")
@@ -31,7 +31,7 @@ var PushDeviceToken = ""
             
             let encodedData = try! NSKeyedArchiver.archivedData(withRootObject: user, requiringSecureCoding: false)
             UserDefaults.standard.setValue(encodedData, forKey: "googlesignin_user")
-            
+
             SwiftEventBus.post("google_signed_in", sender: user.authentication.idToken)
         }
     }
@@ -61,7 +61,7 @@ var PushDeviceToken = ""
                     UIApplication.shared.registerForRemoteNotifications()
                 }
         }
-        
+        UNUserNotificationCenter.current().delegate = self
         return true
     }
 
@@ -140,7 +140,6 @@ var PushDeviceToken = ""
         let token = tokenParts.joined()
         
         PushDeviceToken = token
-        
         print("Device Token: \(token)")
     }
     
@@ -150,28 +149,47 @@ var PushDeviceToken = ""
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
         ) {
-        print("didReceiveRemoteNotification \(userInfo)")
         guard let data = userInfo["data"] as? [String: AnyObject] else {
             completionHandler(.failed)
             return
         }
         
-        guard let jsonBody = data["jsonBody"] as? [String: String], let amount = jsonBody["amount"], let symbol = jsonBody["symbol"], let from = jsonBody["from"] else {
+        guard let jsonBody = data["jsonBody"] as? [String: String] else {
             completionHandler(.failed)
             return
         }
-        
+        let amount = jsonBody["amount"] as! String
+        let from = jsonBody["from_address"]as! String
+        let to = jsonBody["to_address"]as! String
+        let out = jsonBody["out"]as! String
         let content = UNMutableNotificationContent()
-        content.title = "New Transaction"
-        content.body = "Received \(amount) \(symbol) from \(from)"
+        
+        if(out == "true"){
+            content.title = "Transaction Send"
+            content.body = "Amount \(amount) from \(from)"
+        }else{
+            content.title = "Transaction Received"
+            content.body = "Amount \(amount) to \(to)"
+        }
         content.badge = 1
         content.sound = UNNotificationSound.default
-        
+        print("didReceiveRemoteNotification \(content.title)_\(content.body)")
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
         let request = UNNotificationRequest(identifier: "notification1", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
         
         completionHandler(.newData)
     }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+           print("didReceive", response.notification.request.content)
+           completionHandler()
+       }
+       
+       func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+           print("willPresent", notification.request.content)
+           completionHandler([])
+    
+       }
 }
 
