@@ -63,6 +63,8 @@ Add the following code to your AppDelegate.swift file.
         return true
     }
 ```    
+# Push notification
+To receive silent push notification of deposit/withdrawal. Please refer to [this](docs/PushNotification.md) to setup.
 
 # Features
 - Sign in / Sign up with 3rd-party account system - Google Account
