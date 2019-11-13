@@ -97,3 +97,18 @@
         completionHandler(.newData)
     }
     ```
+4. The properties of notification are listed below
+
+    Property    | Description  | Type  
+    :------------|:------------|:-------
+    wallet_id    | Wallet ID    |  Int64 
+    currency    | Currency     |  Int 
+    token_address  | Token address | String
+    out  | If it's an out transaction or not | String("true":out, "false": in)
+    amount  | Transaction amount | String
+    fee  | Transaction fee | String
+    from_address  | Transaction from address | String
+    to_address  | Transaction to address | String
+    timestamp  | Transaction timestamp | Int64
+    txid  | Transaction TXID | String
+    description  | Transaction description | String
