@@ -84,7 +84,7 @@ class AddWalletController : UIViewController {
         Wallets.shared.getEosAccountValid(accountName: accountNameStr) {  result in
             switch result {
             case .success(let result):
-                print("createWallet onSuccess")
+                print("getEosAccountValid onSuccess")
                 guard result.valid else{
                     let successAlert = UIAlertController(title: "EOS account invalid", message: nil, preferredStyle: .alert)
                     successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -108,14 +108,19 @@ class AddWalletController : UIViewController {
             }
         }
     }
-    
+    func hasAccount(currency: Currency) -> Bool{
+        if isToken(currency:currency){
+            return false
+        }
+        return currency.currency == CurrencyHelper.Coin.EOS.rawValue
+    }
     func inputPinCode(currency: Currency){
         let pinInput = PinInputViewController(nibName: "PinInputViewController", bundle: nil)
         pinInput.callback = { pinSecret in
             let parentWalletId = self.parentWallet?.walletId ?? Int64(0)
             print("parentWalletId \(parentWalletId)")
             var extras: [String:String] = [:]
-            if currency.currency == CurrencyHelper.Coin.EOS.rawValue{
+            if self.hasAccount(currency: currency){
                 extras["account_name"] = self.accountName.text
             }
             Wallets.shared.createWallet(currency: currency.currency, tokenAddress: currency.tokenAddress, parentWalletId: parentWalletId, name: self.walletName.text!, pinSecret: pinSecret, extras: extras) {  result in
@@ -144,7 +149,7 @@ class AddWalletController : UIViewController {
             print("onsubmit currency or name not ready")
             return
         }
-        if currency.currency == CurrencyHelper.Coin.EOS.rawValue {
+        if hasAccount(currency: currency) {
             validateForEos(currency: currency)
         }else{
             inputPinCode(currency: currency)
@@ -183,8 +188,11 @@ extension AddWalletController : UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         onSelected(currency: supportedCurrencies[row])
     }
+    func isToken(currency: Currency)->Bool{
+        return currency.tokenAddress.count > 0
+    }
     func onSelected(currency: Currency){
-        if currency.tokenAddress.count > 0 {
+        if isToken(currency:currency) {
             parentLabel.isHidden = false
             parentPicker.isHidden = false
             noParrentConstraint.isActive = false
@@ -200,7 +208,7 @@ extension AddWalletController : UIPickerViewDelegate {
             parentWallets = nil
             parentWallet = nil
         }
-        accountName.isHidden = currency.currency != CurrencyHelper.Coin.EOS.rawValue
+        accountName.isHidden = !self.hasAccount(currency: currency)
     }
 }
 

@@ -20,6 +20,7 @@ class TransactionDetailController : UIViewController {
     @IBOutlet weak var labelMemo: UILabel!
     @IBOutlet weak var labelDesc: UILabel!
     var wallet: Wallet?
+    @IBOutlet weak var amountTitle: UILabel!
     var transaction: Transaction?
 
 
@@ -33,46 +34,61 @@ class TransactionDetailController : UIViewController {
         var currencySymbol = ""
 
         self.centerHorizontal(uiview: self.currencyView, screenWidth: Int(self.view.frame.width))
+
+                if let item = transaction{
+                    labelFromAddress.text = item.fromAddress
+                    labelToAddress.text = item.toAddress
+                    if !item.pending {
+                        removeView(view: labelPending!)
+                    }
+                    amount = item.amount
+                    if item.success{
+                        labelTxId.text = item.txid
+                    }else{
+                        labelTxId.textColor = UIColor.red
+                        labelTxId.text = item.error
+                    }
+                    self.wrapContent(label: self.labelPending!, text: labelPending.text!)
+        //            self.wrapContent(label: self.labelTxId!, text: labelTxId.text!)
+                    labelFail.isHidden = item.success
+                    labelFee.text = item.transactionFee
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy/MM/dd hh:mm:ss"
+                    labelTime.text = dateFormatter.string(from: Date(timeIntervalSince1970: Double(item.timestamp)))
+                    if item.direction == .IN {
+                        labelWithdraw.isHidden = true
+                        labelDeposit.isHidden = false
+                    } else{
+                        labelWithdraw.isHidden = false
+                        labelDeposit.isHidden = true
+                    }
+
+                    self.labelMemo.text = item.memo.count == 0 ? "-" : item.memo
+                    self.labelDesc.text = item.description.count == 0 ? "-" : item.description
+                    fetchTransactionInfo()
+                }
+
+                labelAmount.text = "\(amount) \(currencySymbol)"
+        
         if let wallet = wallet {
             currencySymbol = wallet.currencySymbol
             currencyView.setSymbol(wallet.currencySymbol)
             currencyView.contentView.backgroundColor = UIColor.white
             currencyView.currencyLabel.textColor = UIColor.black
+            CurrencyManager.shared.getAll{ result in
+                if let c = CurrencyHelper.findCurrency(currencies: result, wallet: wallet){
+                    DispatchQueue.main.async {
+                        if(CurrencyHelper.isFungibleToken(currency: c)){
+                            self.amountTitle.text = "Token ID"
+                            self.labelAmount.text = "\(amount)"
+                        }else{
+                            self.amountTitle.text = "Amount"
+                        }
+                    }
+                }
+            }
+            
         }
-        if let item = transaction{
-            labelFromAddress.text = item.fromAddress
-            labelToAddress.text = item.toAddress
-            if !item.pending {
-                removeView(view: labelPending!)
-            }
-            amount = item.amount
-            if item.success{
-                labelTxId.text = item.txid
-            }else{
-                labelTxId.textColor = UIColor.red
-                labelTxId.text = item.error
-            }
-            self.wrapContent(label: self.labelPending!, text: labelPending.text!)
-//            self.wrapContent(label: self.labelTxId!, text: labelTxId.text!)
-            labelFail.isHidden = item.success
-            labelFee.text = item.transactionFee
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy/MM/dd hh:mm:ss"
-            labelTime.text = dateFormatter.string(from: Date(timeIntervalSince1970: Double(item.timestamp)))
-            if item.direction == .IN {
-                labelWithdraw.isHidden = true
-                labelDeposit.isHidden = false
-            } else{
-                labelWithdraw.isHidden = false
-                labelDeposit.isHidden = true
-            }
-
-            self.labelMemo.text = item.memo.count == 0 ? "-" : item.memo
-            self.labelDesc.text = item.description.count == 0 ? "-" : item.description
-            fetchTransactionInfo()
-        }
-
-        labelAmount.text = "\(amount) \(currencySymbol)"
     }
     func wrapContent(label: UILabel, text: String, xOffset: CGFloat = 0){
         label.text = text
@@ -104,7 +120,7 @@ class TransactionDetailController : UIViewController {
         Wallets.shared.getTransactionInfo(currency: wallet!.currency, txid: transaction!.txid, completion: { result in
             switch result {
             case .success(let result):
-                print("getTransactionInfo \(result)")
+                print("getTransactionInfo \(result.data)")
                 self.labelFee.text = result.fee
                 self.labelConfirmBlock.isHidden = false
                 let text = "\(result.confirmBlocks)  CONFIRMED"

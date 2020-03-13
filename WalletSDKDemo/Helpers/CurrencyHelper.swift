@@ -33,7 +33,17 @@ class CurrencyHelper {
         Key(currency: .EOS, tokenAddress: ""): "https://eosflare.io/tx/%@",
         Key(currency: .TRX, tokenAddress: ""): "https://tronscan.org/#/transaction/%@",
     ]
-    
+    static func findCurrency(currencies: Array<Currency>, wallet: Wallet)-> Currency?{
+        for c in currencies{
+            if(c.currency == wallet.currency && c.tokenAddress == wallet.tokenAddress){
+                return c
+            }
+        }
+        return nil
+    }
+    static func isFungibleToken(currency: Currency) -> Bool{
+        return currency.tokenVersion == 721
+    }
     static func getBlockExplorerUri(currency: Int, tokenAddress: String, txid: String) -> String {
         if let coin = CurrencyHelper.Coin(rawValue: currency), let uri = txExplorers[Key(currency: coin, tokenAddress: tokenAddress)] {
             return String(format: uri, txid)

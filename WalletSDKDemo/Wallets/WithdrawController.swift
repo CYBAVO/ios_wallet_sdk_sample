@@ -14,9 +14,14 @@ class WithdrawController : UIViewController{
     @IBOutlet weak var amountQuotaTextView: UITextView!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var currencyView: CurrencyView!
+    @IBOutlet weak var tokenIdPicker: UIPickerView!
+    @IBOutlet weak var amountTitle: UITextView!
     
     var wallet: Wallet?
     var transactionFee = Array<Fee>()
+    var tokenIds = Array<String>()
+    let feePickerId: String = "feePicker"
+    let tokenIdPickerId: String = "tokenIdPicker"
     
     override func viewDidLoad() {
         [addressTextField, amountTextField].forEach{ textField in
@@ -24,8 +29,13 @@ class WithdrawController : UIViewController{
             textField?.delegate = self
         }
         amountTextField.addDoneCancelToolbar()
+        feePicker.accessibilityIdentifier = feePickerId
         feePicker.dataSource = self
         feePicker.delegate = self
+        
+        tokenIdPicker.accessibilityIdentifier = tokenIdPickerId
+        tokenIdPicker.dataSource = self
+        tokenIdPicker.delegate = self
 //        feePicker.isHidden = wallet.
         sendButton.isUserInteractionEnabled = false
         guard let w = wallet else {
@@ -61,7 +71,14 @@ class WithdrawController : UIViewController{
             switch result {
             case .success(let result):
                 print("getBalance \(result)")
-                self.balanceTextView.text = "\(result.balance[w.walletId]?.balance ?? "") \(w.currencySymbol)"
+                if let balanceItem = result.balance[w.walletId]{
+                    self.tokenIds = balanceItem.tokens
+                    DispatchQueue.main.async {
+                        self.tokenIdPicker.reloadAllComponents()
+                    }
+                    print("eee_getBalance \(balanceItem.balance) \(w.currencySymbol)")
+                    self.balanceTextView.text = "\(balanceItem.balance) \(w.currencySymbol)"
+                }
                 break
             case .failure(let error):
                 print("getBalance \(error)")
@@ -79,6 +96,22 @@ class WithdrawController : UIViewController{
             case .failure(let error):
                 print("getWalletUsage \(error)")
                 break
+            }
+        }
+        
+        CurrencyManager.shared.getAll{ result in
+            if let c = CurrencyHelper.findCurrency(currencies: result, wallet: w){
+                DispatchQueue.main.async {
+                    if(CurrencyHelper.isFungibleToken(currency: c)){
+                        self.amountTitle.text = "Token ID"
+                        self.tokenIdPicker.isHidden = false
+                        self.amountTextField.isHidden = true
+                    }else{
+                        self.amountTitle.text = "Amount"
+                        self.tokenIdPicker.isHidden = true
+                        self.amountTextField.isHidden = false
+                    }
+                }
             }
         }
     }
@@ -107,7 +140,8 @@ class WithdrawController : UIViewController{
         }
     }
     @IBAction func onSend(_ sender: Any) {
-        guard let w = wallet, let toAddress = addressTextField.text, let amount = amountTextField.text, let fee = getTranscationFeeAsParam() else {
+        let amountText = tokenIdPicker.isHidden ? amountTextField.text : tokenIds[safe: tokenIdPicker.selectedRow(inComponent: 0)]
+        guard let w = wallet, let toAddress = addressTextField.text, let amount = amountText, amountText != "", let fee = getTranscationFeeAsParam() else {
             return
         }
         
@@ -144,12 +178,39 @@ extension WithdrawController : UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return transactionFee.count
+        if(pickerView.accessibilityIdentifier == tokenIdPickerId){
+            return tokenIds.count
+        }else{
+            return transactionFee.count
+        }
     }
 }
 
 extension WithdrawController : UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        if(pickerView.accessibilityIdentifier == tokenIdPickerId){
+            return getTokenIdPickerView(pickerView, viewForRow: row, forComponent: component, reusing: view)
+        }else{
+            return getFeePickerView(pickerView, viewForRow: row, forComponent: component, reusing: view)
+        }
+    }
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return 32
+    }
+    
+    func getTokenIdPickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView{
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: pickerView.frame.width, height: 32))
+        if let tokenId = tokenIds[safe: row] {
+            let amount = UILabel(frame: CGRect(x: 0, y: 0, width: pickerView.frame.width, height: 32))
+            amount.text = tokenId
+            amount.numberOfLines = 1
+            amount.font = amount.font.withSize(14)
+            amount.textColor = .white
+            view.addSubview(amount)
+        }
+        return view
+    }
+    func getFeePickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView{
         let view = UIView(frame: CGRect(x: 0, y: 0, width: pickerView.frame.width, height: 32))
         if let fee = transactionFee[safe: row] {
             let amount = UILabel(frame: CGRect(x: 0, y: 0, width: pickerView.frame.width, height: 12))
@@ -169,16 +230,13 @@ extension WithdrawController : UIPickerViewDelegate {
         }
         return view
     }
-    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return 32
-    }
 }
 
 extension WithdrawController : UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard
-            let address = addressTextField.text, !address.isEmpty,
-            let amount = amountTextField.text, !amount.isEmpty
+            let address = addressTextField.text, !address.isEmpty
+//            let amount = amountTextField.text, !amount.isEmpty
             else {
                 sendButton.isUserInteractionEnabled = false
                 return true
@@ -195,5 +253,6 @@ extension WithdrawController : UITextFieldDelegate {
 extension WithdrawController : QRCodeContentDelegate {
     func onScan(code: String) {
         addressTextField.text = code
+         sendButton.isUserInteractionEnabled = !code.isEmpty
     }
 }
