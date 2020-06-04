@@ -1,54 +1,54 @@
 PODS:
-  - Alamofire (4.9.0)
+  - Alamofire (4.9.1)
   - AlamofireObjectMapper (5.2.1):
     - Alamofire (~> 4.7)
     - ObjectMapper (~> 3.4)
   - CryptoSwift (1.0.0)
-  - CYBAVOWallet (1.1.96):
-    - Alamofire (~> 4.8)
-    - AlamofireObjectMapper (~> 5.2)
-    - CryptoSwift
-    - ObjectMapper (~> 3.4)
-    - SwiftOTP
-    - SwiftyUserDefaults (= 4.0.0-alpha.1)
+  - CYBAVOWallet (1.2.187):
+    - Alamofire (~> 4.9.0)
+    - AlamofireObjectMapper (~> 5.2.1)
+    - CryptoSwift (= 1.0.0)
+    - ObjectMapper (~> 3.5.1)
+    - SwiftOTP (= 2.0.0)
+    - SwiftyUserDefaults (= 4.0.0)
   - GoogleSignIn (4.4.0):
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
     - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleToolboxForMac/DebugUtils (2.2.1):
-    - GoogleToolboxForMac/Defines (= 2.2.1)
-  - GoogleToolboxForMac/Defines (2.2.1)
-  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.1)":
-    - GoogleToolboxForMac/DebugUtils (= 2.2.1)
-    - GoogleToolboxForMac/Defines (= 2.2.1)
-    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.1)"
-  - "GoogleToolboxForMac/NSString+URLArguments (2.2.1)"
-  - GTMSessionFetcher/Core (1.2.2)
-  - ObjectMapper (3.5.1)
+  - GoogleToolboxForMac/DebugUtils (2.2.2):
+    - GoogleToolboxForMac/Defines (= 2.2.2)
+  - GoogleToolboxForMac/Defines (2.2.2)
+  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.2)":
+    - GoogleToolboxForMac/DebugUtils (= 2.2.2)
+    - GoogleToolboxForMac/Defines (= 2.2.2)
+    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.2)"
+  - "GoogleToolboxForMac/NSString+URLArguments (2.2.2)"
+  - GTMSessionFetcher/Core (1.4.0)
+  - ObjectMapper (3.5.3)
   - PKHUD (5.3.0)
   - SwiftEventBus (3.0.1)
-  - SwiftOTP (1.0.0):
-    - CryptoSwift (>= 0.10.0)
-  - SwiftyUserDefaults (4.0.0-alpha.1)
+  - SwiftOTP (2.0.0):
+    - CryptoSwift (>= 1.0.0)
+  - SwiftyUserDefaults (4.0.0)
   - Toast-Swift (4.0.1)
 
 DEPENDENCIES:
   - Alamofire (~> 4.8)
   - AlamofireObjectMapper (~> 5.2)
   - CryptoSwift
-  - CYBAVOWallet (~> 1.1.0)
+  - CYBAVOWallet (~> 1.2.0)
   - GoogleSignIn (= 4.4.0)
   - ObjectMapper (~> 3.4)
   - PKHUD (~> 5.0)
   - SwiftEventBus (from `https://github.com/cesarferreira/SwiftEventBus.git`, tag `3.0.1`)
   - SwiftOTP
-  - SwiftyUserDefaults (= 4.0.0-alpha.1)
+  - SwiftyUserDefaults (= 4.0.0)
   - Toast-Swift (~> 4.0.0)
 
 SPEC REPOS:
-  https://bitbucket.org/cybavo/Specs_501.git:
+  https://bitbucket.org/cybavo/specs_512.git:
     - CYBAVOWallet
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - AlamofireObjectMapper
     - CryptoSwift
@@ -72,20 +72,20 @@ CHECKOUT OPTIONS:
     :tag: 3.0.1
 
 SPEC CHECKSUMS:
-  Alamofire: afc3e7c6db61476cb45cdd23fed06bad03bbc321
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   AlamofireObjectMapper: 1989f690e982b71921b9253f53a4f33a9bc00d88
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
-  CYBAVOWallet: c548d1473d4134cb54fb11a3a321cddf151b5202
+  CYBAVOWallet: c490df19627f987439f651b7b54516fde9a54bc2
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
-  GoogleToolboxForMac: b3553629623a3b1bff17f555e736cd5a6d95ad55
-  GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
-  ObjectMapper: 70187b8941977c62ccfb423caf6b50be405cabf0
+  GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
+  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
+  ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
   PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
   SwiftEventBus: 87ccaeceff91b748775e37751ae3a81ec815b3d5
-  SwiftOTP: c3deebbc468b33fab479bb494d93eb5fb41ba3ed
-  SwiftyUserDefaults: cebe0ff9472f52699772a514b6f7155861d8069b
+  SwiftOTP: f5e4df69cd4d1642e4bb3cb9e12bf6e9669ea164
+  SwiftyUserDefaults: 6a1951df1daa19337862b677dd9a4b9bd4c288cd
   Toast-Swift: e42a638589a2f95036b4bb7626cfbdde7daf0393
 
-PODFILE CHECKSUM: 1d0f86db3dc28ed25c0e0c09a40f2787bd058cd7
+PODFILE CHECKSUM: 2cf59956171fa210469f1e62c51d19c0239b7ce6
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.9.3
