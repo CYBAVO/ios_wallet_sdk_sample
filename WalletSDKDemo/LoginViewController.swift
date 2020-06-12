@@ -10,16 +10,24 @@ import UIKit
 import GoogleSignIn
 import SwiftEventBus
 import CYBAVOWallet
+import AuthenticationServices
 
-class LoginViewController: UIViewController, GIDSignInUIDelegate {
-
+class LoginViewController: UIViewController, GIDSignInUIDelegate, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     @IBOutlet weak var signInButton: GIDSignInButton!
-
-
+    @IBOutlet weak var appleAuthView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         GIDSignIn.sharedInstance().uiDelegate = self
+        
+        if #available(iOS 13.0, *) {
+            let authorizationAppleIDButton: ASAuthorizationAppleIDButton = ASAuthorizationAppleIDButton()
+            authorizationAppleIDButton.addTarget(self, action: #selector(pressSignInWithAppleButton), for: UIControl.Event.touchUpInside)
+            
+            authorizationAppleIDButton.frame = self.appleAuthView.bounds
+            self.appleAuthView.addSubview(authorizationAppleIDButton)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -36,6 +44,73 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     
     @IBAction func onSignInClick(_ sender: Any) {
         GIDSignIn.sharedInstance().signIn()
+    }
+    
+    @available(iOS 13.0, *)
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+    
+    @objc func pressSignInWithAppleButton() {
+        if #available(iOS 13.0, *) {
+            let authorizationAppleIDRequest: ASAuthorizationAppleIDRequest = ASAuthorizationAppleIDProvider().createRequest()
+            authorizationAppleIDRequest.requestedScopes = [.fullName, .email]
+
+            let controller: ASAuthorizationController = ASAuthorizationController(authorizationRequests: [authorizationAppleIDRequest])
+
+            controller.delegate = self
+            controller.presentationContextProvider = self
+
+            controller.performRequests()
+        }
+    }
+    /// apple sing in success
+    @available(iOS 13.0, *)
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+                
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            let identity = Identity()
+            identity.provider = "Apple"
+            if let idTokenData = appleIDCredential.identityToken{
+                identity.idToken = String(decoding: idTokenData, as: UTF8.self)
+            }
+            if let fullName = appleIDCredential.fullName {
+                //this is only for demo. In production app, please do this by locale
+                identity.name = getFullName(firstName: fullName.givenName ?? "", lastName: fullName.familyName ?? "")
+            }
+            identity.email = appleIDCredential.email ?? ""
+            SwiftEventBus.post("apple_signed_in", sender: identity)
+        }
+    }
+    
+    /// apple signin fail
+    @available(iOS 13.0, *)
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+                
+        switch (error) {
+        case ASAuthorizationError.canceled:
+            break
+        case ASAuthorizationError.failed:
+            break
+        case ASAuthorizationError.invalidResponse:
+            break
+        case ASAuthorizationError.notHandled:
+            break
+        case ASAuthorizationError.unknown:
+            break
+        default:
+            break
+        }
+                    
+        print("didCompleteWithError: \(error.localizedDescription)")
+    }
+    //combine firstName and lastName depends on if it's chinese or not
+    func getFullName(firstName: String, lastName: String) -> String{
+        if((firstName.range(of: "\\p{Han}", options: .regularExpression) != nil) &&
+            (lastName.range(of: "\\p{Han}", options: .regularExpression) != nil)){
+                return "\(lastName)\(firstName)"
+        }
+        return "\(firstName) \(lastName)"
     }
 }
 

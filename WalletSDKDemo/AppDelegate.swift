@@ -31,8 +31,10 @@ var PushDeviceToken = ""
             
             let encodedData = try! NSKeyedArchiver.archivedData(withRootObject: user, requiringSecureCoding: false)
             UserDefaults.standard.setValue(encodedData, forKey: "googlesignin_user")
-
-            SwiftEventBus.post("google_signed_in", sender: user.authentication.idToken)
+            let identity = Identity()
+            identity.provider = "Google"
+            identity.idToken = user.authentication.idToken
+            SwiftEventBus.post("google_signed_in", sender: identity)
         }
     }
     
@@ -186,10 +188,10 @@ var PushDeviceToken = ""
            completionHandler()
        }
        
-       func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-           print("willPresent", notification.request.content)
-           completionHandler([])
-    
-       }
+   func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+       print("willPresent", notification.request.content)
+       completionHandler([])
+
+   }
 }
 

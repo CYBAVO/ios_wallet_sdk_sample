@@ -17,25 +17,38 @@ class SettingsController : UITableViewController {
         settingTableView.delegate = self
         versionCell.selectionStyle = .none
         accounCell.selectionStyle = .none
-        guard let userData = UserDefaults.standard.value(forKey: "googlesignin_user") as? Data else {
-            NSLog("no googlesignin_user")
-            return
-        }
-        
-        guard let user = try! NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(userData) else {
-            NSLog("unable to unarchive")
-            return
-        }
-        
-        if let user = user as? GIDGoogleUser {
-            nameLabel.text = user.profile.name
-            emailLabel.text = user.profile.email
-            
-            getData(from: user.profile.imageURL(withDimension: 50)) { data, response, error in
-                guard let data = data, error == nil else { return }
-                DispatchQueue.main.async() {
-                    self.avatarImageView.image = UIImage(data: data)
+        Auth.shared.getUserState { result in
+            switch result {
+            case .success(let getUserStateResult):
+                self.nameLabel.text = getUserStateResult.userState.realName
+                self.emailLabel.text = getUserStateResult.userState.email
+                break
+            case .failure(let error):
+                //get from local (google only)
+                print("getUserStateResult failed \(error)")
+                
+                guard let userData = UserDefaults.standard.value(forKey: "googlesignin_user") as? Data else {
+                    NSLog("no googlesignin_user")
+                    return
                 }
+                
+                guard let user = try! NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(userData) else {
+                    NSLog("unable to unarchive")
+                    return
+                }
+                
+                if let user = user as? GIDGoogleUser {
+                    self.nameLabel.text = user.profile.name
+                    self.emailLabel.text = user.profile.email
+                    
+                    self.getData(from: user.profile.imageURL(withDimension: 50)) { data, response, error in
+                        guard let data = data, error == nil else { return }
+                        DispatchQueue.main.async() {
+                            self.avatarImageView.image = UIImage(data: data)
+                        }
+                    }
+                }
+                break
             }
         }
     }

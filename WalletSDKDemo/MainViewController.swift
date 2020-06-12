@@ -22,17 +22,24 @@ class MainViewController: UIViewController {
         Auth.shared.addSignInStateDelegate(self)
 
         SwiftEventBus.onMainThread(self, name: "google_signed_in") { result in
-            guard let idToken = result?.object as? String else {
+            guard let identity = result?.object as? Identity else {
                 return
             }
             print("LoginVC google_signed_in")
-            self.doSignIn(token: idToken)
+            self.doSignIn(identity: identity)
         }
         
         SwiftEventBus.onMainThread(self, name: "google_signed_in_failed") { result in
             self.showSignIn()
         }
         
+        SwiftEventBus.onMainThread(self, name: "apple_signed_in") { result in
+            guard let identity = result?.object as? Identity else {
+                return
+            }
+            print("LoginVC apple_signed_in")
+            self.doSignIn(identity: identity)
+        }
         let transform = CGAffineTransform(scaleX: 2.0, y: 2.0);
         indicatorView.transform = transform
     }
@@ -59,6 +66,7 @@ class MainViewController: UIViewController {
                 break
             case .failure(let error):
                 print("getUserStateResult failed \(error)")
+                self.showSignIn()
                 break
             }
         }
@@ -74,9 +82,9 @@ class MainViewController: UIViewController {
         indicatorView.stopAnimating()
     }
     
-    func doSignIn(token: String) {
+    func doSignIn(identity: Identity) {
         print("cybavo doSignIn")
-        Auth.shared.signIn(token: token, identityProvider: "Google") { result in
+        Auth.shared.signIn(token: identity.idToken, identityProvider: identity.provider) { result in
             switch result {
             case .success(_):
                 print("cybavo signed in")
@@ -95,7 +103,7 @@ class MainViewController: UIViewController {
             case .failure(let error):
                 print("cybavo signIn error \(error)")
                 if error.code == .ErrRegistrationRequired {
-                    self.doSignUp(token: token)
+                    self.doSignUp(identity: identity)
                 }
                 self.showSignIn()
                 break
@@ -103,12 +111,15 @@ class MainViewController: UIViewController {
         }
     }
     
-    func doSignUp(token: String) {
-        Auth.shared.signUp(token: token, identityProvider: "Google") { result in
+    func doSignUp(identity: Identity) {
+
+        var extras: [String:String] = [:]
+        extras["user_name"] = identity.name //Required for Apple Auth. Optional for other services
+        Auth.shared.signUp(token: identity.idToken, identityProvider: identity.provider, extras: extras) { result in
             switch result {
             case .success(_):
                 print("cybavo signed up")
-                self.doSignIn(token: token)
+                self.doSignIn(identity: identity)
                 break
             case .failure(let error):
                 print("cybavo signup error \(error)")

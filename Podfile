@@ -11,7 +11,7 @@ target 'WalletSDKDemo' do
   # Pods for CYBAVOWallet
   pod 'ObjectMapper', '~> 3.4'
   pod 'AlamofireObjectMapper', '~> 5.2'
-  pod 'Alamofire', '~> 4.8'
+  pod 'Alamofire', '~> 4.9.0'
   pod 'CryptoSwift'
   pod 'SwiftyUserDefaults', '4.0.0'
   pod 'GoogleSignIn', '4.4.0'

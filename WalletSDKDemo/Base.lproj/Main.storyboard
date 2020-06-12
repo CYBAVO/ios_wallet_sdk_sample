@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="AQH-AZ-0yv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="AQH-AZ-0yv">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,23 +16,45 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Sign In With Google Account" lineBreakMode="wordWrap" numberOfLines="4" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="cF2-Le-7mQ">
-                                <rect key="frame" x="40" y="187" width="245" height="293"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Sign In With Social Accounts" lineBreakMode="wordWrap" numberOfLines="4" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="cF2-Le-7mQ">
+                                <rect key="frame" x="25.5" y="54" width="224" height="293"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="224" id="2Tp-QA-YOq"/>
+                                    <constraint firstAttribute="height" constant="293" id="TaT-Y0-Hdv"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="50"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jM9-fn-5M3" customClass="GIDSignInButton">
-                                <rect key="frame" x="32" y="539" width="311" height="46"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jM9-fn-5M3" customClass="GIDSignInButton">
+                                <rect key="frame" x="32" y="571" width="311" height="46"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="311" id="RpV-xq-Mwv"/>
+                                    <constraint firstAttribute="height" constant="46" id="gfG-pX-dA4"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OYB-5O-oua">
+                                <rect key="frame" x="32" y="515" width="311" height="46"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="311" id="UEc-r3-mqS"/>
+                                    <constraint firstAttribute="height" constant="46" id="xRx-Ip-E83"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.2470588235" green="0.31764705879999999" blue="0.70980392160000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="OYB-5O-oua" firstAttribute="centerX" secondItem="K9I-jD-KjA" secondAttribute="centerX" id="ILM-Lr-aI5"/>
+                            <constraint firstItem="jM9-fn-5M3" firstAttribute="top" secondItem="OYB-5O-oua" secondAttribute="bottom" constant="10" id="UWM-Qn-rPq"/>
+                            <constraint firstItem="K9I-jD-KjA" firstAttribute="bottom" secondItem="jM9-fn-5M3" secondAttribute="bottom" constant="50" id="ZPB-Nb-0sU"/>
+                            <constraint firstItem="cF2-Le-7mQ" firstAttribute="top" secondItem="K9I-jD-KjA" secondAttribute="top" constant="54" id="bUL-Wn-dZY"/>
+                            <constraint firstItem="cF2-Le-7mQ" firstAttribute="centerX" secondItem="K9I-jD-KjA" secondAttribute="centerX" constant="-50" id="ltP-Ci-pjV"/>
+                            <constraint firstItem="jM9-fn-5M3" firstAttribute="centerX" secondItem="K9I-jD-KjA" secondAttribute="centerX" id="zKB-ID-KTf"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="K9I-jD-KjA"/>
                     </view>
                     <connections>
+                        <outlet property="appleAuthView" destination="OYB-5O-oua" id="eDD-Wr-jm6"/>
                         <outlet property="signInButton" destination="jM9-fn-5M3" id="tTt-ug-KQp"/>
                     </connections>
                 </viewController>
