@@ -80,12 +80,31 @@ extension RecoveryRequestController : UITextFieldDelegate {
         }
         return newLength <= RECOVERYCODE_LENGTH
     }
+    func setupBackupChallenge(_ challenges: [BackupChallenge]) {
+           guard let pc = pinSecret, challenges.count == 3 else {
+               NavigationHelper.back(from: self)
+               return
+           }
+           
+           Auth.shared.setupBackupChallenge(pinSecret: pc, challenge1: challenges[0], challenge2: challenges[1], challenge3: challenges[2]) { result in
+               switch result {
+               case .success(_):
+                   print("setup backup challenge success")
+                   self.onSetPINSuccessed(backNum: 2)
+                   break
+               case .failure(let error):
+               print("setup backup challenge failed \(error)")
+               self.onSetPINFailed(error: error)
+                   break
+               }
+           }
+       }
 }
 
 extension RecoveryRequestController : PinCodeDelegate {
     func onPin(pinSecret: PinSecret?) {
         self.pinSecret = pinSecret
-        self.performSegue(withIdentifier: "idInputBackupChallenge", sender: self);
+        self.performSegue(withIdentifier: "idInputBackupChallenge", sender: self);//setupAnswer
     }
 }
 
@@ -95,12 +114,12 @@ extension RecoveryRequestController : BackupChallengeDelegate {
             NavigationHelper.back(from: self)
             return
         }
-        
+
+        pc.retain()
         Auth.shared.recoverPinCode(pinSecret: pc, recoveryCode: recoveryCode) { result in
             switch result {
             case .success(_):
-                print("recovery pin code result")
-                self.onSetPINSuccessed(backNum: 2)
+                self.setupBackupChallenge(challenges)
                 break
             case .failure(let error):
                 print("recovery pin code failed \(error)")

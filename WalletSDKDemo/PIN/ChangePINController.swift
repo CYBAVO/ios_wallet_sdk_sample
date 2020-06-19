@@ -35,7 +35,7 @@ class ChangePINController : UIViewController {
         sendButton.isUserInteractionEnabled = false
     }
     @IBAction func onSubmit(_ sender: Any) {
-        guard let newPinCode = newCode.text, let currentPinCode = currentCode.text else {
+        guard let newPinCode = newCode.text, let currentPinCode = currentCode.text, let newPinSecret = self.newPinSecret, let currentPinSecret = self.currentPinSecret else {
             return
         }
         if currentPinCode.count != PINCODE_LENGTH {
@@ -53,8 +53,8 @@ class ChangePINController : UIViewController {
                 self.newCode.becomeFirstResponder()
             }))
             self.present(successAlert, animated: true)
-        }
-        Auth.shared.changePinCode(newPinCode: newPinCode, currentPinCode: currentPinCode) { result in
+        };
+        Auth.shared.changePinCode(newPinSecret: newPinSecret, currentPinSecret: currentPinSecret) { result in
             switch result {
             case .success(_):
                 let successAlert = UIAlertController(title: "Change pin successed", message: nil, preferredStyle: .alert)

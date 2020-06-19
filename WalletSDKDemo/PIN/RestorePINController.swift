@@ -32,7 +32,7 @@ class RestorePINController : InputPINUI {
         Auth.shared.getRestoreQuestions { result in
             switch result {
             case .success(let result):
-                print("getRestoreQuestions \(result)")
+                print("getRestoreQuestions \(result.questions)")
                 let questions = [self.question1, self.question2, self.question3]
                 for (index, element) in result.questions.enumerated() {
                     if let q = questions[safe: index] {
