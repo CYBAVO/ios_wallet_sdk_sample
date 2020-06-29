@@ -28,6 +28,7 @@ class EosResourceController : UIViewController, SSRadioButtonControllerDelegate{
     @IBOutlet weak var amountInput: UITextField!
     @IBOutlet weak var amountEos: UILabel!
     @IBOutlet weak var receiverInput: UITextField!
+    var historyChangedDelegate: HistoryChangedDelegate?
     var radioButtonController: SSRadioButtonsController?
     var wallet: Wallet?
     var currentRamPrice = 0.9416
@@ -282,6 +283,7 @@ class EosResourceController : UIViewController, SSRadioButtonControllerDelegate{
                     , description: "", pinSecret: pinSecret, extras:  extras) { result in
                 switch result {
                 case .success(_):
+                    self.historyChangedDelegate?.onChange()
                     let successAlert = UIAlertController(title: "Transaction succeed", message: nil, preferredStyle: .alert)
                     successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
                         self.getEosResourceState(accountName:w.address)

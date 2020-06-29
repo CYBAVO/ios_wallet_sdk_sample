@@ -4,6 +4,9 @@ import UIKit
 import CYBAVOWallet
 import QuartzCore
 
+public protocol HistoryChangedDelegate: class {
+    func onChange()
+}
 class WalletDetailController : UIViewController {
     @IBOutlet weak var balanceTextView: UITextView!
     @IBOutlet weak var walletAddressTextView: UITextView!
@@ -28,7 +31,8 @@ class WalletDetailController : UIViewController {
     var allFilterWidth: Int = 0;
     let NO_MORE_TEXT = "End of history"
     let LOADING_MORE_TEXT = "Loading more..."
-
+    var needReload = true;
+    
     func createMoreFilter(x: Int, y: Int) -> UIImageView{
         let image = UIImage(named: "ic_more_h")
         let imageView = UIImageView(image: image)
@@ -137,6 +141,9 @@ class WalletDetailController : UIViewController {
         return byTitle.count * 12
     }
     func createLoadMoreHint(){
+        if(loadMoreHint != nil){
+            return
+        }
         var title = NO_MORE_TEXT
         let label = createLabel(title: title, x: Int(self.view.frame.width / 2) - calWidth(byTitle: title)/2, y: Int(self.view.frame.size.height - 70))
 //        button.backgroundColor = UIColor(red: 80.0/255.0, green: 104.0/255.0, blue: 194.0, alpha: 1.0)
@@ -171,13 +178,14 @@ class WalletDetailController : UIViewController {
             delegate?.reloadHistory()
         }
     }
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         createLoadMoreHint()
-        if(historyItems.count == 0){
+        if(needReload){
             reloadHistory()
+            needReload = false
         }
+        
     }
-
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.loadMoreHint?.removeFromSuperview()
@@ -196,6 +204,7 @@ class WalletDetailController : UIViewController {
         case "idWithdraw":
             let vc = segue.destination as! WithdrawController
             vc.wallet = wallet
+            vc.historyChangedDelegate = self
             break;
         case "idDeposit":
             let vc = segue.destination as! DepositController
@@ -206,11 +215,13 @@ class WalletDetailController : UIViewController {
                 vc.wallet = wallet
                 vc.transaction = transaction
                 selectingItem = nil
+                vc.historyChangedDelegate = self
             }
             break;
         case "idEosResource":
             let vc = segue.destination as! EosResourceController
             vc.wallet = wallet
+            vc.historyChangedDelegate = self
             break;
         default:
             break;
@@ -400,7 +411,12 @@ extension WalletDetailController : UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
-
+extension WalletDetailController: HistoryChangedDelegate{
+    func onChange() {
+        self.needReload = true;
+    }
+    
+}
 extension WalletDetailController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return historyItems.count ?? 0
@@ -420,6 +436,15 @@ extension WalletDetailController : UITableViewDataSource {
             } else{
                 cell.directionLabel.text = "Withdraw"
                 cell.directionLabel.backgroundColor = UIColor(red: 1.0, green: 187.0/255.0, blue: 51.0/255.0, alpha: 1.0)
+            }
+            if(tx.replaced){
+                cell.replaceAddressLabel.text = tx.replaceTxid
+                let attributedText = NSAttributedString(string: tx.txid, attributes: [NSAttributedString.Key.strikethroughStyle: 1])
+                cell.addressLabel.attributedText = attributedText
+            }else{
+                cell.replaceAddressLabel.text = ""
+                let attributedText = NSAttributedString(string: tx.txid, attributes: [NSAttributedString.Key.strikethroughStyle: 0])
+                cell.addressLabel.attributedText = attributedText
             }
             cell.directionLabel.layer.masksToBounds = true
             cell.directionLabel.layer.cornerRadius = 8
@@ -446,3 +471,4 @@ extension Array{
         self += new
     }
 }
+

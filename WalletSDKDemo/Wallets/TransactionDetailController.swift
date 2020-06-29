@@ -16,13 +16,19 @@ class TransactionDetailController : UIViewController {
     
     @IBOutlet weak var labelFail: UILabel!
     @IBOutlet weak var labelPending: UILabel!
-    @IBOutlet weak var labelConfirmBlock: UILabel!
+    @IBOutlet weak var labelConfirmBlock: PaddingLabel!
+    @IBOutlet weak var labelReplaced: PaddingLabel!
     @IBOutlet weak var labelMemo: UILabel!
     @IBOutlet weak var labelDesc: UILabel!
+    @IBOutlet weak var btnSpeedUp: UIButton!
+    @IBOutlet weak var btnCancel: UIButton!
+    @IBOutlet weak var labelReplacedTxid: UILabel!
     var wallet: Wallet?
     @IBOutlet weak var amountTitle: UILabel!
     var transaction: Transaction?
-
+    var historyChangedDelegate: HistoryChangedDelegate?
+    // must be at least 10% higher than original transaction, let's just hard-coded a value for now
+    let LARGER_TX_FEE: String = "0.0000003"
 
     func centerHorizontal(uiview: UIView, screenWidth: Int){
         var frm : CGRect = uiview.frame
@@ -47,6 +53,21 @@ class TransactionDetailController : UIViewController {
                     }else{
                         labelTxId.textColor = UIColor.red
                         labelTxId.text = item.error
+                    }
+                    if(item.replaced){
+                        labelReplaced.isHidden = false
+                        labelReplacedTxid.text = item.replaceTxid
+                        let attributedText = NSAttributedString(string: item.txid, attributes: [NSAttributedString.Key.strikethroughStyle: 1])
+                        labelTxId.attributedText = attributedText
+                    }else{
+                        labelReplaced.isHidden = true
+                    }
+                    if(item.replaceable){
+                        btnSpeedUp.isHidden = false
+                        btnCancel.isHidden = false
+                    }else{
+                        btnSpeedUp.isHidden = true
+                        btnCancel.isHidden = true
                     }
                     self.wrapContent(label: self.labelPending!, text: labelPending.text!)
         //            self.wrapContent(label: self.labelTxId!, text: labelTxId.text!)
@@ -120,7 +141,6 @@ class TransactionDetailController : UIViewController {
         Wallets.shared.getTransactionInfo(currency: wallet!.currency, txid: transaction!.txid, completion: { result in
             switch result {
             case .success(let result):
-                print("getTransactionInfo \(result.data)")
                 self.labelFee.text = result.fee
                 self.labelConfirmBlock.isHidden = false
                 let text = "\(result.confirmBlocks)  CONFIRMED"
@@ -140,6 +160,60 @@ class TransactionDetailController : UIViewController {
             if let url = URL(string: uri){
                 UIApplication.shared.open(url, options: [:])
             }
+        }
+    }
+    @IBAction func onSpeedUp(_ sender: Any) {
+        if let w = wallet, let item = transaction {
+            let pinInput = PinInputViewController(nibName: "PinInputViewController", bundle: nil)
+            pinInput.callback = { pinSecret in
+                Wallets.shared.increaseTransactionFee(fromWalletId: w.walletId, txid: item.txid, transactionFee: self.LARGER_TX_FEE, pinSecret: pinSecret) { result in
+                    switch result {
+                    case .success(_):
+                        self.historyChangedDelegate?.onChange()
+                        let successAlert = UIAlertController(title: "Increase Transaction Fee successed", message: nil, preferredStyle: .alert)
+                        successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
+                            self.navigationController?.popViewController(animated: true)
+                        }))
+                        self.present(successAlert, animated: true)
+                        print("increaseTransactionFee onSuccess")
+                        break
+                    case .failure(let error):
+                        let failedAlert = UIAlertController(title: "Increase Transaction Fee failed", message: error.name, preferredStyle: .alert)
+                        failedAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                        self.present(failedAlert, animated: true)
+                        print("increaseTransactionFee onFailed")
+                        break
+                    }
+                }
+            }
+            present(pinInput, animated: true, completion: nil)
+        }
+    }
+    @IBAction func onCancel(_ sender: Any) {
+        if let w = wallet, let item = transaction {
+            let pinInput = PinInputViewController(nibName: "PinInputViewController", bundle: nil)
+            pinInput.callback = { pinSecret in
+                Wallets.shared.cancelTransaction(fromWalletId: w.walletId, txid: item.txid, transactionFee: self.LARGER_TX_FEE, pinSecret: pinSecret) { result in
+                    switch result {
+                    case .success(_):
+                        self.historyChangedDelegate?.onChange()
+                        let successAlert = UIAlertController(title: "Cancel Transaction Fee successed", message: nil, preferredStyle: .alert)
+                        successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
+                            self.navigationController?.popViewController(animated: true)
+                        }))
+                        self.present(successAlert, animated: true)
+                        print("increaseTransactionFee onSuccess")
+                        break
+                    case .failure(let error):
+                        let failedAlert = UIAlertController(title: "Cancel Transaction Fee failed", message: error.name, preferredStyle: .alert)
+                        failedAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                        self.present(failedAlert, animated: true)
+                        print("increaseTransactionFee onFailed")
+                        break
+                    }
+                }
+            }
+            present(pinInput, animated: true, completion: nil)
         }
     }
 }

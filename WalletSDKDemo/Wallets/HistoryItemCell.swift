@@ -8,4 +8,5 @@ class TransactionItemCell : UITableViewCell {
     @IBOutlet weak var amountLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var failImage: UIImageView!
+    @IBOutlet weak var replaceAddressLabel: UILabel!
 }

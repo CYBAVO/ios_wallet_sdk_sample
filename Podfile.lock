@@ -4,7 +4,7 @@ PODS:
     - Alamofire (~> 4.7)
     - ObjectMapper (~> 3.4)
   - CryptoSwift (1.0.0)
-  - CYBAVOWallet (1.2.188):
+  - CYBAVOWallet (1.2.191):
     - Alamofire (~> 4.9.0)
     - AlamofireObjectMapper (~> 5.2.1)
     - CryptoSwift (= 1.0.0)
@@ -75,7 +75,7 @@ SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   AlamofireObjectMapper: 1989f690e982b71921b9253f53a4f33a9bc00d88
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
-  CYBAVOWallet: 28aaddae6b19344bf797111569c2c350567421ab
+  CYBAVOWallet: c7b1f462bb40465c27f4c4e1fc0802128681cd7b
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10

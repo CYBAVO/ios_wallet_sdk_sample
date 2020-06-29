@@ -22,6 +22,7 @@ class WithdrawController : UIViewController{
     var tokenIds = Array<String>()
     let feePickerId: String = "feePicker"
     let tokenIdPickerId: String = "tokenIdPicker"
+    var historyChangedDelegate: HistoryChangedDelegate?
     
     override func viewDidLoad() {
         [addressTextField, amountTextField].forEach{ textField in
@@ -150,6 +151,7 @@ class WithdrawController : UIViewController{
             Wallets.shared.createTransaction(fromWalletId: w.walletId, toAddress: toAddress, amount: amount, transactionFee: fee, description: "", pinSecret: pinSecret) { result in
                 switch result {
                 case .success(_):
+                    self.historyChangedDelegate?.onChange()
                     let successAlert = UIAlertController(title: "Withdraw successed", message: nil, preferredStyle: .alert)
                     successAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {action in
                         self.navigationController?.popViewController(animated: true)
