@@ -74,9 +74,11 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, ASAuthorizatio
             if let idTokenData = appleIDCredential.identityToken{
                 identity.idToken = String(decoding: idTokenData, as: UTF8.self)
             }
-            if let fullName = appleIDCredential.fullName {
+            if let fullName = appleIDCredential.fullName, let givenName = fullName.givenName, let lastName = fullName.familyName {
                 //this is only for demo. In production app, please do this by locale
-                identity.name = getFullName(firstName: fullName.givenName ?? "", lastName: fullName.familyName ?? "")
+                identity.name = getFullName(firstName: givenName, lastName: lastName)
+            }else{
+                identity.name = UIDevice.current.name
             }
             identity.email = appleIDCredential.email ?? ""
             SwiftEventBus.post("apple_signed_in", sender: identity)
