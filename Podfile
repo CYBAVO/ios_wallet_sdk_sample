@@ -20,6 +20,8 @@ target 'WalletSDKDemo' do
   pod 'CYBAVOWallet', '~> 1.2.0'
   pod 'SwiftOTP'
   pod 'PKHUD', '~> 5.0'
+  pod 'Web3'
+  pod 'Web3/ContractABI'
 
   target 'WalletSDKDemoTests' do
     inherit! :search_paths
