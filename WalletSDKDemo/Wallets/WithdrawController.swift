@@ -23,6 +23,8 @@ class WithdrawController : UIViewController{
     let feePickerId: String = "feePicker"
     let tokenIdPickerId: String = "tokenIdPicker"
     var historyChangedDelegate: HistoryChangedDelegate?
+
+    private let ABI_JSON = "[{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_testInt\",\"type\":\"uint256\"},{\"name\":\"_testStr\",\"type\":\"string\"}],\"name\":\"balanceOfCB\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transferQQQ\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"transferFee\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_testInt\",\"type\":\"uint256\"},{\"name\":\"_testStr\",\"type\":\"string\"}],\"name\":\"transferCB\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"}]"
     
     override func viewDidLoad() {
         [addressTextField, amountTextField].forEach{ textField in
@@ -140,6 +142,39 @@ class WithdrawController : UIViewController{
             return ""
         }
     }
+    
+    /*
+     * The smart contract is on test net for testing purpose
+     * */
+    func callAbiFunctionRead(wallet: Wallet){
+        Wallets.shared.callAbiFunctionRead(walletId: wallet.walletId, name: "balanceOfCB", contractAddress: "0xef3aa4115b071a9a7cd43f1896e3129f296c5a5f", abiJson: ABI_JSON, args:["0x281F397c5a5a6E9BE42255b01EfDf8b42F0Cd179", 123, "test"]){ result in
+            switch result {
+            case .success(let result):
+                print("callAbiFunctionRead_\(result.output)_\(result.signedTx)_\(result.txid)")
+                break
+            case .failure(let error):
+                print("callAbiFunctionRead_\(error)")
+                break
+            }
+        }
+    }
+    
+    /*
+     * The smart contract is on test net for testing purpose
+     * */
+    func callAbiFunctionTransaction(wallet: Wallet, fee: String, pinSecret: PinSecret){
+        Wallets.shared.callAbiFunctionTransaction(walletId: wallet.walletId, name: "transferCB", contractAddress: "0xef3aa4115b071a9a7cd43f1896e3129f296c5a5f", abiJson: ABI_JSON, args: ["0x490d510c1A8b74749949cFE5cA06D0C6BD7119E2", 1, 100, "unittest"], transactionFee: fee, pinSecret: pinSecret){ result in
+                       switch result {
+                       case .success(let result):
+                            print("callAbiFunctionTransaction_\(result.output)_\(result.signedTx)_\(result.txid)")
+                           break
+                       case .failure(let error):
+                            print("callAbiFunctionTransaction_\(error)")
+                           break
+                       }
+        }
+    }
+    
     @IBAction func onSend(_ sender: Any) {
         let amountText = tokenIdPicker.isHidden ? amountTextField.text : tokenIds[safe: tokenIdPicker.selectedRow(inComponent: 0)]
         guard let w = wallet, let toAddress = addressTextField.text, let amount = amountText, amountText != "", let fee = getTranscationFeeAsParam() else {
@@ -148,6 +183,8 @@ class WithdrawController : UIViewController{
         
         let pinInput = PinInputViewController(nibName: "PinInputViewController", bundle: nil)
         pinInput.callback = { pinSecret in
+//            self.callAbiFunctionRead(wallet: w)
+//            self.callAbiFunctionTransaction(wallet: w, fee: fee, pinSecret: pinSecret)
             Wallets.shared.createTransaction(fromWalletId: w.walletId, toAddress: toAddress, amount: amount, transactionFee: fee, description: "", pinSecret: pinSecret) { result in
                 switch result {
                 case .success(_):
