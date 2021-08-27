@@ -8,20 +8,12 @@ target 'WalletSDKDemo' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for CYBAVOWallet
-  pod 'ObjectMapper', '~> 3.4'
-  pod 'AlamofireObjectMapper', '~> 5.2'
-  pod 'Alamofire', '~> 4.9.0'
-  pod 'CryptoSwift'
-  pod 'SwiftyUserDefaults', '4.0.0'
+  # Pods for WalletSDKDemo
   pod 'GoogleSignIn', '4.4.0'
-  pod 'SwiftEventBus', :tag => '3.0.1', :git => 'https://github.com/cesarferreira/SwiftEventBus.git'
+  pod 'SwiftEventBus', :tag => '5.1.0', :git => 'https://github.com/cesarferreira/SwiftEventBus.git'
   pod 'Toast-Swift', '~> 4.0.0'
   pod 'CYBAVOWallet', '~> 1.2.0'
-  pod 'SwiftOTP'
   pod 'PKHUD', '~> 5.0'
-  pod 'Web3'
-  pod 'Web3/ContractABI'
 
   target 'WalletSDKDemoTests' do
     inherit! :search_paths

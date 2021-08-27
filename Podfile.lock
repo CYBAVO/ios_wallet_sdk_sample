@@ -4,11 +4,11 @@ PODS:
     - Alamofire (~> 4.7)
     - ObjectMapper (~> 3.4)
   - BigInt (4.0.0)
-  - CryptoSwift (1.0.0)
-  - CYBAVOWallet (1.2.201):
+  - CryptoSwift (1.3.8)
+  - CYBAVOWallet (1.2.360):
     - Alamofire (~> 4.9.0)
     - AlamofireObjectMapper (~> 5.2.1)
-    - CryptoSwift (= 1.0.0)
+    - CryptoSwift (~> 1.3.8)
     - ObjectMapper (~> 3.5.1)
     - SwiftOTP (= 2.0.0)
     - SwiftyUserDefaults (= 4.0.0)
@@ -30,41 +30,34 @@ PODS:
   - ObjectMapper (3.5.3)
   - PKHUD (5.3.0)
   - secp256k1.swift (0.1.4)
-  - SwiftEventBus (3.0.1)
+  - SwiftEventBus (5.0.0)
   - SwiftOTP (2.0.0):
     - CryptoSwift (>= 1.0.0)
   - SwiftyUserDefaults (4.0.0)
   - Toast-Swift (4.0.1)
-  - Web3 (0.4.2):
-    - Web3/Core (= 0.4.2)
-    - Web3/HTTPExtension (= 0.4.2)
-  - Web3/ContractABI (0.4.2):
+  - Web3 (0.4.3):
+    - Web3/Core (= 0.4.3)
+    - Web3/HTTPExtension (= 0.4.3)
+  - Web3/ContractABI (0.4.3):
     - Web3/Core
-  - Web3/Core (0.4.2):
+  - Web3/Core (0.4.3):
     - BigInt (~> 4.0)
     - CryptoSwift (~> 1.0)
     - secp256k1.swift (~> 0.1)
-  - Web3/HTTPExtension (0.4.2):
+  - Web3/HTTPExtension (0.4.3):
     - Web3/Core
 
 DEPENDENCIES:
-  - Alamofire (~> 4.9.0)
-  - AlamofireObjectMapper (~> 5.2)
-  - CryptoSwift
   - CYBAVOWallet (~> 1.2.0)
   - GoogleSignIn (= 4.4.0)
-  - ObjectMapper (~> 3.4)
   - PKHUD (~> 5.0)
-  - SwiftEventBus (from `https://github.com/cesarferreira/SwiftEventBus.git`, tag `3.0.1`)
-  - SwiftOTP
-  - SwiftyUserDefaults (= 4.0.0)
+  - SwiftEventBus (from `https://github.com/cesarferreira/SwiftEventBus.git`, tag `5.1.0`)
   - Toast-Swift (~> 4.0.0)
-  - Web3
-  - Web3/ContractABI
 
 SPEC REPOS:
-  https://bitbucket.org/cybavo/specs_512.git:
+  https://bitbucket.org/cybavo/Specs_512.git:
     - CYBAVOWallet
+    - Web3
   https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - AlamofireObjectMapper
@@ -79,36 +72,35 @@ SPEC REPOS:
     - SwiftOTP
     - SwiftyUserDefaults
     - Toast-Swift
-    - Web3
 
 EXTERNAL SOURCES:
   SwiftEventBus:
     :git: https://github.com/cesarferreira/SwiftEventBus.git
-    :tag: 3.0.1
+    :tag: 5.1.0
 
 CHECKOUT OPTIONS:
   SwiftEventBus:
     :git: https://github.com/cesarferreira/SwiftEventBus.git
-    :tag: 3.0.1
+    :tag: 5.1.0
 
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   AlamofireObjectMapper: 1989f690e982b71921b9253f53a4f33a9bc00d88
   BigInt: 2aad1a9942dc932ec8b84290d2c564a3d76f97ab
-  CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
-  CYBAVOWallet: c2da4c84d339249de19480b3994d0550e0ec0d2f
+  CryptoSwift: 01b0f0cba1d5c212e5a335ff6c054fb75a204f00
+  CYBAVOWallet: 51dd4e50ec139096428ac0e40f235d6578766f5d
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
   PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
-  SwiftEventBus: 87ccaeceff91b748775e37751ae3a81ec815b3d5
+  SwiftEventBus: 976fdca8270b925c5f8e897f519cc49597e1f13c
   SwiftOTP: f5e4df69cd4d1642e4bb3cb9e12bf6e9669ea164
   SwiftyUserDefaults: 6a1951df1daa19337862b677dd9a4b9bd4c288cd
   Toast-Swift: e42a638589a2f95036b4bb7626cfbdde7daf0393
-  Web3: 7b2c30f98f24cc290bc671ab525d7a30a2afbc73
+  Web3: c57d5406a2ce218bafa0b286901e138b9f06e4f1
 
-PODFILE CHECKSUM: 66c01bc36d78da08f55295eab6616bf7af711228
+PODFILE CHECKSUM: 75ed283e1abd2504b36672ac0887a2f3854ee5ae
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.1
