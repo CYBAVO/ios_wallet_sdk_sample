@@ -18,7 +18,7 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 - CocoaPods `1.1.0+` is required to build `CYBAVOWallet 1.2.0+`  
 - specify in your `Podfile`:
 
-    ```swift
+    ```JSON
     source 'https://github.com/CocoaPods/Specs.git'
     source 'https://bitbucket.org/cybavo/Specs_512.git'
 
@@ -161,7 +161,7 @@ public enum SignInState {
 
 - If you activate the Security Enhancement in the console.  
 
-  <img src="images/sdk_guideline/screenshot_security_enhancement.png" alt="drawing" width="300"/>  
+  <img src="images/sdk_guideline/screenshot_security_enhancement.png" alt="drawing" width="500"/>  
 
   You might get `needRegisterPhone` or `needVerifyOtp` as your `SignInState`.  
   ➡️ Do `registerPhoneNumber` and `verifyOtp` before the next step.
@@ -288,7 +288,8 @@ public func recoverPinCode(pinSecret: CYBAVOWallet.PinSecret, recoveryCode: Stri
 
 - `PinSecret` will be cleared after Wallet and Auth APIs are executed. If you intendly want to keep the `PinSecret`, call `PinSecret.retain()` everytime before APIs are called.
 
-> **⚠️WARNING** : When creating multiple wallets for the user. If you call APIs constantly, you will receive the error `.ErrInvalidPinSecret` caused by `PinSecret` being cleared.
+> **⚠️ WARNING** : When creating multiple wallets for the user. If you call APIs constantly.  
+> You will receive the error `.ErrInvalidPinSecret` caused by `PinSecret` being cleared.
 
 ## Push Notification
 
@@ -304,7 +305,7 @@ public func recoverPinCode(pinSecret: CYBAVOWallet.PinSecret, recoveryCode: Stri
 
 - Step 2 : setPushDeviceToken
   
-  <img src="images/sdk_guideline/screenshot_push_notification.png" alt="drawing" width="300"/>  
+  <img src="images/sdk_guideline/screenshot_push_notification.png" alt="drawing" width="500"/>  
 
   ```swift
   /// Set Firebase Cloud Messaging (FCM) or Amazon Pinpoint device token
@@ -322,7 +323,7 @@ Push-Notification types were defined in the JSONs below.
 
 - Transaction
   
-  ```JSON
+  ```swift
     {
         "currency": "194",
         "token_address": "",
