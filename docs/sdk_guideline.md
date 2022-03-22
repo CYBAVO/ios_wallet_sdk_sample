@@ -19,14 +19,14 @@ It provides both high-level and low-level APIs for nearly all **CYBAVO Wallet AP
 - [PIN Code](#pin-code)
   - [NumericPinCodeInputView](#numericpincodeinputview)
   - [Setup PIN Code / Change PIN Code](#setup-pin-code--change-pin-code)
-  - [Reset PIN code ( with API )](#reset-pin-code--with-api)
-  - [Reset PIN code ( with Admin System )](#reset-pin-code--with-admin-system)
+  - [Reset PIN code - with API](#reset-pin-code---with-api)
+  - [Reset PIN code - with Admin System](#reset-pin-code---with-admin-system)
   - [Notice](#notice)
 - [Push Notification](#push-notification)
   - [Push-Notification Setup](#push-notification-setup)
   - [Push-Notification Types](#push-notification-types)
 - [Others](#others)
-  - [⚠️ Error Handling - ApiError ⚠️](#⚠️-error-handling---apierror-⚠️)
+  - [Error Handling - ApiError](#error-handling---apierror)
   - [Sandbox Environment](#sandbox-environment)
 
 ## SDK Guideline
@@ -274,7 +274,7 @@ public func setupPinCode(pinSecret: CYBAVOWallet.PinSecret, completion: @escapin
 public func changePinCode(newPinSecret: CYBAVOWallet.PinSecret, currentPinSecret: CYBAVOWallet.PinSecret, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.ChangePinCodeResult>)
 ```
 
-## Reset PIN code ( with API )
+## Reset PIN code - with API
 
 - Set questions and answers for PIN code recovery.
 
@@ -288,7 +288,7 @@ public func getRestoreQuestions(completion: @escaping CYBAVOWallet.Callback<CYBA
 public func verifyRestoreQuestions(challenge1: CYBAVOWallet.BackupChallenge, challenge2: CYBAVOWallet.BackupChallenge, challenge3: CYBAVOWallet.BackupChallenge, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.VerifyRestoreQuestionsResult>)
 ```
 
-## Reset PIN code ( with Admin System )
+## Reset PIN code - with Admin System
 
 - If the user forgot both the PIN code and the answers which they have set.
 
@@ -405,9 +405,9 @@ Push-Notification types were defined in the JSONs below.
 
 # Others
 
-## ⚠️ Error Handling - ApiError ⚠️
+## Error Handling - ApiError
 
-- Please properly handle the ApiError we provided in the API response.
+> **⚠️ WARNING** : Please properly handle the ApiError we provided in the API response.
 
 ```swift
 public struct ApiError : Error {
