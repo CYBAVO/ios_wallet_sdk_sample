@@ -18,7 +18,7 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 - CocoaPods `1.1.0+` is required to build `CYBAVOWallet 1.2.0+`  
 - specify in your `Podfile`:
 
-    ```JSON
+    ```sh
     source 'https://github.com/CocoaPods/Specs.git'
     source 'https://bitbucket.org/cybavo/Specs_512.git'
 
@@ -57,17 +57,17 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 
 ---
 
-## Auth
+# Auth
 
-### Sign-in / Sign-up Flowchart
+## Sign-in / Sign-up Flowchart
 
 ![ref](images/sdk_guideline/signin_signup.jpg)
 
-### Third-Party login
+## Third-Party login
 
   Supported services : Apple / Google / Facebook / LINE / Twitter / WeChat
 
-### Sign-in flow
+## Sign-in flow
 
 - 3rd party login ➡️ `Auth.signIn` ➡️ get success ➡️ wait for `SignInStateDelegate` update
   
@@ -101,7 +101,7 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 public func signIn(token: String, identityProvider: String, extras: [String : String] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SignInResult>)
 ```
 
-### Sign-up flow
+## Sign-up flow
 
 - `Auth.signUp` ➡️ get success ➡️ `Auth.signIn`
 
@@ -120,13 +120,13 @@ public func signIn(token: String, identityProvider: String, extras: [String : St
 public func signUp(token: String, identityProvider: String, extras: [String : String] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SignUpResult>)
 ```
 
-### Sign-out
+## Sign-out
 
 ```swift
 public func signOut()
 ```
 
-### Model : SignInState
+## Model : SignInState
 
 ```swift
 public enum SignInState {
@@ -195,7 +195,7 @@ public enum SignInState {
   public func getSignInState() -> CYBAVOWallet.SignInState
   ```
 
-### Model : UserState
+## Model : UserState
 
 ```swift
 public protocol UserState {
@@ -222,17 +222,19 @@ public protocol UserState {
   public func getUserState(completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetUserStateResult>)
   ```
 
-## PIN Code
+---
+
+# PIN Code
 
 PIN Code is one of the most important components for user security.  
 Ensure your users setPIN right after sign-in success.
 
-### NumericPinCodeInputView
+## NumericPinCodeInputView
 
 - Use `NumericPinCodeInputView` to input PIN code, see [this](NumericPinCodeInputView.md)
 - feel free to customize your own input view.
 
-### Setup PIN Code / Change PIN Code
+## Setup PIN Code / Change PIN Code
 
 - Setup PIN code is mandatory for further API calls. Make sure your user setup PIN code successfully before creating wallets.
 
@@ -246,7 +248,7 @@ public func setupPinCode(pinSecret: CYBAVOWallet.PinSecret, completion: @escapin
 public func changePinCode(newPinSecret: CYBAVOWallet.PinSecret, currentPinSecret: CYBAVOWallet.PinSecret, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.ChangePinCodeResult>)
 ```
 
-### Reset PIN code ( with API )
+## Reset PIN code ( with API )
 
 - Set questions and answers for PIN code recovery.
 
@@ -260,7 +262,7 @@ public func getRestoreQuestions(completion: @escaping CYBAVOWallet.Callback<CYBA
 public func verifyRestoreQuestions(challenge1: CYBAVOWallet.BackupChallenge, challenge2: CYBAVOWallet.BackupChallenge, challenge3: CYBAVOWallet.BackupChallenge, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.VerifyRestoreQuestionsResult>)
 ```
 
-### Reset PIN code ( with Admin System )
+## Reset PIN code ( with Admin System )
 
 - If the user forgot both the PIN code and the answers which they have set.
 
@@ -277,7 +279,7 @@ public func verifyRecoveryCode(recoveryCode: String, completion: @escaping CYBAV
 public func recoverPinCode(pinSecret: CYBAVOWallet.PinSecret, recoveryCode: String, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.RecoveryPinCodeResult>)
 ```
 
-### Notice
+## Notice
 
 - Old version `pinCode: String` was deprecated, use `CYBAVOWallet.PinSecret` instead.
 
@@ -291,9 +293,9 @@ public func recoverPinCode(pinSecret: CYBAVOWallet.PinSecret, recoveryCode: Stri
 > **⚠️ WARNING** : When creating multiple wallets for the user. If you call APIs constantly.  
 > You will receive the error `.ErrInvalidPinSecret` caused by `PinSecret` being cleared.
 
-## Push Notification
+# Push Notification
 
-### Push-Notification Setup
+## Push-Notification Setup
 
 - Step 1 : enable the apnsSandbox
 
@@ -317,7 +319,7 @@ public func recoverPinCode(pinSecret: CYBAVOWallet.PinSecret, recoveryCode: Stri
 
 - Step 3 : create your Push Notification receive handler
 
-### Push-Notification Types
+## Push-Notification Types
 
 Push-Notification types were defined in the JSONs below.
 
@@ -367,9 +369,11 @@ Push-Notification types were defined in the JSONs below.
   }
   ```
 
-## Others
+---
 
-### ⚠️ Error Handling - ApiError ⚠️
+# Others
+
+## ⚠️ Error Handling - ApiError ⚠️
 
 - Please properly handle the ApiError we provided in the API response.
 
@@ -388,7 +392,7 @@ public struct ApiError : Error {
 }
 ```
 
-### Sandbox Environment
+## Sandbox Environment
 
 - You will only get the `endPoint` & `apiCode` for testing in the beginning.
 - We will provide the production `endPoint` & `apiCode` when you are ready.
