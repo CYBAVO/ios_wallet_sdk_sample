@@ -69,4 +69,4 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
 - PIN Code configuration: Setup / Change / Recovery
 - Secure PIN code input view - [NumericPinCodeInputView](docs/NumericPinCodeInputView.md)
 - Push Notification - To receive push notification of deposit / withdrawal. Please refer to [this](docs/PushNotification.md) to set up.
-- for more detail, see this [SDK Guideline](docs/SDK_Guideline.md)
+- for more detail, see this [SDK Guideline](docs/sdk_guideline.md)
