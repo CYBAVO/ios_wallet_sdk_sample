@@ -7,6 +7,28 @@
 The **CYBAVO Wallet APP SDK** provides a thorough solution for building Institutional-grade security wallets.  
 It provides both high-level and low-level APIs for nearly all **CYBAVO Wallet APP** features, backed by **CYBAVO** private key protection technology.
 
+- [SDK Guideline](#sdk-guideline)
+- [Auth](#auth)
+  - [Sign-in / Sign-up Flowchart](#sign-in--sign-up-flowchart)
+  - [Third-Party login](#third-party-login)
+  - [Sign-in flow](#sign-in-flow)
+  - [Sign-up flow](#sign-up-flow)
+  - [Sign-out](#sign-out)
+  - [Model : SignInState](#model--signinstate)
+  - [Model : UserState](#model--userstate)
+- [PIN Code](#pin-code)
+  - [NumericPinCodeInputView](#numericpincodeinputview)
+  - [Setup PIN Code / Change PIN Code](#setup-pin-code--change-pin-code)
+  - [Reset PIN code ( with API )](#reset-pin-code--with-api)
+  - [Reset PIN code ( with Admin System )](#reset-pin-code--with-admin-system)
+  - [Notice](#notice)
+- [Push Notification](#push-notification)
+  - [Push-Notification Setup](#push-notification-setup)
+  - [Push-Notification Types](#push-notification-types)
+- [Others](#others)
+  - [⚠️ Error Handling - ApiError ⚠️](#⚠️-error-handling---apierror-⚠️)
+  - [Sandbox Environment](#sandbox-environment)
+
 ## SDK Guideline
 
 ### Prerequisite
@@ -54,6 +76,8 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 ### First-time login tasks
 
 ![ref](images/sdk_guideline/first_time_login.jpg)
+
+[↑ go to the top ↑](#cybavo-wallet-app-sdk-for-ios---guideline)
 
 ---
 
@@ -222,6 +246,8 @@ public protocol UserState {
   public func getUserState(completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetUserStateResult>)
   ```
 
+[↑ go to the top ↑](#cybavo-wallet-app-sdk-for-ios---guideline)
+
 ---
 
 # PIN Code
@@ -292,6 +318,10 @@ public func recoverPinCode(pinSecret: CYBAVOWallet.PinSecret, recoveryCode: Stri
 
 > **⚠️ WARNING** : When creating multiple wallets for the user. If you call APIs constantly.  
 > You will receive the error `.ErrInvalidPinSecret` caused by `PinSecret` being cleared.
+
+[↑ go to the top ↑](#cybavo-wallet-app-sdk-for-ios---guideline)
+
+---
 
 # Push Notification
 
@@ -369,6 +399,8 @@ Push-Notification types were defined in the JSONs below.
   }
   ```
 
+[↑ go to the top ↑](#cybavo-wallet-app-sdk-for-ios---guideline)
+
 ---
 
 # Others
@@ -398,4 +430,4 @@ public struct ApiError : Error {
 - We will provide the production `endPoint` & `apiCode` when you are ready.
 Feel free to play around with the WalletSDK in the sandbox environment.
 
-[go to the top](#setup)
+[↑ go to the top ↑](#cybavo-wallet-app-sdk-for-ios---guideline)
