@@ -40,6 +40,17 @@ A group of cybersecurity experts making crypto-currency wallets secure and usabl
 
 We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exchanges and stable-coin ico teams, please feel free to contact us when your company or business needs any help in cryptocurrency operation.
 
+# SDK Features
+
+- Sign in / Sign up with 3rd-party account services
+- Wallet Creation / Editing
+- Wallet Deposit / Withdrawal
+- Transaction History query
+- PIN Code configuration: Setup / Change / Recovery
+- Secure PIN code input view - NumericPinCodeInputView
+- Push Notification - receive push notification of deposit / withdrawal
+- Private chain, NFT and WalletConnect supported
+
 # Run the demo app
 
 1. In ~/.ssh/ create a file called config with contents based on this:
@@ -51,6 +62,8 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
     IdentityFile ~/.ssh/{{your private SSH key}}
     ```
 
+    > How to setup an SSH key? : see [this](https://support.atlassian.com/bitbucket-cloud/docs/set-up-an-ssh-key/)
+
 2. Run ```pod install``` to install all dependencies.
 3. Run ```pod update``` to update all dependencies. **(Optional)**
 4. Open ```CYBAVOWallet.xcworkspace``` in xcode.
@@ -60,13 +73,6 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
 8. Edit `AppDelegate.swift` ➜ `MY_GOOGLE_SIGN_IN_WEB_CLI_ID` to your Google sign-in client ID **(Optional)**
 9. Now you can run it on your device!
 
-# SDK Features
+# More Details
 
-- Sign in / Sign up with 3rd-party account services
-- Wallet Creation / Editing
-- Wallet Deposit / Withdrawal
-- Transaction History query
-- PIN Code configuration: Setup / Change / Recovery
-- Secure PIN code input view - [NumericPinCodeInputView](docs/NumericPinCodeInputView.md)
-- Push Notification - To receive push notification of deposit / withdrawal. Please refer to [this](docs/PushNotification.md) to set up.
-- for more detail, see this [SDK Guideline](docs/sdk_guideline.md)
+see this : [**SDK Guideline**](docs/sdk_guideline.md)
