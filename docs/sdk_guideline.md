@@ -7,27 +7,14 @@
 The **CYBAVO Wallet APP SDK** provides a thorough solution for building Institutional-grade security wallets.  
 It provides both high-level and low-level APIs for nearly all **CYBAVO Wallet APP** features, backed by **CYBAVO** private key protection technology.
 
-- [SDK Guideline](#sdk-guideline)
-- [Auth](#auth)
-  - [Sign-in / Sign-up Flowchart](#sign-in--sign-up-flowchart)
-  - [Third-Party login](#third-party-login)
-  - [Sign-in flow](#sign-in-flow)
-  - [Sign-up flow](#sign-up-flow)
-  - [Sign-out](#sign-out)
-  - [Model : SignInState](#model--signinstate)
-  - [Model : UserState](#model--userstate)
-- [PIN Code](#pin-code)
-  - [NumericPinCodeInputView](#numericpincodeinputview)
-  - [Setup PIN Code / Change PIN Code](#setup-pin-code--change-pin-code)
-  - [Reset PIN code - with API](#reset-pin-code---with-api)
-  - [Reset PIN code - with Admin System](#reset-pin-code---with-admin-system)
-  - [Notice](#notice)
-- [Push Notification](#push-notification)
-  - [Push-Notification Setup](#push-notification-setup)
-  - [Push-Notification Types](#push-notification-types)
-- [Others](#others)
-  - [Error Handling - ApiError](#error-handling---apierror)
-  - [Sandbox Environment](#sandbox-environment)
+- Category
+  - [SDK Guideline](#sdk-guideline)
+  - [Auth](#auth)
+  - [PIN Code](#pin-code)
+  - Wallets ➜ [Wallets.md](wallets.md)
+  - Transaction ➜ [Transaction.md](transaction.md)
+  - [Push Notification](#push-notification)
+  - [Others](#others)
 
 ## SDK Guideline
 
@@ -185,7 +172,7 @@ public enum SignInState {
 
 - If you activate the Security Enhancement in the console.  
 
-  <img src="images/sdk_guideline/screenshot_security_enhancement.png" alt="drawing" width="500"/>  
+  <img src="images/sdk_guideline/screenshot_security_enhancement.png" alt="drawing" width="400"/>  
 
   You might get `needRegisterPhone` or `needVerifyOtp` as your `SignInState`.  
   ➡️ Do `registerPhoneNumber` and `verifyOtp` before the next step.
@@ -325,7 +312,7 @@ public func recoverPinCode(pinSecret: CYBAVOWallet.PinSecret, recoveryCode: Stri
 
 # Push Notification
 
-## Push-Notification Setup
+## Setup
 
 - Step 1 : enable the apnsSandbox
 
@@ -337,7 +324,7 @@ public func recoverPinCode(pinSecret: CYBAVOWallet.PinSecret, recoveryCode: Stri
 
 - Step 2 : setPushDeviceToken
   
-  <img src="images/sdk_guideline/screenshot_push_notification.png" alt="drawing" width="500"/>  
+  <img src="images/sdk_guideline/screenshot_push_notification.png" alt="drawing" width="400"/>  
 
   ```swift
   /// Set Firebase Cloud Messaging (FCM) or Amazon Pinpoint device token
@@ -349,7 +336,9 @@ public func recoverPinCode(pinSecret: CYBAVOWallet.PinSecret, recoveryCode: Stri
 
 - Step 3 : create your Push Notification receive handler
 
-## Push-Notification Types
+- more details : [PushNotification.md](PushNotification.md)
+
+## Notification Types
 
 Push-Notification types were defined in the JSONs below.
 
