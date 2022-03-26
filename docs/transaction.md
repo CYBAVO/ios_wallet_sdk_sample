@@ -228,7 +228,7 @@ public func getTransactionsInfo(currency: Int64, txids: [String], completion: @e
 
 - If a user wants to Cancel / Accelerate a `Pending` Tx on blockchain. 
 The user needs to create another Tx with higher Tx fee and the same nonce to replace the original one.
-- You can achive Tx replacemnet by `cancelTransaction` and `increaseTransactionFee` API.
+- You can achive Tx replacement by `cancelTransaction` and `increaseTransactionFee` API.
 - Condition: `replaceable == true`
 
   ```swift
