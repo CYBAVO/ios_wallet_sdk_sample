@@ -20,9 +20,10 @@
 
 - To get transaction fees of the selected currency,  
 you will get three levels { high, medium, low } of fees for the user to select.
-- `tokenAddress` is for private chain usage.
-- ETH (currency = 60) ➜ Tx fee should use ETH
-- ERC20 (currency = 60, tokenAddress = "") ➜ Tx fee should use ETH, too
+- `tokenAddress` is for private chain usage. For public chain, `tokenAddress` should always be ""
+- For example: 
+  - ETH transaction use ETH as transaction fee ➜ pass `currency: 60, tokenAddress: ""`
+  - ERC20 transaction use ETH as transaction fee ➜ pass `currency: 60, tokenAddress: ""`
 
 ```swift
 /// Get transaction transactionFee of specified currency
@@ -53,11 +54,11 @@ public func getCurrencyTraits(currency: Int, tokenAddress: String, tokenVersion:
     ```swift
     public protocol GetCurrencyTraitsResult {
 
-        var granularity: String { get }
+        var granularity: String { get } // EPI-777: withdraw must be multiples of granularity
 
-        var existentialDeposit: String { get }
+        var existentialDeposit: String { get } // The minimum balance after transaction (ALGO, DOT, KSM)
 
-        var minimumAccountBalance: String { get }
+        var minimumAccountBalance: String { get } // The minimum balance after transaction (XLM, FLOW)
     }
     ```
 
@@ -94,11 +95,11 @@ public func estimateTransaction(currency: Int, tokenAddress: String, amount: Str
 
         var blockchainFee: String { get } // Estimated blockchain fee of transaction
 
-        var withdrawMin: String { get } // Minimum transfer amount for private
+        var withdrawMin: String { get } // Minimum transfer amount for private chain
     }
     ```
 
-  - `platformFee` was set on admin panel
+  - Administrators can add `platformFee` on admin panel
   ![screenshot](images/sdk_guideline/screenshot_platform_fee_management.png)
 
 ### getAddressesTags
@@ -117,7 +118,7 @@ public func getAddressesTags(currency: Int, addresses: [String], completion: @es
 
 ### createTransaction
 
-- This method will try to send the transaction onto the blockchain.
+- This method will create and broadcast a transaction to blockchain.
 - Fulfill the requirement of different types of currencies in the extras field.
 - Please use the function with `PinSecret` version, the others are planning to deprecate.
 - If you are making SMS transaction, refer to `createTransactionSms`
@@ -168,10 +169,9 @@ public func createTransaction(actionToken: String = "", signature: String = "", 
 ///   - walletAddress: Wallet address
 ///   - start: Query start offset
 ///   - count: Query count returned
-///   - crosschain: 0: history for private chain transfer; 1: history for crossing private and public chain
-///                 (private chain currency is 99999999995, tokenAddress not null)
+///   - crosschain: For private chain transaction history filtering. 0: history for private chain transfer; 1: history for crossing private and public chain
 ///   - filters: Filter parameters:
-///     -  direction {Transaction.Direction} - Direction of transaction
+///     - direction {Transaction.Direction} - Direction of transaction
 ///     - pending {Bool} - Pending state of transactions
 ///     - success {Bool} - Success state of transactions
 ///     - start_time {Int} - Start of time period to query, in Unix timestamp
@@ -180,7 +180,9 @@ public func createTransaction(actionToken: String = "", signature: String = "", 
 ///   - completion: asynchronous callback
 public func getHistory(currency: Int, tokenAddress: String, walletAddress: String, start: Int, count: Int, crosschain: Int = 1, filters: [String : Any] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetAddressHistoryResult>)
 ```
-
+- Paging query: you can utilize `start` and `count` to fulfill paging query.  
+For example, you can pass `start: transactions.count, count: 10` to get 10 more records when it reaches your load more condition until there's no more transactions.   
+Has more: `result.start` + `result.transactions.count` < `result.total`
 - Response: list of `Transaction`
 
     ```swift
@@ -222,10 +224,11 @@ public func getTransactionsInfo(currency: Int64, txids: [String], completion: @e
 
 ## Transaction Replacement
 
-> ⚠️ Warning: Cancel / Speed-up transactions will incur a higher Tx fee for replacing the original orders.
+> ⚠️ Warning: Cancel / Accelerate transactions will incur a higher Tx fee for replacing the original Tx.
 
-- When user want to Cancel / Speed-up a `Pending` Tx they have made. You cannot just cancel the original order, because the order information is already on the blockchain.
-- You need to do is to provide a higher Tx fee with the same Tx-id onto the blockchain, therefore you could replace the original order.
+- If a user wants to Cancel / Accelerate a `Pending` Tx on blockchain. 
+The user needs create another Tx with higher Tx fee and the same nonce to replace the original one.
+- You can utilze `cancelTransaction` and `increaseTransactionFee` to achive Tx replacement.
 - Condition: `replaceable == true`
 
   ```swift
@@ -252,7 +255,7 @@ public func getTransactionsInfo(currency: Int64, txids: [String], completion: @e
         - if (Tx fee <= original Tx fee) ➜ decide a higher Tx fee by your rules
             - Suggestion: In our experience, (original Tx fee) * 1.1 might be a easy way to calculate a new price for doing this operation.
     3. Call `cancelTransaction` for canceling transactions.
-    4. Call `increaseTransactionFee` for speeding-up transactions.
+    4. Call `increaseTransactionFee` for accelerating transactions.
 
 ### Transaction Replacement History
 
@@ -263,8 +266,8 @@ public func getTransactionsInfo(currency: Int64, txids: [String], completion: @e
     3. mapping transactions with the same nonce
     4. in a set of transactions:
         - the Tx fee lower one ➜ the original order
-        - `if Tx1.amount == Tx2.amount` ➜ is Speed-up transaction operation
+        - `if Tx1.amount == Tx2.amount` ➜ is Accelerate transaction operation
         - `if Tx.amount == 0` ➜ is Cancel transaction operation
         - `if Tx1.replaced == false && Tx2.replaced == false` ➜ is operating
-        - `if Original-Tx.replaced == true` ➜ Cancel / Speed-up success
-        - `if Replacement-Tx.replaced == true` ➜ Cancel / Speed-up failed
+        - `if Original-Tx.replaced == true` ➜ Cancel / Accelerate success
+        - `if Replacement-Tx.replaced == true` ➜ Cancel / Accelerate failed
