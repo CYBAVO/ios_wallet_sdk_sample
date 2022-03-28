@@ -21,7 +21,7 @@
 - To get transaction fees of the selected currency,  
 you will get three levels { high, medium, low } of fees for the user to select.
 - `tokenAddress` is for private chain usage. For public chain, `tokenAddress` should always be ""
-- For example: 
+- For example:
   - ETH transaction use ETH as transaction fee ➜ pass `currency: 60, tokenAddress: ""`
   - ERC20 transaction use ETH as transaction fee ➜ pass `currency: 60, tokenAddress: ""`
 
@@ -180,9 +180,11 @@ public func createTransaction(actionToken: String = "", signature: String = "", 
 ///   - completion: asynchronous callback
 public func getHistory(currency: Int, tokenAddress: String, walletAddress: String, start: Int, count: Int, crosschain: Int = 1, filters: [String : Any] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetAddressHistoryResult>)
 ```
+
 - Paging query: you can utilize `start` and `count` to fulfill paging query.  
-For example, you can pass `start: transactions.count, count: 10` to get 10 more records when it reaches your load more condition until there's no more transactions.   
-Has more: `result.start` + `result.transactions.count` < `result.total`
+  - For example:
+    - pass `[start: transactions.count, count: 10]` to get 10 more records when it reaches your load more condition until there's no more transactions.
+    - Has more: `result.start` + `result.transactions.count` < `result.total`
 - Response: list of `Transaction`
 
     ```swift
@@ -226,7 +228,7 @@ public func getTransactionsInfo(currency: Int64, txids: [String], completion: @e
 
 > ⚠️ Warning: Cancel / Accelerate transactions will incur a higher Tx fee for replacing the original Tx.
 
-- If a user wants to Cancel / Accelerate a `Pending` Tx on blockchain. 
+- If a user wants to Cancel / Accelerate a `Pending` Tx on blockchain.
 The user needs to create another Tx with higher Tx fee and the same nonce to replace the original one.
 - You can achive Tx replacement by `cancelTransaction` and `increaseTransactionFee` API.
 - Condition: `replaceable == true`
