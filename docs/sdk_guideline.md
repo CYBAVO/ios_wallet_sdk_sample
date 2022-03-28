@@ -1,7 +1,5 @@
 # CYBAVO Wallet APP SDK (for iOS) - Guideline
 
-![version](https://img.shields.io/badge/version-0.1.1-blue.svg)
-
 > Welcome to CYBAVO Wallet APP SDK (for iOS) - Guideline
 
 The **CYBAVO Wallet APP SDK** provides a thorough solution for building Institutional-grade security wallets.  
@@ -13,8 +11,12 @@ It provides both high-level and low-level APIs for nearly all **CYBAVO Wallet AP
   - [PIN Code](#pin-code)
   - Wallets ➜ [Wallets.md](wallets.md)
   - Transaction ➜ [Transaction.md](transaction.md)
+  - NFT ➜ coming soon
   - [Push Notification](#push-notification)
   - [Others](#others)
+  - Advanced
+    - WalletConnect ➜ coming soon
+    - Private Chain ➜ coming soon
 
 ## SDK Guideline
 
