@@ -55,10 +55,9 @@ public func getWallets(completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.
   ```
 
   - Classify:
-    - `(address != "", tokenAddress == "")` ➜ it is a normal wallet
-    - `(address != "", tokenAddress != "")` ➜ it is a mapped wallet or NFT wallet (coming soon)
-      - `Currency.tokenVersion != 721 || 1155` ➜ it is a mapped wallet.
-      - `Currency.tokenVersion == 721 || 1155` ➜ it is an NFT wallet.
+    - `tokenAddress == ""` ➜ it is a normal wallet
+    - `tokenAddress != ""` ➜ it is a mapped wallet
+      - `Currency.tokenVersion == 721 || 1155` ➜ it is an NFT wallet
     - `isPrivate == true` ➜ it is on private chain (CPSC), see Private Chain (coming soon)
 
 ### getCurrencyPrices

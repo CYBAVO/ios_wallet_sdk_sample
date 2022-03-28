@@ -9,8 +9,8 @@
 ## Deposit
 
 - Select a wallet address, create a new one if needed.
-- Generate QRCode
-- Present the QRCode for deposit.
+- Generate QR code
+- Present the QR code for deposit.
 
 ## Withdraw
 
