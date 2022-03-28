@@ -110,15 +110,16 @@ public func getWallet(walletId: Int64, completion: @escaping CYBAVOWallet.Callba
   - `getWallets` provides current user's wallets
   - `tokenAddress != ""` means the currency needs a parent wallet
   - `tokenAddress == ""` means the currency don't need a parent wallet
-  - a parent wallet could not hold multiple token wallets with the same token type
-  - If you're creating a token currency and there is no parent wallet exist. You need to create a parent wallet before creating the token wallet.
+  - A mapped wallet has same wallet address with its parent wallet.  
+  If a wallet address has been used for create a mapped wallet, you cannot create 2 or more mapped wallet with same `currency` and `tokenAddress` to this wallet address. You have to choose another parent wallet.
+  - If you're creating a mapped wallet and there is no parent wallet available. You need to create a parent wallet for it.
 
 - For `currency`, please refer to [Currency Definition](https://github.com/CYBAVO/SOFA_MOCK_SERVER#currency-definition)
 
 ```swift
 /// Create a new wallet
 /// - Parameters:
-///   - currency: Currency of desired new wallet. ex: 60
+///   - currency: Currency of desired new wallet. ex: 60 for ETH
 ///   - tokenAddress: Token address for tokens, i.e. an ERC-20 token wallet maps to an Ethereum wallet
 ///   - parentWalletId: Parent wallet for tokens, i.e. an ERC-20 token wallet maps to an Ethereum wallet
 ///   - name: Name of the new wallet
@@ -131,7 +132,7 @@ public func createWallet(currency: Int, tokenAddress: String, parentWalletId: In
 
 ### getSameCurrencyWalletLimit
 
-- This value was set on the admin panel.
+- Administrators can configure this value on admin panel.
 
  <img src="images/sdk_guideline/screenshot_number_of_same_currency_wallets.png" alt="drawing" width="400"/>
 
@@ -160,7 +161,7 @@ public func renameWallet(walletId: Int64, name: String, completion: @escaping CY
 ### queryCoinType
 
 - Use case:  
-    When scanning a wallet address with QRCode, use this API to get which currency type it is.
+    When scanning a wallet address with QR code, use this API to get which currency type it is.
 
 ```swift
 /// Get coin type with address
