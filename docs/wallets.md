@@ -29,6 +29,38 @@ public func getCurrencies(completion: @escaping CYBAVOWallet.Callback<CYBAVOWall
 public func getWallets(completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetWalletsResult>)
 ```
 
+- Response: List of `Wallet`
+
+  ```swift
+  protocol Wallet : CYBAVOWallet.BalanceAddress, CYBAVOWallet.CurrencyType {
+
+      var walletId: Int64 { get } // Wallet ID
+
+      var type: CYBAVOWallet.WalletType { get } // REGULAR, MAPPED_WALLET, RELAYER_WALLET (Deprecated)
+
+      override var address: String { get } // Wallet Address
+
+      override var tokenAddress: String { get } // Address for tokens (ERC-20, NFT...)
+
+      var name: String { get } // Name of wallet
+
+      override var currency: Int { get } // Wallet currency ID, refer to Wallets.getCurrencies() API
+
+      var currencySymbol: String { get } // Wallet simple currency name.
+
+      var isPrivate: Bool { get } // Is private chain (CPSC)
+
+      ...
+  }
+  ```
+
+  - Classify:
+    - `(address != "", tokenAddress == "")` ➜ it is a normal wallet
+    - `(address != "", tokenAddress != "")` ➜ it is a mapped wallet or NFT wallet (coming soon)
+      - `Currency.tokenVersion != 721 || 1155` ➜ it is a mapped wallet.
+      - `Currency.tokenVersion == 721 || 1155` ➜ it is an NFT wallet.
+    - `isPrivate == true` ➜ it is on private chain (CPSC), see Private Chain (coming soon)
+
 ### getCurrencyPrices
 
 ```swift
@@ -51,36 +83,36 @@ public func getCurrencyPrices(wallets: [CYBAVOWallet.Wallet], exchangeCurrencys:
 public func getBalances(addresses: [Int64 : CYBAVOWallet.BalanceAddress], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetBalanceResult>)
 ```
 
-#### Model: `Balance`
+- Response: `Balance`
 
-```swift
-protocol Balance {
+  ```swift
+  protocol Balance {
 
-    var balance: String { get } /** Balance */
+      var balance: String { get } /** Balance */
 
-    var tokenBalance: String { get } /** Balance of token */
+      var tokenBalance: String { get } /** Balance of token */
 
-    var availableBalance: String { get } /** Available balance */
+      var availableBalance: String { get } /** Available balance */
 
-    var tokens: [String] { get } /** Non-Fungible Token IDs for ERC-721*/
+      var tokens: [String] { get } /** Non-Fungible Token IDs for ERC-721*/
 
-    var tokenIdAmounts: [CYBAVOWallet.TokenIdAmount] { get } /** Non-Fungible Token ID and amounts for ERC-1155 */
+      var tokenIdAmounts: [CYBAVOWallet.TokenIdAmount] { get } /** Non-Fungible Token ID and amounts for ERC-1155 */
 
-    ...
-}
-```
+      ...
+  }
+  ```
 
-- `Balance` is for the parent wallet (`tokenAddress` is “”). ex: ETH wallet
-- `tokenBalance` is for mapped wallet (`tokenAddress` has value). ex: ERC-20 wallet
-- `availableBalance` provides how much available balance do you have,
+  - `Balance` is for the parent wallet (`tokenAddress` is “”). ex: ETH wallet
+  - `tokenBalance` is for mapped wallet (`tokenAddress` has value). ex: ERC-20 wallet
+  - `availableBalance` provides how much available balance do you have,
 
-   for example :
-   1. when you have 1 ETH and you do the tx with 0.2 ETH to send out
-   2. the balance will still be 1 ETH until the tx was packed up on blockchain, but the available balance will reduce to 0.8 ETH
-   3. that is the customer can only operate the remaining 0.8 ETH
+    for example :
+    1. when you have 1 ETH and you do the tx with 0.2 ETH to send out
+    2. the balance will still be 1 ETH until the tx was packed up on blockchain, but the available balance will reduce to 0.8 ETH
+    3. that is the customer can only operate the remaining 0.8 ETH
 
-- if ERC-721 (NFT), use `tokens`
-- if ERC1155 (NFT), use `tokenIdAmounts`
+  - if ERC-721 (NFT), use `tokens`
+  - if ERC-1155 (NFT), use `tokenIdAmounts`
 
 ### getWallet with ID
 
