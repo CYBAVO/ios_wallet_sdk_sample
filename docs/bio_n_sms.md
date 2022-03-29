@@ -7,7 +7,7 @@
 
 ## UserState
 
-- Biometrics verification is controlled in the Security Enhancement Section on the admin panel.  
+- Biometrics verification is controlled in the Security Enhancement section on the admin panel.  
 
   <img src="images/sdk_guideline/screenshot_security_enhancement.png" alt="drawing" width="400"/> 
 - Although biometrics verification is applied globally, in User Management,  administrator still can set single user to skip SMS / biometrics verification.   
