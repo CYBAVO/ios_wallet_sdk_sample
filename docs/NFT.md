@@ -27,7 +27,7 @@ public func addContractCurrencies(currency: [Int64], contractAddress: [String], 
 
 - How to get contract address?  
 You can find it on blockchain explorer.  
-Take CryptoKitties for example, you can find its contract address on Etherscan, 
+Take CryptoKitties for example, you can find its contract address on Etherscan 
   ![img](images/sdk_guideline/nft_etherscan_1.png)
 
 ## NFT Wallet List
