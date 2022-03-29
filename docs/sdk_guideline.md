@@ -9,9 +9,9 @@ It provides both high-level and low-level APIs for nearly all **CYBAVO Wallet AP
   - [SDK Guideline](#sdk-guideline)
   - [Auth](#auth)
   - [PIN Code](#pin-code)
-  - Wallets ➜ [Wallets.md](wallets.md)
-  - Transaction ➜ [Transaction.md](transaction.md)
-  - NFT ➜ coming soon
+  - Wallets ➜ [wallets.md](wallets.md)
+  - Transaction ➜ [transaction.md](transaction.md)
+  - NFT ➜ [NFT.md](NFT.md)
   - [Push Notification](#push-notification)
   - [Others](#others)
   - Advanced
