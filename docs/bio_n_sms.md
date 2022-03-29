@@ -12,7 +12,7 @@
   <img src="images/sdk_guideline/screenshot_security_enhancement.png" alt="drawing" width="400"/> 
 - Although biometrics verification is applied globally, in User Management,  administrator still can set single user to skip SMS / biometrics verification.   
   <img src="images/sdk_guideline/screenshot_skip_sms_1.png" alt="drawing" width="400"/>   
-  <img src="images/sdk_guideline/screenshot_skip_sms_2.png" alt="drawing" width="400"/> 
+  <img src="images/sdk_guideline/screenshot_skip_sms_2.png" alt="drawing" width="800"/> 
     ```swift
     public protocol UserState {
 
