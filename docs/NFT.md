@@ -9,7 +9,8 @@
 
 ## NFT Wallet Creation
 
-- First of all, you need to create a new wallet with the specific token, call `addContractCurrency`.
+- Suppose you'd like to receive some NFT tokens with Wallet SDK, but there's no that kind of `Currency` in the currency list, you can add NFT currency by calling `addContractCurrency`.  
+If that kind of `Currency` is already exist, there's no need to add again.
 
 ```swift
 /// [NFT] Add a new token & create first wallet
@@ -24,18 +25,19 @@ public func addContractCurrency(currency: Int64, contractAddress: String, pinSec
 public func addContractCurrencies(currency: [Int64], contractAddress: [String], pinSecret: CYBAVOWallet.PinSecret, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.AddContractCurrenciesResult>)
 ```
 
-- How to get a contractAddress?
+- How to get contract address?  
+You can find it on blockchain explorer.  
+Take CryptoKitties for example, you can find its contract address on Etherscan, 
   ![img](images/sdk_guideline/nft_etherscan_1.png)
-  ![img](images/sdk_guideline/nft_etherscan_2.png)
 
 ## NFT Wallet List
 
 ![img](images/sdk_guideline/nft_wallets.jpg)
 
-- No need to call APIs again, Refer to: [Wallet Information](wallets.md#wallet-information)
+- Same way as we mentioned in [Wallet Information](wallets.md#wallet-information)
 - Conditions:
   - `Wallet.isPrivate == false` ➜ it is on public chain
-  - `tokenAddress != ""` ➜ it is a mapped wallet (NFT wallet is one type of mapped wallet)
+  - `tokenAddress != ""` ➜ it is a mapped wallet (NFT wallet is also mapped wallet)
   - `Currency.tokenVersion == 721 || 1155` ➜ it is an NFT wallet
 
 ## Balance
@@ -56,6 +58,17 @@ protocol Balance {
 - if ERC-721 (NFT), use `tokens`
 - if ERC-1155 (NFT), use `tokenIdAmounts`
 
+- In order to present images, call `getMultipleTokenUri` to get token urls.
+  
+  ```swift
+  /// Get NFT Token URI
+  /// - Parameters:
+  ///   - currency: Currency of token to query
+  ///   - tokenAddresses: Array of token address to query
+  ///   - tokenIds: Array of token address to query
+  ///   - completion: asynchronous callback of [String : CYBAVOWallet.TokenUriInfo]
+  public func getMultipleTokenUri(currency: Int, tokenAddresses: [String], tokenIds: [String], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetMultipleTokenUriReponse>)
+  ```
 ### Error Handling
 
 - for ERC-1155
@@ -86,14 +99,3 @@ protocol Balance {
 
 - The steps are similar to normal transactions. Refer to [getHistory](transaction.md#gethistory)
 
-- In order to present images, call `getMultipleTokenUri` to get token urls.
-  
-  ```swift
-  /// Get NFT Token URI
-  /// - Parameters:
-  ///   - currency: Currency of token to query
-  ///   - tokenAddresses: Array of token address to query
-  ///   - tokenIds: Array of token address to query
-  ///   - completion: asynchronous callback of [String : CYBAVOWallet.TokenUriInfo]
-  public func getMultipleTokenUri(currency: Int, tokenAddresses: [String], tokenIds: [String], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetMultipleTokenUriReponse>)
-  ```
