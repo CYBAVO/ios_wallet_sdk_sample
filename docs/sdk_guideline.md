@@ -11,11 +11,11 @@ It provides both high-level and low-level APIs for nearly all **CYBAVO Wallet AP
   - [PIN Code](#pin-code)
   - Wallets ➜ [wallets.md](wallets.md)
   - Transaction ➜ [transaction.md](transaction.md)
-  - NFT ➜ [NFT.md](NFT.md)
   - Biometrics & SMS ➜ [bio_n_sms.md](bio_n_sms.md)
   - [Push Notification](#push-notification)
   - [Others](#others)
   - Advanced
+    - NFT ➜ [NFT.md](NFT.md)
     - WalletConnect ➜ coming soon
     - Private Chain ➜ coming soon
 
