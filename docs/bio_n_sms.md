@@ -38,7 +38,7 @@
 
 ## Biometrics / SMS Verification Setup
 
-![img](images/sdk_guideline/biometric_verification.png)
+![img](images/sdk_guideline/biometric_verification.jpg)
 
 - Must be set up before performing APIs which are mentioned in the next section.
 - Steps:
