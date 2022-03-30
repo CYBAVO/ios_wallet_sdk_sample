@@ -10,7 +10,7 @@
 ## NFT Wallet Creation
 
 - Suppose you'd like to receive some NFT tokens with Wallet SDK, but there's no that kind of `Currency` in the currency list, you can add NFT currency by calling `addContractCurrency`.  
-If that kind of `Currency` is already exist, there's no need to add again.
+If that kind of `Currency` already exists, there's no need to add it again.
 
 ```swift
 /// [NFT] Add a new token & create first wallet
@@ -25,9 +25,10 @@ public func addContractCurrency(currency: Int64, contractAddress: String, pinSec
 public func addContractCurrencies(currency: [Int64], contractAddress: [String], pinSecret: CYBAVOWallet.PinSecret, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.AddContractCurrenciesResult>)
 ```
 
-- How to get contract address?  
+- How to get a contract address?  
 You can find it on blockchain explorer.  
-Take CryptoKitties for example, you can find its contract address on Etherscan 
+Take CryptoKitties for example, you can find its contract address on Etherscan
+
   ![img](images/sdk_guideline/nft_etherscan_1.png)
 
 ## NFT Wallet List
@@ -69,6 +70,7 @@ protocol Balance {
   ///   - completion: asynchronous callback of [String : CYBAVOWallet.TokenUriInfo]
   public func getMultipleTokenUri(currency: Int, tokenAddresses: [String], tokenIds: [String], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetMultipleTokenUriReponse>)
   ```
+
 ### Error Handling
 
 - for ERC-1155
@@ -98,4 +100,3 @@ protocol Balance {
 ## Transaction Detail
 
 - The steps are similar to normal transactions. Refer to [getHistory](transaction.md#gethistory)
-
