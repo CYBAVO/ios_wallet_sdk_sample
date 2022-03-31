@@ -97,7 +97,7 @@ WalletConnect Introduction: [WalletConnect v1.0](https://docs.walletconnect.com/
 - ### [eth_signTransaction](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_signtransaction)
 
     1. Check and adjust the Tx object if necessary, the Tx object must at least contain `gas`, `gasPrice` and `nonce`.   
-    You can use `getEstimateGas`, `getTransactionFee` and `getNonce` to get corresponding values and set its hex string to Tx object.
+    You can use `getEstimateGas`, `getTransactionFee` and `getNonce` to get corresponding values and set its hex string to the Tx object.
     2. Use `walletConnectSignTransaction()` to sign a transaction. ➜ Response to WalletConnect 
 
         ```swift
