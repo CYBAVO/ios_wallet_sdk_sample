@@ -16,7 +16,7 @@ It provides both high-level and low-level APIs for nearly all **CYBAVO Wallet AP
   - [Others](#others)
   - Advanced
     - NFT ➜ [NFT.md](NFT.md)
-    - WalletConnect ➜ coming soon
+    - WalletConnect ➜ [wallet_connect.md](wallet_connect.md)
     - Private Chain ➜ coming soon
 
 ## SDK Guideline
