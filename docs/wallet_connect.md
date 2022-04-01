@@ -1,24 +1,30 @@
 # WalletConnect
 
-> Introduction: [WalletConnect v1.0](https://docs.walletconnect.com/)
+> WalletConnect is an open protocol which makes Dapps able to interact with wallets on different platforms.  
+> Wallet SDK provides corresponding APIs which help you get the results to return to Dapp, after establishing a wallet client and being able to receive Dapp's request.  
+> In later sections, we'll illustrate how to use those APIs to respond to [session request](https://docs.walletconnect.com/tech-spec#session-request) and JSON-RPC call requests which are defined in [JSON-RPC API Methods](https://docs.walletconnect.com/json-rpc-api-methods/ethereum).  
+>
+> Wallet clients integration on iOS : [Swift Client (iOS)](https://docs.walletconnect.com/quick-start/wallets/swift)  
+> WalletConnect Introduction: [WalletConnect v1.0](https://docs.walletconnect.com/)
 
 - Bookmark:
-  - [Connect with Dapps](#connect-with-dapps)
-  - [Interaction with Dapps](#interaction-with-dapps)
+  - [Session Request](#session-request)
+  - [JSON-RPC Call Requests](#json-rpc-call-requests)
   - [API History](#api-history)
   - [Cancel a Transaction](#cancel-a-transaction)
 
-## Connect with Dapps
+## [Session Request](https://docs.walletconnect.com/tech-spec#session-request)
 
-> Wallet clients integration in iOS : see [this](https://docs.walletconnect.com/quick-start/wallets/swift)
+![img](images/sdk_guideline/wc_session_request.jpg)
 
-- You could find examples to connect with Dapps in the link above.
-- When [Session Request](https://docs.walletconnect.com/tech-spec#session-request)
-![image](images/sdk_guideline/screenshot_walletconnect_1.png)
+- Receiving `wc_sessionRequest` from WalletConnect SDK.
+- Call `getWalletsByChainIds(chainIds: [-1])` to get all wallets.
+- Guide the user to choose a parent wallet.
+- Generate `WCSessionRequestResponse` and response to the WalletConnect service by WalletConnect SDK.
 
-- Response parameters:
-    1. `chainId = Wallet.chainId`
-    2. `accounts = Wallet.address`
+  - Response parameters:
+    1. `chainId` use `Wallet.chainId`
+    2. `accounts` use `Wallet.address`
 
         ```swift
         protocol Wallet : CYBAVOWallet.BalanceAddress, CYBAVOWallet.CurrencyType {
@@ -33,16 +39,12 @@
         }
         ```
 
-## Interaction with Dapps
-
-> API Methods: <https://docs.walletconnect.com/json-rpc-api-methods/ethereum>
-
-Response parameters:
+## [JSON-RPC Call Requests](https://docs.walletconnect.com/json-rpc-api-methods/ethereum)
 
 - ### [personal_sign](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#personal_sign)
 
   - Use `walletConnectSignMessage()` to sign a message. ➜ Response to WalletConnect
-  - Suggestion: `extras = [“is_hex”: true]`, you will get a signed message in hex.
+  - Suggestion: `extras = [“is_hex”: true]` to avoid encode / decode issues which lead to invalid signatures.
 
     ```swift
     /// Sign message by wallet private key(eth_sign, personal_sign) via WalletConnect
@@ -93,28 +95,13 @@ Response parameters:
     ```
 
     - Use different functions for biometrics & SMS Verification: see [this](bio_n_sms.md#biometrics--sms-verification-for-transaction-and-sign-operation)
-
-- ### [eth_sendTransaction](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_sendtransaction)
-
-    1. Use `walletConnectSignTransaction()` below to get the `signedTx`.
-    2. Second, use `walletConnectSendSignedTransaction()` to get the `txid`. ➜ Response to WalletConnect
-
-        ```swift
-        /// Create transaction by signed transaction(eth_sendTransaction) via WalletConnect, this call will be logged as ApiHistoryItem with API name: eth_sendRawTransaction
-        /// - Parameters:
-        ///   - walletId: wallet ID
-        ///   - signedTx: signed transaction
-        ///   - completion: asynchronous callback of SendSignedTxResult
-        public func walletConnectSendSignedTransaction(walletId: Int64, signedTx: String, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SendSignedTxResult>)
-        ```
-
-    3. If you are swapping a new type of currency, it will create a new wallet automatically.
-    4. call `Wallets.walletConnectSync` to sync wallets on the blockchain
-    5. call `Wallets.getWallets` to get the new wallet list
+    - Always check and send valid `typedData`. More specification: see [this](https://eips.ethereum.org/EIPS/eip-712#specification-of-the-eth_signtypeddata-json-rpc)
 
 - ### [eth_signTransaction](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_signtransaction)
 
-    1. Use `walletConnectSignTransaction()` to sign a transaction. ➜ Response to WalletConnect
+    1. Check and adjust the Tx object if necessary, the Tx object must at least contain `gas`, `gasPrice` and `nonce`.  
+    You can use `getEstimateGas`, `getTransactionFee` and `getNonce` to get corresponding values and set its hex string to the Tx object.
+    2. Use `walletConnectSignTransaction()` to sign a transaction. ➜ Response to WalletConnect
 
         ```swift
         /// Signs a transaction(eth_signTransaction) via WalletConnect, this call will be logged as ApiHistoryItem with API name:
@@ -134,9 +121,27 @@ Response parameters:
 - ### [eth_sendRawTransaction](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_sendrawtransaction)
 
     1. use `walletConnectSendSignedTransaction()` to get the `txid`.
-    2. If you are swapping a new type of currency, it will create a new wallet automatically.
-    3. call `Wallets.walletConnectSync` to sync wallets on the blockchain
+    2. During some transactions, you may receive new currencies / tokens which don't exist in the currency list, like swapping a new type of token.
+    3. call `Wallets.walletConnectSync` to add currencies and wallets which are created by `walletConnectSendSignedTransaction`.
     4. call `Wallets.getWallets` to get the new wallet list
+
+- ### [eth_sendTransaction](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_sendtransaction)
+
+    1. Use `walletConnectSignTransaction()` in the previous section to get the `signedTx`.
+    2. Second, use `walletConnectSendSignedTransaction()` to get the `txid`. ➜ Response to WalletConnect
+
+        ```swift
+        /// Create transaction by signed transaction(eth_sendTransaction) via WalletConnect, this call will be logged as ApiHistoryItem with API name: eth_sendRawTransaction
+        /// - Parameters:
+        ///   - walletId: wallet ID
+        ///   - signedTx: signed transaction
+        ///   - completion: asynchronous callback of SendSignedTxResult
+        public func walletConnectSendSignedTransaction(walletId: Int64, signedTx: String, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SendSignedTxResult>)
+        ```
+
+    3. During some transactions, you may receive new currencies / tokens which don't exist in the currency list, like swapping a new type of token.
+    4. call `Wallets.walletConnectSync` to add currencies and wallets which are created by `walletConnectSendSignedTransaction`.
+    5. call `Wallets.getWallets` to get the new wallet list
 
 ## API History
 
