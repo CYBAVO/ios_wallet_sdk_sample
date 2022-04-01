@@ -6,8 +6,8 @@
   - Financial Management Services
   
 - Advantages of a private chain:
-    1. Free, zero transaction fee
-    2. Fast, transactions can be done immediately
+    1. Free, zero transaction fee for inner transfer
+    2. Faster then public chain
     3. Community, referral system is possible
 
 - Easy to implement, sharing APIs with the public chain.
@@ -16,7 +16,8 @@
   - [Model - Wallet](#wallet)
   - [Model - Currency](#currency)
   - [Model - UserState](#userstate)
-  - [APIs](#apis)
+  - TODO: Transaction (Deposit to Private Chain, Withdraw to Public Chain, Inner Transfer)
+  - TODO: Transaction History
 
 ## Models
 
@@ -77,10 +78,9 @@ protocol Currency : CYBAVOWallet.CurrencyType {
   - related infos: `mapToPublicType`, `mapToPublicTokenAddress`, `mapToPublicName`, `canCreateFinanceWallet`
 
 - How to create a private chain wallet with the currency?
-  - `isPrivate == true`
-  - `canCreateFinanceWallet == true`
-  - `tokenAddress == ""`
-  - call `createWallet`, refer to [createWallet](wallets.md#createwallet)
+  - Basically, it's the same way as we mentioned in [createWallet](wallets.md#createwallet), the only difference is the filtering condition of currency and wallet.
+  - In the chart below, `Available Currecies` should be `isPrivate == true && (canCreateFinanceWallet == true || tokenAddress == "")`
+  ![img](images/sdk_guideline/create_wallet.jpg)
 
 ### UserState
 
@@ -102,7 +102,62 @@ protocol UserState {
 - `linkUserReferralCode` represent the referrer's referral code
 - call `Auth.registerReferralCode()` to register a referrer.
 
-## APIs
+## Transaction
+> There are 3 types of transaction on the private chain.
+### Deposit to Private Chain
 
-- All the APIs are shared with the normal operations.
-- Refer to [wallets.md](wallets.md) and [transaction.md](transaction.md)
+- Select a private wallet, create a new one if needed.
+- Select a deposit address of the private wallet.
+- Present the address and memo of the deposit address for deposit.
+
+### Withdraw to Public Chain
+#### getTransactionFee
+- Withdraw to public chain will be charged a fixed transaction fee.  
+i.e. `getTransactionFee()` will return same amount of { high, medium, low } level for private chain currency.
+- Use `wallet.depositAddress` 's `Currency` and `tokenAddress` as parameter to get the transaction fee for withdraw to public chain.
+- The receive amount = transfer amount - transaction fee
+- The receive amount cannot less then `withdrawMin` 
+```swift
+public protocol GetTransactionFeeResult {
+  ...
+    var withdrawMin: String {get} // Minimum transfer amount for private
+}
+```
+#### Perform Withdraw
+- Call `callAbiFunctionTransaction()` to perform the transaction with specific parameters:
+```swift
+let depositAddress = wallet.depositAddress[0] //select a deposit address
+let args: [Any] = [toAddress,
+                   transferAmount, //ex. "123.123456"
+                   memo, // optional, ex. "123456" 
+                   "\(depositAddress.mapToPublicCurrency)", //ex. "60"
+                   depositAddress.mapToPublicTokenAddress], 
+
+Wallets.shared.callAbiFunctionTransaction(walletId: walletId, 
+                    name: "burn", // fixed to "burn"
+                    contractAddress: wallet.tokenAddress, 
+                    abiJson: "", // fixed to ""
+                    args: args, 
+                    transactionFee: "0", //our backend will take care of this 
+                    pinSecret: pinSecret) {result in ... }
+```
+### Inner Transfer
+- There's no transaction fee for inner transfer.
+- Call `createTransaction()` to perform the transaction with specific parameters:
+```swift
+let extras = ["kind": "code"] //means it's a inner transfer transaction
+
+Wallets.shared.createTransaction(fromWalletId: walletId,
+                    toAddress: toAddress, //other user's userReferralCode, ex. "8X372G"
+                    amount: transferAmount, //ex. "123.123456"
+                    transactionFee: "0", // fixed to "0"
+                    description: description,
+                    pinSecret: pinSecret,
+                    extras: extras)  { result in ... }
+```
+
+## Transaction Detail
+- Basically, it's the same way as we mentioned in [transaction.md](transaction.md).  
+ The only different thing is the parameter `crosschain` of `getHistory()`:
+  - Pass `crosschain: 1`, it returns transactions of [Deposit to Private Chain](#deposit-to-private-chain) and [Withdraw to Public Chain](#withdraw-to-public-chain)
+  - Pass `crosschain: 0`, it returns transactions of [Inner Transfer](#inner-transfer).
