@@ -1,10 +1,11 @@
 # WalletConnect
 
 > WalletConnect is an open protocol which makes Dapps able to interact with wallets on different platforms.  
-Wallet SDK provides corresponding APIs which help you get the results to return to Dapp, after establishing a wallet client and being able to receive Dapp's request.   
-In later sections, we'll illustrate how to use those APIs to respond to [session request](https://docs.walletconnect.com/tech-spec#session-request) and JSON-RPC call requests which are defined in [JSON-RPC API Methods](https://docs.walletconnect.com/json-rpc-api-methods/ethereum).   
-Wallet clients integration on iOS : see [this](https://docs.walletconnect.com/quick-start/wallets/swift)  
-WalletConnect Introduction: [WalletConnect v1.0](https://docs.walletconnect.com/)
+> Wallet SDK provides corresponding APIs which help you get the results to return to Dapp, after establishing a wallet client and being able to receive Dapp's request.  
+> In later sections, we'll illustrate how to use those APIs to respond to [session request](https://docs.walletconnect.com/tech-spec#session-request) and JSON-RPC call requests which are defined in [JSON-RPC API Methods](https://docs.walletconnect.com/json-rpc-api-methods/ethereum).  
+>
+> Wallet clients integration on iOS : [Swift Client (iOS)](https://docs.walletconnect.com/quick-start/wallets/swift)  
+> WalletConnect Introduction: [WalletConnect v1.0](https://docs.walletconnect.com/)
 
 - Bookmark:
   - [Session Request](#session-request)
@@ -92,13 +93,13 @@ WalletConnect Introduction: [WalletConnect v1.0](https://docs.walletconnect.com/
     ```
 
     - Use different functions for biometrics & SMS Verification: see [this](bio_n_sms.md#biometrics--sms-verification-for-transaction-and-sign-operation)
-    - Always check and send valid `typedData`. More specification: see [this](https://eips.ethereum.org/EIPS/eip-712#specification-of-the-eth_signtypeddata-json-rpc) 
+    - Always check and send valid `typedData`. More specification: see [this](https://eips.ethereum.org/EIPS/eip-712#specification-of-the-eth_signtypeddata-json-rpc)
 
 - ### [eth_signTransaction](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_signtransaction)
 
-    1. Check and adjust the Tx object if necessary, the Tx object must at least contain `gas`, `gasPrice` and `nonce`.   
+    1. Check and adjust the Tx object if necessary, the Tx object must at least contain `gas`, `gasPrice` and `nonce`.  
     You can use `getEstimateGas`, `getTransactionFee` and `getNonce` to get corresponding values and set its hex string to the Tx object.
-    2. Use `walletConnectSignTransaction()` to sign a transaction. ➜ Response to WalletConnect 
+    2. Use `walletConnectSignTransaction()` to sign a transaction. ➜ Response to WalletConnect
 
         ```swift
         /// Signs a transaction(eth_signTransaction) via WalletConnect, this call will be logged as ApiHistoryItem with API name:
@@ -124,7 +125,7 @@ WalletConnect Introduction: [WalletConnect v1.0](https://docs.walletconnect.com/
 
 - ### [eth_sendTransaction](https://docs.walletconnect.com/json-rpc-api-methods/ethereum#eth_sendtransaction)
 
-    1. Use `walletConnectSignTransaction()` in previous section to get the `signedTx`.   
+    1. Use `walletConnectSignTransaction()` in the previous section to get the `signedTx`.
     2. Second, use `walletConnectSendSignedTransaction()` to get the `txid`. ➜ Response to WalletConnect
 
         ```swift
@@ -139,7 +140,6 @@ WalletConnect Introduction: [WalletConnect v1.0](https://docs.walletconnect.com/
     3. During some transactions, you may receive new currencies / tokens which don't exist in the currency list, like swapping a new type of token.
     4. call `Wallets.walletConnectSync` to add currencies and wallets which are created by `walletConnectSendSignedTransaction`.
     5. call `Wallets.getWallets` to get the new wallet list
-
 
 ## API History
 
