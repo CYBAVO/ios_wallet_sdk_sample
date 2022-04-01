@@ -15,14 +15,16 @@
 
 ## [Session Request](https://docs.walletconnect.com/tech-spec#session-request)
 
-> TODO: flow chart  
-(receive session request > call getWalletsByChainIds (pass -1 to get all) > filter !isPrivate && tokenAddress == '' > user select wallet and click approve > call walletconnect's approveSession with wallet address & chainId )
+![img](images/sdk_guideline/wc_session_request.jpg)
 
-- TODO: explaination of flow chart
+- Receiving `wc_sessionRequest` from WalletConnect SDK.
+- Call `getWalletsByChainIds(chainIds: [-1])` to get all wallets.
+- Guide the user to choose a parent wallet.
+- Generate `WCSessionRequestResponse` and response to the WalletConnect service by WalletConnect SDK.
 
-- Response parameters:
-    1. `chainId = Wallet.chainId`
-    2. `accounts = [Wallet.address]`
+  - Response parameters:
+    1. `chainId` use `Wallet.chainId`
+    2. `accounts` use `Wallet.address`
 
         ```swift
         protocol Wallet : CYBAVOWallet.BalanceAddress, CYBAVOWallet.CurrencyType {
