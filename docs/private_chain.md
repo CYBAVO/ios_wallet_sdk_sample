@@ -6,9 +6,9 @@
   - Financial Management Services
   
 - Advantages of a private chain:
-    1. Free, zero transaction fee for inner transfer
-    2. Faster then public chain
-    3. Community, referral system is possible
+    1. Free; zero transaction fee for inner transfer
+    2. Faster; faster than public chain
+    3. Community; referral system is possible
 
 - Easy to implement, sharing APIs with the public chain.
 
@@ -16,8 +16,8 @@
   - [Model - Wallet](#wallet)
   - [Model - Currency](#currency)
   - [Model - UserState](#userstate)
-  - TODO: Transaction (Deposit to Private Chain, Withdraw to Public Chain, Inner Transfer)
-  - TODO: Transaction History
+  - [Transactions (Deposit to Private Chain, Withdraw to Public Chain, Inner Transfer)](#transactions)
+  - [Transaction History](#transaction-history)
 
 ## Models
 
@@ -50,9 +50,9 @@ protocol Wallet : CYBAVOWallet.BalanceAddress, CYBAVOWallet.CurrencyType {
 - Thus, it will map to a public currency on the public chain.  
   - related infos: `mapToPublicCurrency`, `mapToPublicTokenAddress`, `mapToPublicName`
 - `depositAddresses` provides the addresses on the public chain. When you deposit currencies / tokens to these addresses, you will receive tokens in the related private chain wallet.
-  - multiple `depositAddresses` means one private chain wallet might provide mutiple addresses for depositing.
+  - multiple `depositAddresses` means one private chain wallet might provide multiple addresses for depositing.
   - ex: CPSC-USDT on private chain is mapped to USDT-ERC20 and USDT-TRC20 on the public chains, so you will get multiple addresses in this field.
-  - `memo` in model `DepositAddress` is neccesary when depositing tokens from public chain to private chain.
+  - `memo` in model `DepositAddress` is necessary when depositing tokens from public chain to private chain.
 
 ### Currency
 
@@ -79,7 +79,7 @@ protocol Currency : CYBAVOWallet.CurrencyType {
 
 - How to create a private chain wallet with the currency?
   - Basically, it's the same way as we mentioned in [createWallet](wallets.md#createwallet), the only difference is the filtering condition of currency and wallet.
-  - In the chart below, `Available Currecies` should be `isPrivate == true && (canCreateFinanceWallet == true || tokenAddress == "")`
+  - In the chart below, `Available Currencies` should be `isPrivate == true && (canCreateFinanceWallet == true || tokenAddress == "")`
   ![img](images/sdk_guideline/create_wallet.jpg)
 
 ### UserState
@@ -102,29 +102,39 @@ protocol UserState {
 - `linkUserReferralCode` represent the referrer's referral code
 - call `Auth.registerReferralCode()` to register a referrer.
 
-## Transaction
-> There are 3 types of transaction on the private chain.
-### Deposit to Private Chain
+## Transactions
+
+- There are 3 types of transactions on the private chain.
+
+### 1. Deposit to Private Chain
 
 - Select a private wallet, create a new one if needed.
 - Select a deposit address of the private wallet.
 - Present the address and memo of the deposit address for deposit.
 
-### Withdraw to Public Chain
+### 2. Withdraw to Public Chain
+
 #### getTransactionFee
-- Withdraw to public chain will be charged a fixed transaction fee.  
-i.e. `getTransactionFee()` will return same amount of { high, medium, low } level for private chain currency.
-- Use `wallet.depositAddress` 's `Currency` and `tokenAddress` as parameter to get the transaction fee for withdraw to public chain.
-- The receive amount = transfer amount - transaction fee
-- The receive amount cannot less then `withdrawMin` 
+
+- Withdrawing to public chain will be charged a fixed transaction fee.  
+i.e. `getTransactionFee()` will return the same amount of { high, medium, low } level for private chain currency.
+- Use `wallet.depositAddress` 's `Currency` and `tokenAddress` as parameters to get the transaction fee for withdraw to public chain.
+- The { receive amount = transfer amount - transaction fee }
+- The receive amount cannot less than `withdrawMin`
+
 ```swift
 public protocol GetTransactionFeeResult {
-  ...
-    var withdrawMin: String {get} // Minimum transfer amount for private
+    
+    var withdrawMin: String { get } // Minimum transfer amount for private
+    
+    ...
 }
 ```
+
 #### Perform Withdraw
+
 - Call `callAbiFunctionTransaction()` to perform the transaction with specific parameters:
+
 ```swift
 let depositAddress = wallet.depositAddress[0] //select a deposit address
 let args: [Any] = [toAddress,
@@ -141,9 +151,12 @@ Wallets.shared.callAbiFunctionTransaction(walletId: walletId,
                     transactionFee: "0", //our backend will take care of this 
                     pinSecret: pinSecret) {result in ... }
 ```
-### Inner Transfer
+
+### 3. Inner Transfer
+
 - There's no transaction fee for inner transfer.
 - Call `createTransaction()` to perform the transaction with specific parameters:
+
 ```swift
 let extras = ["kind": "code"] //means it's a inner transfer transaction
 
@@ -156,7 +169,8 @@ Wallets.shared.createTransaction(fromWalletId: walletId,
                     extras: extras)  { result in ... }
 ```
 
-## Transaction Detail
+## Transaction History
+
 - Basically, it's the same way as we mentioned in [transaction.md](transaction.md).  
  The only different thing is the parameter `crosschain` of `getHistory()`:
   - Pass `crosschain: 1`, it returns transactions of [Deposit to Private Chain](#deposit-to-private-chain) and [Withdraw to Public Chain](#withdraw-to-public-chain)
