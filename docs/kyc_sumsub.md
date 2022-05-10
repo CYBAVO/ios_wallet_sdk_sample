@@ -23,7 +23,7 @@
 ⚠️ Please note that must select `MobileSDK` for "Integration type" and select `Standard` for "Type"
 
         <img src="images/sdk_guideline/kyc_flow.png" alt="drawing" width="500"/>
-    * You can use `Auth.shared.checkKycSetting()` to check if `Sumsub Server URL`, `Sumsub Token` and `Sumsub Token` are set properly and display / hide related UI.
+    * You can use `Auth.shared.checkKycSetting()` to check if `Sumsub Server URL`, `Sumsub Token` and `Sumsub Secret` are set properly and display / hide related UI.
 
         ```swift
         /// Check if the KYC settings exist:
