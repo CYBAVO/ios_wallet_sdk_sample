@@ -7,7 +7,7 @@
   - [Preparation](#preparation)
   - [Create an Applicant](#create-an-applicant)
   - [Access Token and Launching Sumsub MSDK](#access-token-and-launching-sumsub-msdk)
-  - [Sharing Applicants between Partner Services]()
+  - [Sharing Applicants between Partner Services](#sharing-applicants-between-partner-services)
 
 ## Preparation
 
