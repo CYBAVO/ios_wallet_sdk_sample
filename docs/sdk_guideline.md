@@ -129,7 +129,7 @@ public func signIn(token: String, identityProvider: String, extras: [String : St
 ///   - identityProvider: refer to func signIn()
 ///   - extras: Extra attributes for specific provider, pass null if unspecified.
 ///     1. id_token_secret (String) - Secret for Twitter
-///     2. user_name (String) - User name, Required for Apple Auth, optional for other services
+///     2. user_name (String) - User name, Required for Apple Auth
 ///
 ///   - completion: Result<_, ApiError>
 ///   case success: ➡️ ready to signIn()
