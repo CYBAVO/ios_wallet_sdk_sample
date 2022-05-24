@@ -108,7 +108,9 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 ///     5. Twitter - "Twitter"
 ///     6. WeChat - "WeChat"
 ///
-///   - extras: undefined
+///   - extras: Extra attributes for specific provider, pass null if unspecified.
+///     1. id_token_secret (String) - Secret for Twitter
+///
 ///   - completion: Result<_, ApiError>
 ///     case success: ➡️ ready to getUserState()
 ///     case failure: if ErrorCode == .ErrRegistrationRequired ➡️ go to the Sign-up flow
@@ -125,15 +127,17 @@ public func signIn(token: String, identityProvider: String, extras: [String : St
 /// - Parameters:
 ///   - token: refer to func signIn()
 ///   - identityProvider: refer to func signIn()
-///   - extras: *note_1*
+///   - extras: Extra attributes for specific provider, pass null if unspecified.
+///     1. id_token_secret (String) - Secret for Twitter
+///     2. user_name (String) - User name, Required for Apple Auth, optional for other services
+///
 ///   - completion: Result<_, ApiError>
 ///   case success: ➡️ ready to signIn()
 ///   case failure: handle ApiError
 ///
-///   - note_1: extras = ["user_name" : <UserName>] // Required for Apple Auth, optional for other services
-///
 public func signUp(token: String, identityProvider: String, extras: [String : String] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SignUpResult>)
 ```
+### Sign-up flow
 
 ## Sign-out
 
