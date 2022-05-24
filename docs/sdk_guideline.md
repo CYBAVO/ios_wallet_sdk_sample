@@ -112,7 +112,7 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 ///     1. id_token_secret (String) - Secret for Twitter
 ///
 ///   - completion: Result<_, ApiError>
-///     case success: ➡️ ready to getUserState()
+///     case success: ➡️ Ready to getUserState()
 ///     case failure: if ErrorCode == .ErrRegistrationRequired ➡️ go to the Sign-up flow
 ///
 public func signIn(token: String, identityProvider: String, extras: [String : String] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SignInResult>)
@@ -125,15 +125,15 @@ public func signIn(token: String, identityProvider: String, extras: [String : St
 ```swift
 /// sign-up with CYBAVOWallet Auth
 /// - Parameters:
-///   - token: refer to func signIn()
-///   - identityProvider: refer to func signIn()
+///   - token: Refer to func signIn()
+///   - identityProvider: Refer to func signIn()
 ///   - extras: Extra attributes for specific provider, pass null if unspecified.
 ///     1. id_token_secret (String) - Secret for Twitter
-///     2. user_name (String) - User name, Required for Apple Auth
+///     2. user_name (String) - User name, required for Apple auth
 ///
 ///   - completion: Result<_, ApiError>
-///   case success: ➡️ ready to signIn()
-///   case failure: handle ApiError
+///   case success: ➡️ Ready to signIn()
+///   case failure: Handle ApiError
 ///
 public func signUp(token: String, identityProvider: String, extras: [String : String] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SignUpResult>)
 ```
