@@ -101,6 +101,49 @@ protocol UserState {
 - `userReferralCode` represent the user's referral code
 - `linkUserReferralCode` represent the referrer's referral code
 - call `Auth.registerReferralCode()` to register a referrer.
+- You can search user by calling `Auth.getInstance().searchUser()`, the keyword can be `realName` (partial match) or `referralCode` (fully match)
+  ```swift
+  Auth.shared.searchUser(keyword: "UserX"){ result in
+                    switch result {
+                        case .success(let result):
+                            for i in 0..<result.infos.count {
+                                print("#\(i), Name: \(result.infos[i].realName), Code: \(result.infos[i].referralCode)")
+                            }
+                            break;
+                        case .failure(let error):
+                            //keyword length cannot less then 3,
+                            //otherwise the API will receive ErrKeywordForSearchTooShort
+                            print("searchUser failed \(error)")
+                            break;
+                    }
+                }
+
+  ```
+- You can update `realName` by calling `Auth.getInstance().updateRealName()`
+  ```swift
+  Auth.shared.updateRealName(realName: "UserY"){ result in
+                    switch result {
+                    case .success(_):
+                            Auth.shared.getUserState(){userStateResult in
+                                switch userStateResult {
+                                case .success(let userStateResult):
+                                    print("newRealName: \(userStateResult.userState.realName)")
+                                    break
+                                case .failure(let userStateErr):
+                                    print("getUserState failed \(userStateErr)")
+                                    break
+                                }
+                            }
+                            break;
+                        case .failure(let error):
+                            //realName length cannot less then 3,
+                            //otherwise the API will receive ErrKeywordForSearchTooShort
+                            print("updateRealName failed \(error)")
+                            break;
+                    }
+                    
+                }
+  ```
 
 ## Transactions
 

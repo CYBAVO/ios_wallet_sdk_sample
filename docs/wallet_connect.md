@@ -165,6 +165,23 @@
     ///   - completion: asynchronous callback of GetApiHistoryResult
     public func getWalletConnectApiHistory(walletId: Int64, start: Int, count: Int, filters: [String : Any] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetApiHistoryResult>)
     ```
+- WalletSDK also provides `getWalletConnectSignedTx` and `getWalletConnectUnsignedData` for further needs.
+
+    ```swift
+    /// Get signed TX for walletConnectSendSignedTransaction()
+    ///   - Parameters:
+    ///   - walletId: wallet ID
+    ///   - accessId: accessId from API history
+    ///   - completion: Asynchronized callback
+    public func getWalletConnectSignedTx(walletId: Int64, accessId: String, completion: @escaping Callback<GetWalletConnectSignedTxResult>)
+
+    /// Get unsigned data for walletConnectSignTypedData() and walletConnectSignTransaction()
+    ///   - Parameters:
+    ///   - walletId: wallet ID
+    ///   - accessId: accessId from API history
+    ///   - completion: Asynchronized callback
+    public func getWalletConnectUnsignedData(walletId: Int64, accessId: String, completion: @escaping Callback<GetWalletConnectUnsignedDataResult>)
+    ```
 
 ## Cancel a Transaction
 
