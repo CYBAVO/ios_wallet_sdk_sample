@@ -8,7 +8,7 @@
   - [Create an Applicant](#create-an-applicant)
   - [Access Token and Launching Sumsub MSDK](#access-token-and-launching-sumsub-msdk)
   - [Sharing Applicants between Partner Services](#sharing-applicants-between-partner-services)
-  - [Getting applicant status](#getting-applicant-status)
+  - [Getting Applicant Status](#getting-applicant-status)
 
 ## Preparation
 
@@ -128,7 +128,7 @@
     ///   - completion: Asynchronized callback
     public func getKycShareToken(completion: @escaping Callback<GetKycShareTokenResult>)
     ```
-## Getting applicant status
+## Getting Applicant Status
 - Sumsub provides API to get applicant status, for detailed status definition, please visit their [API Reference](https://developers.sumsub.com/api-reference/#getting-applicant-status-sdk).
 - Use `Auth.shared.getApplicantStatus()` to get applicant status.
 
