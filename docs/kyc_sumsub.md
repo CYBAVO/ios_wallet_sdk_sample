@@ -130,7 +130,7 @@
     ```
 ## Getting applicant status
 - Sumsub provides API to get applicant status, for detailed status definition, please visit their [API Reference](https://developers.sumsub.com/api-reference/#getting-applicant-status-sdk).
-- Use `Auth.getInstance().getApplicantStatus()` to get applicant status.
+- Use `Auth.shared.getApplicantStatus()` to get applicant status.
 
     ```swift
     ///

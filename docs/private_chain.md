@@ -100,8 +100,8 @@ protocol UserState {
     2. substitute readable address for making transactions in the private chain
 - `userReferralCode` represent the user's referral code
 - `linkUserReferralCode` represent the referrer's referral code
-- call `Auth.registerReferralCode()` to register a referrer.
-- You can search user by calling `Auth.getInstance().searchUser()`, the keyword can be `realName` (partial match) or `referralCode` (fully match)
+- Call `Auth.shared.registerReferralCode()` to register a referrer.
+- You can search user by calling `Auth.shared.searchUser()`, the keyword can be `realName` (partial match) or `referralCode` (fully match)
   ```swift
   Auth.shared.searchUser(keyword: "UserX"){ result in
                     switch result {
@@ -119,7 +119,7 @@ protocol UserState {
                 }
 
   ```
-- You can update `realName` by calling `Auth.getInstance().updateRealName()`
+- You can update `realName` by calling `Auth.shared.updateRealName()`
   ```swift
   Auth.shared.updateRealName(realName: "UserY"){ result in
                     switch result {
