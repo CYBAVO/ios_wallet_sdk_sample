@@ -154,7 +154,7 @@ public func getAddressesTags(currency: Int, addresses: [String], completion: @es
 ///      - Note 1:
 ///         - When eos_transaction_type is EosResourceTransactionType.SELL_RAM, EosResourceTransactionType.UNDELEGATE_CPU or EosResourceTransactionType.UNDELEGATE_NET, the receiver should be address of Wallet fromWalletId
 ///         - ex: ["memo": "abcd", "eos_transaction_type": EosResourceTransactionType.SELL_RAM.rawValue, "skip_email_notification": false, "kind": "code"]
-///      - Note 2: Pass sol_token_id for SOL NFT transaction, and the amount must be "1", otherwise, it will return ErrInvalidParameter error
+///      - Note 2: Pass sol_token_id for SOL NFT transaction, and the amount must be "1", otherwise, it will return .ErrInvalidParameter error
 ///   - completion: asynchronous callback
 ///
 public func createTransaction(actionToken: String = "", signature: String = "", smsCode: String = "", fromWalletId: Int64, toAddress: String, amount: String, transactionFee: String, description: String, pinSecret: CYBAVOWallet.PinSecret, extras: [String : Any] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.CreateTransactionResult>)
