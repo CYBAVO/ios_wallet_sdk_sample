@@ -5,7 +5,7 @@
   - [Withdraw](#withdraw)
   - [Transaction Detail](#transaction-detail)
   - [Transaction Replacement](#transaction-replacement)
-  - [Others](#others)
+  - [Interact with Smart Contract](#interact-with-smart-contract)
 
 ## Deposit
 
@@ -150,10 +150,11 @@ public func getAddressesTags(currency: Int, addresses: [String], completion: @es
 ///         9. to_address_tag (Array<String>) - AML tag, get from getAddressesTags() API
 ///        10. custom_nonce (Int64, Int) - Specific nonce
 ///        11. custom_gas_limit (Int64, Int) - Specific gas limit
-
-///      - Note:
+///        12. sol_token_id (String) - token ID of SOL NFT, if get from getSolNftTokens() API, the token ID would be TokenMeta.tokenAddress
+///      - Note 1:
 ///         - When eos_transaction_type is EosResourceTransactionType.SELL_RAM, EosResourceTransactionType.UNDELEGATE_CPU or EosResourceTransactionType.UNDELEGATE_NET, the receiver should be address of Wallet fromWalletId
 ///         - ex: ["memo": "abcd", "eos_transaction_type": EosResourceTransactionType.SELL_RAM.rawValue, "skip_email_notification": false, "kind": "code"]
+///      - Note 2: Pass sol_token_id for SOL NFT transaction, and the amount must be "1", otherwise, it will return .ErrInvalidParameter error
 ///   - completion: asynchronous callback
 ///
 public func createTransaction(actionToken: String = "", signature: String = "", smsCode: String = "", fromWalletId: Int64, toAddress: String, amount: String, transactionFee: String, description: String, pinSecret: CYBAVOWallet.PinSecret, extras: [String : Any] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.CreateTransactionResult>)
@@ -278,6 +279,130 @@ The user needs to create another Tx with higher Tx fee and the same nonce to rep
         - `if Original-Tx.replaced == true` ➜ Cancel / Accelerate success
         - `if Replacement-Tx.replaced == true` ➜ Cancel / Accelerate failed
 
-## Others
+## Interact with Smart Contract
+Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/abi-spec.html) functions for general read and write operation.   
+- For read operation, like `balanceOf`, use `callAbiFunctionRead()`. The parameter is depends on the ABI function required.  
 
-- ABI functions `callAbiFunctionTransaction()`, `callAbiFunctionRead()` see this [Sample](https://github.com/CYBAVO/ios_wallet_sdk_sample/blob/c516b35e740b1719d916c40c52df949c5a5d6cda/WalletSDKDemo/Wallets/WithdrawController.swift)
+  For example, here's the json of the ABI function we want to call:
+    ```javascript
+    //Part of ABI_JSON
+    {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "_owner",
+            "type": "address"
+          },
+          {
+            "name": "_testInt",
+            "type": "uint256"
+          },
+          {
+            "name": "_testStr",
+            "type": "string"
+          }
+        ],
+        "name": "balanceOfCB",
+        "outputs": [
+          {
+            "name": "balance",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ``` 
+    According to its definition, we would compose an API call like this:
+    ```swift
+    Wallets.shared.callAbiFunctionRead(walletId: walletId,
+                                           // name, function name of ABI
+                                           name: "balanceOfCB",
+                                           // contractAddress, contract address of ABI
+                                           contractAddress: "0xef3aa4115b071a9a7cd43f1896e3129f296c5a5f",
+                                           // abiJson, ABI contract json
+                                           abiJson: ABI_JSON,
+                                           // args, argument array of ABI function
+                                           args:["0x281F397c5a5a6E9BE42255b01EfDf8b42F0Cd179", 123, "test"]{ result in
+                            switch result {
+                            case .success(let result):
+                                print("callAbiFunctionRead_\(result.output)_\(result.signedTx)_\(result.txid)")
+                                break
+                            case .failure(let error):
+                                print("callAbiFunctionRead_\(error)")
+                                break
+                            }
+        }
+    ```
+    Aside from `walletId` and  `completion`, all the parameters are varied according to the ABI function.  
+    
+    See [this](https://github.com/CYBAVO/ios_wallet_sdk_sample/blob/master/WalletSDKDemo/Wallets/WithdrawController.swift#L149-L160) for complete example.  
+- For write operaion, like `transferFrom`, use `callAbiFunctionTransaction()`. The parameter is also depends on the ABI function required.  
+
+  For example, here's the json of the ABI function we want to call:
+    ```javascript
+    //Part of ABI_JSON
+    {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_to",
+            "type": "address"
+          },
+          {
+            "name": "_value",
+            "type": "uint256"
+          },
+          {
+            "name": "_testInt",
+            "type": "uint256"
+          },
+          {
+            "name": "_testStr",
+            "type": "string"
+          }
+        ],
+        "name": "transferCB",
+        "outputs": [
+          {
+            "name": "success",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ```
+    According to its definition, we would compose an API call like this:
+    ```swift
+    Wallets.shared.callAbiFunctionTransaction(walletId: wallet.walletId,
+                                              // name, function name of ABI
+                                              name: "transferCB",
+                                              // contractAddress, contract address of ABI
+                                              contractAddress: "0xef3aa4115b071a9a7cd43f1896e3129f296c5a5f",
+                                              // abiJson, ABI contract json
+                                              abiJson: ABI_JSON,
+                                              // args, argument array of ABI function
+                                              args: ["0x490d510c1A8b74749949cFE5cA06D0C6BD7119E2", 1, 100, "unittest"],
+                                              // transactionFee, see getTransactionFee() and amount property of Fee struct
+                                              transactionFee: fee,
+                                              pinSecret: pinSecret){ result in
+                           switch result {
+                           case .success(let result):
+                                print("callAbiFunctionTransaction_\(result.output)_\(result.signedTx)_\(result.txid)")
+                               break
+                           case .failure(let error):
+                                print("callAbiFunctionTransaction_\(error)")
+                               break
+                           }
+      }
+    ```
+    Different from `callAbiFunctionRead()`, `callAbiFunctionTransaction()` requires 2 more parameters: `transactionFee` and `PinSecret` for transaction.  
+    
+    The parameter `name`, `contractAddress`, `abiJson` and `args` are varied according to the ABI function.  
+    
+    See [this](https://github.com/CYBAVO/ios_wallet_sdk_sample/blob/master/WalletSDKDemo/Wallets/WithdrawController.swift#L165-L176) for complete example.  
+    
+    See [Withdraw to Public Chain](https://github.com/CYBAVO/ios_wallet_sdk_sample/blob/master/docs/private_chain.md#perform-withdraw) for another specific usage in private chain.

@@ -241,6 +241,20 @@ public protocol UserState {
   public func getUserState(completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetUserStateResult>)
   ```
 
+## Account deletion
+For account deletion, Wallet SDK provides `revokeUser()` API and the detailed flow is described as below.
+1. Check `UserState.setPin` 
+
+    - If it's true, ask user to input PIN and call `revokeUser(pinSecret: PinSecret, completion: callback)`.
+    - If it's false, just call `revokeUser(completion: callback)`.
+
+2. (Suggest) Lead user back to sign in page without calling `signOut()` and sign out 3rd party SSO.  
+⚠️ After `revokeUser()`, `signOut()` will trigger `onUserStateChanged` with state `.SessionExpired`.  
+
+3. On the admin panel, the user will be mark as disabled with extra info: unregistered by user, then the administrator can remove PII (real name, email and phone) of the user.  
+
+4. This account still can be enabled by administrator if needed. Before being enabled, if the user trying to sign in with revoked account, `signIn()` API will return `.ErrUserRevoked` error.  
+
 [↑ go to the top ↑](#cybavo-wallet-app-sdk-for-ios---guideline)
 
 ---
@@ -269,45 +283,55 @@ public func setupPinCode(pinSecret: CYBAVOWallet.PinSecret, completion: @escapin
 public func changePinCode(newPinSecret: CYBAVOWallet.PinSecret, currentPinSecret: CYBAVOWallet.PinSecret, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.ChangePinCodeResult>)
 ```
 
-## Reset PIN code - with API
+## Reset PIN code - with Security Question
+- There are 2 ways to reset PIN code, one is by answering security questions
 
-- Set questions and answers for PIN code recovery.
-
-```swift
-public func setupBackupChallenge(pinSecret: CYBAVOWallet.PinSecret, challenge1: CYBAVOWallet.BackupChallenge, challenge2: CYBAVOWallet.BackupChallenge, challenge3: CYBAVOWallet.BackupChallenge, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SetupPinCodeResult>)
-
-public func restorePinCode(pinSecret: CYBAVOWallet.PinSecret, challenge1: CYBAVOWallet.BackupChallenge, challenge2: CYBAVOWallet.BackupChallenge, challenge3: CYBAVOWallet.BackupChallenge, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.ChangePinCodeResult>)
-
-public func getRestoreQuestions(completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetRestoreQuestionsResult>)
-
-public func verifyRestoreQuestions(challenge1: CYBAVOWallet.BackupChallenge, challenge2: CYBAVOWallet.BackupChallenge, challenge3: CYBAVOWallet.BackupChallenge, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.VerifyRestoreQuestionsResult>)
-```
+  1. Before that, the user has to set the answers of security questions.  
+  ⚠️ Please note that the account must have at least a wallet, otherwise, the API will return `ErrNoWalletToBackup` error.
+  ```swift
+  public func setupBackupChallenge(pinSecret: CYBAVOWallet.PinSecret, challenge1: CYBAVOWallet.BackupChallenge, challenge2: CYBAVOWallet.BackupChallenge, challenge3: CYBAVOWallet.BackupChallenge, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SetupPinCodeResult>)
+  ```
+  2. Get the security question for user to answer
+  ```swift
+  public func getRestoreQuestions(completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetRestoreQuestionsResult>)
+  ```
+  3. Verify user input answer (just check if the answers are correct)
+  ```swift
+  public func verifyRestoreQuestions(challenge1: CYBAVOWallet.BackupChallenge, challenge2: CYBAVOWallet.BackupChallenge, challenge3: CYBAVOWallet.BackupChallenge, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.VerifyRestoreQuestionsResult>)
+  ```
+  4. Reset PIN code by security questions and answers
+  ```swift
+  public func restorePinCode(pinSecret: CYBAVOWallet.PinSecret, challenge1: CYBAVOWallet.BackupChallenge, challenge2: CYBAVOWallet.BackupChallenge, challenge3: CYBAVOWallet.BackupChallenge, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.ChangePinCodeResult>)
+  ```
 
 ## Reset PIN code - with Admin System
 
 - If the user forgot both the PIN code and the answers which they have set.
 
   1. First, call API `forgotPinCode` to get the **_Handle Number_**.
-  2. Second, contact the system administrator.
-  3. System administrator should provide you with an 8 digits **_Recovery Code_**.
-  4. Then call API `verifyRecoveryCode` and `recoverPinCode` to recover PIN code.
+  ```swift
+  public func forgotPinCode(completion: @escaping Callback<ForgotPinCodeResult>)
+  ```
 
-```swift
-public func forgotPinCode(completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.ForgotPinCodeResult>)
+  2. Second, contact the system administrator and get an 8 digits **_Recovery Code_**.
+  3. Verify the recovery code  (just check if the recovery code is correct)
+  ```swift
+  public func verifyRecoveryCode(recoveryCode: String, completion: @escaping Callback<VerifyRecoveryCodeResult>)
+  ```
+  4. Reset PIN code by the recovery code.
 
-public func verifyRecoveryCode(recoveryCode: String, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.VerifyRecoveryCodeResult>)
-
-public func recoverPinCode(pinSecret: CYBAVOWallet.PinSecret, recoveryCode: String, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.RecoveryPinCodeResult>)
-```
+  ```swift
+  public func recoverPinCode(pinSecret: PinSecret, recoveryCode: String, completion: @escaping Callback<RecoveryPinCodeResult>)
+  ```
 
 ## Notice
 
 - Old version `pinCode: String` was deprecated, use `CYBAVOWallet.PinSecret` instead.
 
   `CYBAVOWallet.PinSecret` advantages:
-    1. much more secure
-    2. compatible with NumericPinCodeInputView
-    3. certainly release the PIN code with API  
+    1. Much more secure
+    2. Compatible with NumericPinCodeInputView
+    3. Certainly release the PIN code with API  
 
 - `PinSecret` will be cleared after Wallet and Auth APIs are executed. If you intendly want to keep the `PinSecret`, call `PinSecret.retain()` everytime before APIs are called.
 
