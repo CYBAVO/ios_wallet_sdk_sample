@@ -287,7 +287,7 @@ public func changePinCode(newPinSecret: CYBAVOWallet.PinSecret, currentPinSecret
 - There are 2 ways to reset PIN code, one is by answering security questions
 
   1. Before that, the user has to set the answers of security questions.  
-  ⚠️ Please note that the account must have at least a wallet, otherwise, the API will return `ErrNoWalletToBackup` error.
+  ⚠️ Please note that the account must have at least a wallet, otherwise, the API will return `.ErrNoWalletToBackup` error.
   ```swift
   public func setupBackupChallenge(pinSecret: CYBAVOWallet.PinSecret, challenge1: CYBAVOWallet.BackupChallenge, challenge2: CYBAVOWallet.BackupChallenge, challenge3: CYBAVOWallet.BackupChallenge, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SetupPinCodeResult>)
   ```
