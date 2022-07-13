@@ -254,6 +254,7 @@ For account deletion, Wallet SDK provides `revokeUser()` API and the detailed fl
 3. On the admin panel, the user will be mark as disabled with extra info: unregistered by user, then the administrator can remove PII (real name, email and phone) of the user.  
 
 4. This account still can be enabled by administrator if needed. Before being enabled, if the user trying to sign in with revoked account, `signIn()` API will return `.ErrUserRevoked` error.  
+
 [↑ go to the top ↑](#cybavo-wallet-app-sdk-for-ios---guideline)
 
 ---
