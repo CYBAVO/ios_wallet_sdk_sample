@@ -372,11 +372,11 @@ public func changePinCode(newPinSecret: CYBAVOWallet.PinSecret, currentPinSecret
 
 ## Notification Types
 
-Push-Notification types were defined in the JSONs below.
+There are 2 types of push notification: Transacion and Announcement.
 
-- Transaction
+1. Transaction
   
-  ```swift
+    ```swift
     {
         "currency": "194",
         "token_address": "",
@@ -395,30 +395,30 @@ Push-Notification types were defined in the JSONs below.
     }
     ```
 
-  Sample :
+    Sample :
 
-  - Withdraw (currencySymbol was from API getWallets)
+    - Withdraw (currencySymbol was from API getWallets)
 
-    ```String
-    Transaction Sent: Amount {{amount}} {{currencySymbol}} to {{fromAddress}}
+      ```String
+      Transaction Sent: Amount {{amount}} {{currencySymbol}} to {{fromAddress}}
+      ```
+
+    - Deposit (NFT wallet, i.e. wallet mapping to a Currency which tokenVersion is 721 or 1155)
+
+      ```string
+      Transaction Received: Token {{amount}}({{currencySymbol}}) received from {{fromAddress}}
+      ```
+
+2. Announcement
+
+    ```JSON
+    {
+        "body": "All CYBAVO Wallet users will be charged 0.1% platform fee for BTC transaction during withdraw since 2021/9/10",
+        "sound": "default",
+        "title": "Important information",
+        "category": "myCategory"
+    }
     ```
-
-  - Deposit (NFT wallet, i.e. wallet mapping to a Currency which tokenVersion is 721 or 1155)
-  
-    ```string
-    Transaction Received: Token {{amount}}({{currencySymbol}}) received from {{fromAddress}}
-    ```
-
-- Announcement
-
-  ```JSON
-  {
-      "body": "All CYBAVO Wallet users will be charged 0.1% platform fee for BTC transaction during withdraw since 2021/9/10",
-      "sound": "default",
-      "title": "Important information",
-      "category": "myCategory"
-  }
-  ```
 
 [↑ go to the top ↑](#cybavo-wallet-app-sdk-for-ios---guideline)
 
