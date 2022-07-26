@@ -344,9 +344,52 @@ public func changePinCode(newPinSecret: CYBAVOWallet.PinSecret, currentPinSecret
 
 # Push Notification
 
+> Wallet SDK support 2 ways to integrate Push Notification: **Amazon Pinpoint** and **Google Firebase**
+
+  <img src="images/sdk_guideline/screenshot_push_notification.png" alt="drawing" width="400"/>  
+
+## Install and configuration
+
+- For admin panel configuration, please refer to "Amazon Pinpoint / Google Firebase" section in CYBAVO Wallet SDK Admin Panel User Manual.
+- Registering Your App with APNs, refer [this](https://developer.apple.com/documentation/usernotifications/registering_your_app_with_apns)
+- Amazon Pinpoint：could also refer [this](https://github.com/CYBAVO/ios_wallet_sdk_sample/blob/master/docs/PushNotification.md)
+
 ## Setup
 
-- Step 1 : enable the apnsSandbox
+- Step 1 : decide your `pushDeviceToken` string
+  - Amazon Pinpoint
+
+    ```swift
+    extension AppDelegate: UNUserNotificationCenterDelegate {
+      
+      func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+          let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+          let token = tokenParts.joined()
+          debugPrint("Device APNs Push Token: \(token)")
+          
+          UserManager.shared.pushDeviceToken = token
+      }
+
+      ...
+    }
+    ```
+
+  - Google Firebase
+
+    ```swift
+    Messaging.messaging().delegate = self
+
+    extension AppDelegate: MessagingDelegate {
+    
+        func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+            debugPrint("Device FCM Token: \(String(describing: fcmToken))")
+            
+            UserManager.shared.pushDeviceToken = fcmToken
+        }
+    }
+    ```
+
+- Step 2 : enable the WalletSdk apnsSandbox (for Dev environment)
 
   ```swift
   #if DEBUG
@@ -354,10 +397,8 @@ public func changePinCode(newPinSecret: CYBAVOWallet.PinSecret, currentPinSecret
   #endif
   ```
 
-- Step 2 : setPushDeviceToken
+- Step 3 : After signed in, `setPushDeviceToken`
   
-  <img src="images/sdk_guideline/screenshot_push_notification.png" alt="drawing" width="400"/>  
-
   ```swift
   /// Set Firebase Cloud Messaging (FCM) or Amazon Pinpoint device token
   /// - Parameters:
@@ -366,17 +407,56 @@ public func changePinCode(newPinSecret: CYBAVOWallet.PinSecret, currentPinSecret
   public func setPushDeviceToken(deviceToken: String, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SetPushDeviceTokenResult>)
   ```
 
-- Step 3 : create your Push Notification receive handler
+  ```swift
+  // After user Signed In
+  guard Auth.shared.getSignInState() == .SignedIn else { return }
 
-- more details : [PushNotification.md](PushNotification.md)
+  // Set the push device token
+  Auth.shared.setPushDeviceToken(deviceToken: pushDeviceToken) {
+      ...
+  }
+  ```
+
+- Step 4 : Receive and handle the notification
+
+  ```swift
+  func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+
+      // Demo for 'Transaction' type
+
+      let amount = userInfo["amount"] as? String ?? ""
+      let from = userInfo["from_address"] as? String ?? ""
+      let to = userInfo["to_address"] as? String ?? ""
+      let out = userInfo["out"] as? String ?? ""
+      let content = UNMutableNotificationContent()
+      
+      if (out == "true") {
+          content.title = "Transaction Send"
+          content.body = "Amount \(amount) from \(from)"
+      } else {
+          content.title = "Transaction Received"
+          content.body = "Amount \(amount) to \(to)"
+      }
+      content.badge = 1
+      content.sound = UNNotificationSound.default
+      
+      print("didReceiveRemoteNotification \(content.title)_\(content.body)")
+      
+      let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
+      let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+      UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+      
+      completionHandler(.newData)
+  }
+  ```
 
 ## Notification Types
 
-Push-Notification types were defined in the JSONs below.
+There are 2 types of push notification: **Transacion** and **Announcement**.
 
-- Transaction
+1. Transaction
   
-  ```swift
+    ```swift
     {
         "currency": "194",
         "token_address": "",
@@ -395,30 +475,46 @@ Push-Notification types were defined in the JSONs below.
     }
     ```
 
-  Sample :
+    - The keys of **Transaction** type are listed below
+      Key    | Description  | Type  
+      :------------|:------------|:-------
+      type    | notification type    |  String
+      wallet_id    | Wallet ID    |  String
+      currency    | Currency     |  String
+      token_address  | Token address | String
+      out  | Transaction direction<br>("true": out, "false": in)| String
+      amount  | Transaction amount | String
+      fee  | Transaction fee | String
+      from_address  | Transaction from address | String
+      to_address  | Transaction to address | String
+      timestamp  | Transaction timestamp | String
+      txid  | Transaction TXID | String
+      description  | Transaction description | String
 
-  - Withdraw (currencySymbol was from API getWallets)
+    - Sample :
 
-    ```String
-    Transaction Sent: Amount {{amount}} {{currencySymbol}} to {{fromAddress}}
+      - Withdraw (currencySymbol was from API getWallets)
+
+        ```String
+        Transaction Sent: Amount {{amount}} {{currencySymbol}} to {{fromAddress}}
+        ```
+
+      - Deposit (NFT wallet, i.e. wallet mapping to a Currency which tokenVersion is 721 or 1155)
+
+        ```string
+        Transaction Received: Token {{amount}}({{currencySymbol}}) received from {{fromAddress}}
+        ```
+
+2. Announcement
+
+    ```JSON
+    {
+        "body": "All CYBAVO Wallet users will be charged 0.1% platform fee for BTC transaction during withdraw since 2021/9/10",
+        "sound": "default",
+        "title": "Important information",
+        "category": "myCategory"
+    }
     ```
-
-  - Deposit (NFT wallet, i.e. wallet mapping to a Currency which tokenVersion is 721 or 1155)
-  
-    ```string
-    Transaction Received: Token {{amount}}({{currencySymbol}}) received from {{fromAddress}}
-    ```
-
-- Announcement
-
-  ```JSON
-  {
-      "body": "All CYBAVO Wallet users will be charged 0.1% platform fee for BTC transaction during withdraw since 2021/9/10",
-      "sound": "default",
-      "title": "Important information",
-      "category": "myCategory"
-  }
-  ```
 
 [↑ go to the top ↑](#cybavo-wallet-app-sdk-for-ios---guideline)
 
