@@ -421,7 +421,9 @@ public func changePinCode(newPinSecret: CYBAVOWallet.PinSecret, currentPinSecret
 
   ```swift
   func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        
+
+      // Demo for 'Transaction' type
+
       let amount = userInfo["amount"] as? String ?? ""
       let from = userInfo["from_address"] as? String ?? ""
       let to = userInfo["to_address"] as? String ?? ""
@@ -448,25 +450,9 @@ public func changePinCode(newPinSecret: CYBAVOWallet.PinSecret, currentPinSecret
   }
   ```
 
-  - The userInfo keys are listed below
-    Key    | Description  | Type  
-    :------------|:------------|:-------
-    type    | notification type    |  String
-    wallet_id    | Wallet ID    |  String
-    currency    | Currency     |  String
-    token_address  | Token address | String
-    out  | Transaction direction<br>("true": out, "false": in)| String
-    amount  | Transaction amount | String
-    fee  | Transaction fee | String
-    from_address  | Transaction from address | String
-    to_address  | Transaction to address | String
-    timestamp  | Transaction timestamp | String
-    txid  | Transaction TXID | String
-    description  | Transaction description | String
-
 ## Notification Types
 
-There are 2 types of push notification: Transacion and Announcement.
+There are 2 types of push notification: **Transacion** and **Announcement**.
 
 1. Transaction
   
@@ -489,19 +475,35 @@ There are 2 types of push notification: Transacion and Announcement.
     }
     ```
 
-    Sample :
+    - The keys of **Transaction** type are listed below
+      Key    | Description  | Type  
+      :------------|:------------|:-------
+      type    | notification type    |  String
+      wallet_id    | Wallet ID    |  String
+      currency    | Currency     |  String
+      token_address  | Token address | String
+      out  | Transaction direction<br>("true": out, "false": in)| String
+      amount  | Transaction amount | String
+      fee  | Transaction fee | String
+      from_address  | Transaction from address | String
+      to_address  | Transaction to address | String
+      timestamp  | Transaction timestamp | String
+      txid  | Transaction TXID | String
+      description  | Transaction description | String
 
-    - Withdraw (currencySymbol was from API getWallets)
+    - Sample :
 
-      ```String
-      Transaction Sent: Amount {{amount}} {{currencySymbol}} to {{fromAddress}}
-      ```
+      - Withdraw (currencySymbol was from API getWallets)
 
-    - Deposit (NFT wallet, i.e. wallet mapping to a Currency which tokenVersion is 721 or 1155)
+        ```String
+        Transaction Sent: Amount {{amount}} {{currencySymbol}} to {{fromAddress}}
+        ```
 
-      ```string
-      Transaction Received: Token {{amount}}({{currencySymbol}}) received from {{fromAddress}}
-      ```
+      - Deposit (NFT wallet, i.e. wallet mapping to a Currency which tokenVersion is 721 or 1155)
+
+        ```string
+        Transaction Received: Token {{amount}}({{currencySymbol}}) received from {{fromAddress}}
+        ```
 
 2. Announcement
 
