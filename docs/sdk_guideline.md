@@ -165,7 +165,8 @@ public enum SignInState {
 - monitor `SignInState`
 
   1. call `addSignInStateDelegate` in your auth manager
-  2. conform `SignInStateDelegate` to handle `onUserStateChanged` callback
+  2. conform `SignInStateDelegate` to handle `onUserStateChanged` callback  
+  ⚠️ Remember to call `getSignInState()` when you get ready to receive `onUserStateChanged`, because iOS WalletSDK will only trigger delegate's `onUserStateChanged` after `getSignInState()` has been called.
   3. call `removeSignInStateDelegate` if you don’t need monitor anymore
 
   ```swift
