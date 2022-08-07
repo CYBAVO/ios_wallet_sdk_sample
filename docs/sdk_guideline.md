@@ -11,7 +11,7 @@ It provides both high-level and low-level APIs for nearly all **CYBAVO Wallet AP
   - [PIN Code](#pin-code)
   - Wallets ➜ [wallets.md](wallets.md)
   - Transaction ➜ [transaction.md](transaction.md)
-  - Biometrics & SMS ➜ [bio_n_sms.md](bio_n_sms.md)
+  - Security Enhancement ➜ [bio_n_sms.md](bio_n_sms.md)
   - [Push Notification](#push-notification)
   - [Others](#others)
   - Advanced
@@ -78,11 +78,11 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 
 ![ref](images/sdk_guideline/signin_signup.jpg)
 
-## Third-Party login
+## Third-Party Login
 
   Supported services : Apple / Google / Facebook / LINE / Twitter / WeChat
 
-## Sign-in flow
+## Sign-in Flow
 
 - 3rd party login ➡️ `Auth.signIn` ➡️ get success ➡️ wait for `SignInStateDelegate` update
   
@@ -118,7 +118,7 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 public func signIn(token: String, identityProvider: String, extras: [String : String] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SignInResult>)
 ```
 
-## Sign-up flow
+## Sign-up Flow
 
 - `Auth.signUp` ➡️ get success ➡️ `Auth.signIn`
 
@@ -137,8 +137,6 @@ public func signIn(token: String, identityProvider: String, extras: [String : St
 ///
 public func signUp(token: String, identityProvider: String, extras: [String : String] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SignUpResult>)
 ```
-### Sign-up flow
-
 ## Sign-out
 
 ```swift
