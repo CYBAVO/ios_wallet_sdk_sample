@@ -11,7 +11,7 @@ It provides both high-level and low-level APIs for nearly all **CYBAVO Wallet AP
   - [PIN Code](#pin-code)
   - Wallets ➜ [wallets.md](wallets.md)
   - Transaction ➜ [transaction.md](transaction.md)
-  - Biometrics & SMS ➜ [bio_n_sms.md](bio_n_sms.md)
+  - Security Enhancement ➜ [bio_n_sms.md](bio_n_sms.md)
   - [Push Notification](#push-notification)
   - [Others](#others)
   - Advanced
@@ -78,11 +78,11 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 
 ![ref](images/sdk_guideline/signin_signup.jpg)
 
-## Third-Party login
+## Third-Party Login
 
   Supported services : Apple / Google / Facebook / LINE / Twitter / WeChat
 
-## Sign-in flow
+## Sign-in Flow
 
 - 3rd party login ➡️ `Auth.signIn` ➡️ get success ➡️ wait for `SignInStateDelegate` update
   
@@ -118,7 +118,7 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 public func signIn(token: String, identityProvider: String, extras: [String : String] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SignInResult>)
 ```
 
-## Sign-up flow
+## Sign-up Flow
 
 - `Auth.signUp` ➡️ get success ➡️ `Auth.signIn`
 
@@ -137,8 +137,6 @@ public func signIn(token: String, identityProvider: String, extras: [String : St
 ///
 public func signUp(token: String, identityProvider: String, extras: [String : String] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.SignUpResult>)
 ```
-### Sign-up flow
-
 ## Sign-out
 
 ```swift
@@ -178,36 +176,7 @@ public enum SignInState {
       func onUserStateChanged(state: CYBAVOWallet.SignInState)
   }
   ```
-
-- If you activate the Security Enhancement in the console.  
-
-  <img src="images/sdk_guideline/screenshot_security_enhancement.png" alt="drawing" width="400"/>  
-
-  You might get `needRegisterPhone` or `needVerifyOtp` as your `SignInState`.  
-  ➡️ Do `registerPhoneNumber` and `verifyOtp` before the next step.
-
-- RegisterPhoneNumber
-
-  ```swift
-  /// register phone number
-  /// - Parameters:
-  ///   - countryCode: country code, ex. 886
-  ///   - phone: phone number, ex. 900123456
-  ///   - duration: OTP valid duration in seconds, ex. 60
-  ///   - completion: CYBAVOWallet.RegisterPhoneNumberResult ➡️ get actionToken
-  public func registerPhoneNumber(countryCode: String, phone: String, duration: Int64, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.RegisterPhoneNumberResult>)
-  ```
-
-- VerifyOTP
-
-  ```swift
-  /// verify OTP
-  /// - Parameters:
-  ///   - actionToken: actionToken returned by registerPhoneNumber / getSmsCode
-  ///   - code: SMS code that registered phone received
-  ///   - completion: asynchronous callback
-  public func verifyOtp(actionToken: String, code: String, completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.VerifyOtpResult>)
-  ```
+- For Security Enhancement in the [flowchart](#sign-in--sign-up-flowchart), `.needVerifyOtp` and `.needRegisterPhone` SignInState, please see [Security Enhancement](bio_n_sms.md)
 
 - call `getSignInState` anytime when you need current `CYBAVOWallet.SignInState`
 
@@ -232,7 +201,7 @@ public protocol UserState {
 }
 ```
 
-- Once you SignedIn, you should get the current `UserState` to check the variable `setPin`.
+- Once you signed in, you should get the current `UserState` to check the variable `setPin`.
 
   `if (setPin == false)` ➡️ go to **_Setup PIN Code_** in the next section
 
