@@ -162,10 +162,10 @@ public enum SignInState {
 
 - monitor `SignInState`
 
-  1. Call `addSignInStateDelegate` in your auth manager.
-  2. Conform `SignInStateDelegate` to handle `onUserStateChanged` callback.  
-  ⚠️ Remember to call `getSignInState()` when you get ready to receive `onUserStateChanged`, because iOS WalletSDK will only trigger delegate's `onUserStateChanged` after `getSignInState()` has been called.
-  3. Call `removeSignInStateDelegate` if you don’t need monitor anymore.
+  1. Call `addSignInStateDelegate()` in your auth manager.
+  2. Conform `SignInStateDelegate` to handle `onUserStateChanged()` callback.  
+  ⚠️ Remember to call `getSignInState()` when you get ready to receive `onUserStateChanged`, because iOS WalletSDK will only trigger delegate's `onUserStateChanged()` after `getSignInState()` has been called.
+  3. Call `removeSignInStateDelegate()` if you don’t need monitor anymore.
 
   ```swift
   public func addSignInStateDelegate(_delegate: CYBAVOWallet.SignInStateDelegate)
@@ -178,7 +178,7 @@ public enum SignInState {
   ```
 - For Security Enhancement in the [flowchart](#sign-in--sign-up-flowchart), `.needVerifyOtp` and `.needRegisterPhone` SignInState, please see [Security Enhancement](bio_n_sms.md).
 
-- Call `getSignInState` whenever you need current `CYBAVOWallet.SignInState`.
+- Call `getSignInState()` whenever you need current `CYBAVOWallet.SignInState`.
 
   ```swift
   public func getSignInState() -> CYBAVOWallet.SignInState
@@ -205,7 +205,7 @@ public protocol UserState {
 
   `if (setPin == false)` ➡️ go to **_Setup PIN Code_** in the next section
 
-- call `Auth.getUserState` to get the current `UserState`
+- Call `Auth.getUserState` to get the current `UserState`
 
   ```swift
   public func getUserState(completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetUserStateResult>)
