@@ -212,7 +212,7 @@ Wallets.shared.callAbiFunctionTransaction(walletId: walletId,
   Wallets.shared.estimateTransaction(
                     currency: wallet.currency,
                     tokenAddress: wallet.tokenAddress,
-                    amount: "amount", // ex. "100"
+                    amount: amount, // ex. "100"
                     transactionFee: "0", //fixed to "0"
                     walletId: wallet.walletId){result in
                       switch result {
