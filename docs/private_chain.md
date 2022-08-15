@@ -1,6 +1,5 @@
-# Private Chain
+# CYBAVO Private Chain (CPC)
 
-- Private chain a.k.a. CYBAVO Private Smart Chain (CPSC)
 - Scenario for:
   - Financial Products
   - Financial Management Services
@@ -30,7 +29,7 @@ protocol Wallet : CYBAVOWallet.BalanceAddress, CYBAVOWallet.CurrencyType {
 
     var walletId: Int64 { get } // Wallet ID
 
-    var isPrivate: Bool { get } // Is private chain (CPSC)
+    var isPrivate: Bool { get } // Is private chain (CPC)
 
     var mapToPublicCurrency: Int { get } // Public chain's currency
 
@@ -61,7 +60,7 @@ protocol Wallet : CYBAVOWallet.BalanceAddress, CYBAVOWallet.CurrencyType {
 ```swift
 protocol Currency : CYBAVOWallet.CurrencyType {
 
-    var isPrivate: Bool { get } // Is private chain (CPSC)
+    var isPrivate: Bool { get } // Is private chain (CPC)
 
     var mapToPublicType: Int { get } // Public chain's currency type
 
