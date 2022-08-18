@@ -151,10 +151,9 @@ public func getAddressesTags(currency: Int, addresses: [String], completion: @es
 ///        10. custom_nonce (Int64, Int) - Specific nonce
 ///        11. custom_gas_limit (Int64, Int) - Specific gas limit
 ///        12. sol_token_id (String) - token ID of SOL NFT, if get from getSolNftTokens() API, the token ID would be TokenMeta.tokenAddress
-///      - Note 1:
+///        13. force_send (Bool) - For SOL transaction, true means create ATA account for receiver
+///      - Note:
 ///         - When eos_transaction_type is EosResourceTransactionType.SELL_RAM, EosResourceTransactionType.UNDELEGATE_CPU or EosResourceTransactionType.UNDELEGATE_NET, the receiver should be address of Wallet fromWalletId
-///         - ex: ["memo": "abcd", "eos_transaction_type": EosResourceTransactionType.SELL_RAM.rawValue, "skip_email_notification": false, "kind": "code"]
-///      - Note 2: Pass sol_token_id for SOL NFT transaction, and the amount must be "1", otherwise, it will return .ErrInvalidParameter error
 ///   - completion: asynchronous callback
 ///
 public func createTransaction(actionToken: String = "", signature: String = "", smsCode: String = "", fromWalletId: Int64, toAddress: String, amount: String, transactionFee: String, description: String, pinSecret: CYBAVOWallet.PinSecret, extras: [String : Any] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.CreateTransactionResult>)
