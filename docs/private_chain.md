@@ -254,7 +254,7 @@ Wallets.shared.createTransaction(fromWalletId: walletId,
   - Pass `crosschain: 0`, it returns transactions of [Inner Transfer](#inner-transfer).
 
 ## CPC Financial Product
-- ⚠️ Please use `CYBAVOWallet (1.2.446)` and above.
+- ⚠️ Please use `CYBAVOWallet (1.2.448)` or later.
 - After deposit to CPC, users can further deposit to financial product for a period of time to get interest, the financial product can be setup on the admin panel.  
 - In the following part, we will introduce necessary class and retrive data APIs first, then the operation API.  
 
