@@ -58,7 +58,7 @@ protocol Wallet : CYBAVOWallet.BalanceAddress, CYBAVOWallet.CurrencyType {
   - related infos: `mapToPublicCurrency`, `mapToPublicTokenAddress`, `mapToPublicName`
 - `depositAddresses` provides the addresses on the public chain. When you deposit currencies / tokens to these addresses, you will receive tokens in the related private chain wallet.
   - multiple `depositAddresses` means one private chain wallet might provide multiple addresses for depositing.
-  - ex: CPSC-USDT on private chain is mapped to USDT-ERC20 and USDT-TRC20 on the public chains, so you will get multiple addresses in this field.
+  - ex: CPSC-USDT on private chain is mapped to USDT-ERC20 and USDT-TRC20 on the public chains, so you will get multiple addresses in this property.
   - `memo` in model `DepositAddress` is necessary when depositing tokens from public chain to private chain.
 
 ### Currency
@@ -259,7 +259,7 @@ Wallets.shared.createTransaction(fromWalletId: walletId,
 - In the following part, we will introduce necessary class and retrive data APIs first, then the operation API.  
 
 ### Financial Product  
-- The following image and table shows the mapping of product settings on the admin panel and FinancialProduct fields. 
+- The following image and table shows the mapping of product settings on the admin panel and FinancialProduct properties. 
 
 <img src="images/sdk_guideline/private_chain_product_setting.png" alt="drawing" width="700"/> 
 
@@ -458,11 +458,11 @@ Wallets.shared.getFinancialHistory(
 ### Financial Order
 - ⚠️ Financial order is only for `FixedDeposit` product.
 - Every deposit will create an order.
-- The following image and table shows the mapping of order info on the admin panel and GetFinancialOrderResult fields.  
+- The following image and table shows the mapping of order info on the admin panel and GetFinancialOrderResult properties.  
 
   <img src="images/sdk_guideline/private_chain_order.png" alt="drawing" width="900"/>  
 
-  |  Order Column <br>(Admin Panel)  | GetFinancialOrderResult Field  | Note |
+  |  Order Column <br>(Admin Panel)  | GetFinancialOrderResult Property  | Note |
   |  ----  | ----  | ----  |
   |  OrderID  | `uuid`  | |
   |  Amount  | `userDeposit`| |
@@ -582,7 +582,7 @@ required wallets are
 3. CPSC-USDT wallet(`mapToPublicCurrency`: 60, `mapToPublicTokenAddress`: "0x456...").
 
 #### Transaction Explain
-- Perform those operations may create [Transaction History](#transaction-history) for inner transfer, those transaction will have `explain` field with additional information, you can use `explain` to make the UI more clearer.
+- Perform those operations may create [Transaction History](#transaction-history) for inner transfer, those transaction will have `explain` property with additional information, you can use `explain` to make the UI more clearer.
 ```swift
 if(item.explain.kind == TransactionExplainKind.Unknown){
     return
