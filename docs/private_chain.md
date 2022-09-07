@@ -489,7 +489,7 @@ Wallets.shared.getFinancialOrder(productUuid: history.productUuid, orderID: hist
     }
 ```
 ### Financial Bonus
-- CPC financial product also has rebate mechanism, if the user meet the requirement, ex. the user's referrer deposit a finance product, the user will have a `FinancialBonus` in his/her financial list.
+- CPC financial product also has rebate mechanism, if the user meet the requirement, ex. the user's referrer deposit a finance product, the user will have a `FinancialBonus` in his / her financial list.
 - User can perform `withdrawBonus` with `uuid` if `isAlreadyWithdrawn` is false.
 ```swift
 Wallets.shared.getFinancialBonusList(){ result in
