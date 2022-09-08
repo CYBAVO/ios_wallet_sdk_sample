@@ -405,9 +405,9 @@ let page: String? = doRefresh ? nil : previousResult.nextPage
                         Interest amount: 0.143537800000000000, Annual Interest Rate: 10%
                      */
                     print("Currency: \(product.publicName), Subscribe item: \(product.title.en), Deposit amount: \(history.userDeposit),")
-                    print("Start date: \(getDateStr(product.startTimestamp)), Value date: \(getDateStr(product.rewardTimestamp)),")
+                    print("Start date: \(getDateStr(history.startTimestamp)), Value date: \(getDateStr(history.rewardTimestamp)),")
                     // if kind is FinancialHistoryListKind.Withdraw, should display as "Withdraw date"
-                    print("Expiry date: \(getDateStr(product.endTimestamp))")
+                    print("Expiry date: \(getDateStr(history.endTimestamp))")
                     print("Interest amount: \(history.userReward), Annual Interest Rate: \(product.rate)%")
                 }
             break
