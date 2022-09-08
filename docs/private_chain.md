@@ -254,7 +254,7 @@ Wallets.shared.createTransaction(fromWalletId: walletId,
   - Pass `crosschain: 0`, it returns transactions of [Inner Transfer](#inner-transfer).
 
 ## CPC Financial Product
-- ⚠️ Please use `CYBAVOWallet (1.2.448)` or later.
+- ⚠️ Please use `CYBAVOWallet (1.2.449)` or later.
 - After deposit to CPC, users can further deposit to financial product for a period of time to get interest, the financial product can be setup on the admin panel.  
 - In the following part, we will introduce necessary class and retrive data APIs first, then the operation API.  
 
@@ -584,14 +584,14 @@ required wallets are
 #### Transaction Explain
 - Perform those operations may create [Transaction History](#transaction-history) for inner transfer, those transaction will have `explain` property with additional information, you can use `explain` to make the UI more clearer.
 ```swift
-if(item.explain.kind == TransactionExplainKind.Unknown){
+if(item.explain.kind == TransactionExplainKind.Unknown.rawValue){
     return
 }
 if(!item.explain.isShowAmount){
     //hide amount for 0 amount operation like approve
 }
 // ex. kind: WithdrawReward, product: Demand Deposits (Hourly Interest)
-print("kind: \(item.explain.kind), product: \(item.explain.name.en)")
+print("kind: \(TransactionExplainKind.getKind(value: item.explain.kind)), product: \(item.explain.name.en)")
 ```
 
 #### Approve Activate
