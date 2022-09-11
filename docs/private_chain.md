@@ -254,7 +254,7 @@ Wallets.shared.createTransaction(fromWalletId: walletId,
   - Pass `crosschain: 0`, it returns transactions of [Inner Transfer](#inner-transfer).
 
 ## CPC Financial Product
-- ⚠️ Please use `CYBAVOWallet (1.2.449)` or later.
+- ⚠️ Please use `CYBAVOWallet (1.2.451)` or later.
 - After deposit to CPC, users can further deposit to financial product for a period of time to get interest, the financial product can be setup on the admin panel.  
 - In the following part, we will introduce necessary class and retrive data APIs first, then the operation API.  
 
@@ -269,8 +269,8 @@ Wallets.shared.createTransaction(fromWalletId: walletId,
 |  Contract Address  | `uuid`  | |
 |  StartAt  | `startTimestamp`  | |
 |  Title:zh-tw <br>Title:zh-cn<br>Title:zh-en | `title.tw`<br>`title.cn`<br>`title.en`  |- Display one of these as product name according to device locale.|
-|  Max Users<br>UserWarningCountPrcent  | `maxUsers`<br>`userPercent`  |- `maxUsers` <= `userCount`, means sold out.<br>- `maxUsers` * `userPercent` >= `userCount`, means available<br>- `maxUsers` * `userPercent` < `userCount`, means about full.|
-|  Show Rate  | `rate`  |- Display it as annual interest rate<br>-`ratePercent` is `Double` version of annual interest rate.|
+|  Max Users<br>UserWarningCountPrcent  | `maxUsers`<br>`userPercent`  |- `maxUsers` <= `userCount`, means sold out.<br>- `maxUsers` * `userPercent` >= `userCount`, means available.<br>- `maxUsers` * `userPercent` < `userCount`, means about full.|
+|  Show Rate  | `rate`  |- Display it as annual interest rate.<br>-`ratePercent` is `Double` version of annual interest rate.|
 |  Campaign  | `GetFinancialProductsResult.campaign`  |- If Campaign is checked, this product will also exist in `GetFinancialProductsResult.campaign`.|
 |  MinDeposit<br>MaxDeposit  | `minDeposit`<br>`maxDeposit`  |- Display the deposit amount limit range,<br>ex. Min 0.5 HW-ETH - 1000 HW-ETH. |
 |  InverseProfitSharingCurrency  | `kind`  |- enum: `FinancialProductKind`<br>- If InverseProfitSharingCurrency is set to **Disable**, `kind` would be `DemandDeposit`(2) ,<br>otherwise, `kind` would be `FixedDeposit`(1).|
@@ -322,9 +322,9 @@ Wallets.shared.getFinancialProducts(kinds: [kind.rawValue]){result in
     }
 }
 /** Transfer and get userWaitToWithdraw in formatted string */
-func getUserWaitToWithdrawStr(_ userWaitToWithdraw: Int, _ isCanWithdraw: Bool) -> String{
+func getUserWaitToWithdrawStr(_ userWaitToWithdraw: Int, _ canNotWithdraw: Bool) -> String{
     let countdownTime = userWaitToWithdraw - Int(Date().timeIntervalSince1970)
-    if countdownTime <= 0 || isCanWithdraw{
+    if countdownTime <= 0 || canNotWithdraw{
         return ""
     }
     
@@ -398,17 +398,23 @@ let page: String? = doRefresh ? nil : previousResult.nextPage
                     guard let product = result.products[history.productUuid] else{
                         continue
                     }
+                        // Use FinancialHistory.isCan || FinancialProduct.isCan
+                        let isCanWithdraw = history.isCanWithdraw || product.isCanWithdraw
+                        let isCanEarlyWithdraw = history.isCanEarlyWithdraw || product.isCanEarlyWithdraw
+                        let isCanWithdrawReward = history.isCanWithdrawReward || product.isCanWithdrawReward
                     /**
                         ex. Currency: HW-ETH, Subscribe item: Demand Deposits (Hourly Interest), Deposit amount: 2.000000000000000000,
                         Start date: 2021-11-03 23:44:00, Value date: ,
                         Expiry date: 2022-12-03 23:44:00
                         Interest amount: 0.143537800000000000, Annual Interest Rate: 10%
+                        Allow withdraw after: 00:02:27
                      */
                     print("Currency: \(product.publicName), Subscribe item: \(product.title.en), Deposit amount: \(history.userDeposit),")
                     print("Start date: \(getDateStr(history.startTimestamp)), Value date: \(getDateStr(history.rewardTimestamp)),")
                     // if kind is FinancialHistoryListKind.Withdraw, should display as "Withdraw date"
                     print("Expiry date: \(getDateStr(history.endTimestamp))")
                     print("Interest amount: \(history.userReward), Annual Interest Rate: \(product.rate)%")
+                    print("Allow withdraw after: \(getUserWaitToWithdrawStr(history.userWaitToWithdraw, !isCanWithdraw && !isCanEarlyWithdraw && !isCanWithdrawReward))")
                 }
             break
         case .failure(let error):
@@ -433,8 +439,9 @@ Wallets.shared.getFinancialHistory(
                             continue
                         }
                         // Use FinancialHistory.isCan || FinancialProduct.isCan
-                        let isCanWithdraw = product.isCanWithdraw || history.isCanWithdraw
-                        let isCanEarlyWithdraw = product.isCanEarlyWithdraw || history.isCanEarlyWithdraw
+                        let isCanWithdraw = history.isCanWithdraw || product.isCanWithdraw
+                        let isCanEarlyWithdraw = history.isCanEarlyWithdraw || product.isCanEarlyWithdraw
+                        let isCanWithdrawReward = history.isCanWithdrawReward || product.isCanWithdrawReward
                         /**
                           ex. Currency: HW-XRP, Subscribe item: Time deposit (10 days), Deposit amount: 0.521955,
                           Start date: 2022-09-07 19:03:02, Value date: ,
@@ -446,7 +453,7 @@ Wallets.shared.getFinancialHistory(
                         print("Start date: \(getDateStr(history.startTimestamp)), Value date: \(getDateStr(history.rewardTimestamp)),")
                         print("Expiry date: \(getDateStr(history.endTimestamp))")
                         print("Interest amount: \(history.userReward), Annual Interest Rate: \(product.rate)%")
-                        print("Allow withdraw after: \(getUserWaitToWithdrawStr(history.userWaitToWithdraw, !isCanWithdraw && !isCanEarlyWithdraw))")
+                        print("Allow withdraw after: \(getUserWaitToWithdrawStr(history.userWaitToWithdraw, !isCanWithdraw && !isCanEarlyWithdraw && !isCanWithdrawReward))")
                     }
                 break
             case .failure(let error):
@@ -470,7 +477,7 @@ Wallets.shared.getFinancialHistory(
   |  Penalty  | `earlyReward` | `earlyReward` = Reward - Penalty|
 
 ```swift
-Wallets.shared.getFinancialOrder(productUuid: history.productUuid, orderID: history.uuid){ result in
+Wallets.shared.getFinancialOrder(productUuid: history.productUuid, orderId: history.uuid){ result in
         switch result{
         case .success(let result):
             // If the order is not exist, result.kind will be FinancialProductKind.Unknown(-1)
@@ -517,17 +524,17 @@ Wallets.shared.getFinancialBonusList(){ result in
 
 ### Transaction Operations 
 - There are 6 operations for CPC financial product, they can be achieved by `callAbiFunctionTransaction()` with different `args`, the behavior might be different between different `FinancialProductKind`.
-- ⚠️ After performed `callAbiFunctionTransaction()`, it'll take a while to change data, App may need to display a status for transition to prevent users execute the same operation again (press again the same button).
+- ⚠️ After performed `callAbiFunctionTransaction()`, it"ll take a while to change data, App may need to display a status for transition to prevent users execute the same operation again (press again the same button).
  
 |  ABI Method Name<br>`args[0]`   | `kind` /<br>Perform  to  | Note | `args` |
 |  :----:  | :----  | :----  | :---- |
-|  [approve](#approve-activate)  | `FixedDeposit`<br>`DemandDeposit` / <br>FinancialProduct | - Approve to activate the product.<br>- Required and cannot perform other operations if `FinancialProduct.isNeedApprove` is true | ["approve", product.uuid] |
-|  [deposit](#deposit)  | `FixedDeposit`<br>`DemandDeposit` / <br>FinancialProduct  | - Deposit to the product.<br>- Performable when `FinancialProduct.isCanDeposit` is true| ["deposit",<br>product.uuid,<br>amount, <br>""] |
-|  [withdraw](#withdraw---fixeddeposit)  | `FixedDeposit` / <br>Order which linked to FinancialHistory| - Withdraw all principal and interest to given financial wallet.<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialHistory.userWaitToWithdraw`.<br>- Performable when `isCanWithdraw` is true<br>- `isCanWithdraw = history.isCanWithdraw \|\| history.isCanWithdraw`| ["withdraw", product.uuid,<br>"0",<br>history.orderId] |
-|  [withdraw](#withdraw---demanddeposit)  | `DemandDeposit` / <br>FinancialProduct | - Withdraw a certain amount of principal to given financial wallet.<br>- Cannot withdraw if current time is earlier then `FinancialProduct.userWaitToWithdraw`.<br>- Performable when `FinancialProduct.isCanWithdraw` is true| ["withdraw", product.uuid,<br>amount,<br>""] |
-|  [earlyWithdraw](#earlywithdraw)  | `FixedDeposit` / <br>Order which linked to FinancialHistory | - Withdraw all principal and interest to given financial wallet.<br>- Withdraw by product / order.<br>- Interest will be deducted, see [Financial Order](#financial-order).<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialHistory.userWaitToWithdraw`.<br>- Performable when `isCanEarlyWithdraw` is true<br>- `isCanEarlyWithdraw = history.isCanEarlyWithdraw \|\| product.isCanEarlyWithdraw`| ["earlyWithdraw",<br>product.uuid,<br>"0", <br>history.orderId] |
-|  [withdrawReward](#withdrawreward)  | `DemandDeposit` / <br>FinancialProduct | - Withdraw all interest to given financial wallet.<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialProduct.userWaitToWithdraw`.<br>- Performable when `FinancialProduct.isCanWithdrawReward` is true| ["withdrawReward", product.uuid,<br>"0",<br>""] |
-|  [withdrawBonus](#withdrawbonus)  | - / FinancialBonus | - Withdraw bonus to given financial wallet.<br>- Performable when `FinancialBonus.isAlreadyWithdrawn` is false| ["withdrawBonus", bonus.uuid,<br>"0"] |
+|  [approve](#approve-activate)  | `FixedDeposit`<br>`DemandDeposit` / <br>FinancialProduct | - Approve to activate the product.<br>- Required and cannot perform other operations if `isNeedApprove` is true.<br>- `isNeedApprove = history.isNeedApprove \|\| product.isNeedApprove` | ["approve", product.uuid] |
+|  [deposit](#deposit)  | `FixedDeposit`<br>`DemandDeposit` / <br>FinancialProduct  | - Deposit to the product.<br>- Performable when `isCanDeposit` is true.<br>- `isCanDeposit = history.isCanDeposit \|\| product.isCanDeposit`| ["deposit",<br>product.uuid,<br>amount, <br>""] |
+|  [withdraw](#withdraw---fixeddeposit)  | `FixedDeposit` / <br>Order which linked to FinancialHistory| - Withdraw all principal and interest to given financial wallet.<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialHistory.userWaitToWithdraw`.<br>- Performable when `isCanWithdraw` is true.<br>- `isCanWithdraw = history.isCanWithdraw \|\| product.isCanWithdraw`| ["withdraw", product.uuid,<br>"0",<br>history.orderId] |
+|  [withdraw](#withdraw---demanddeposit)  | `DemandDeposit` / <br>FinancialProduct | - Withdraw a certain amount of principal to given financial wallet.<br>- Cannot withdraw if current time is earlier then `FinancialProduct.userWaitToWithdraw`.<br>- Performable when `isCanWithdraw` is true.<br>- `isCanWithdraw = history.isCanWithdraw \|\| product.isCanWithdraw`| ["withdraw", product.uuid,<br>amount,<br>""] |
+|  [earlyWithdraw](#earlywithdraw)  | `FixedDeposit` / <br>Order which linked to FinancialHistory | - Withdraw all principal and interest to given financial wallet.<br>- Withdraw by product / order.<br>- Interest will be deducted, see [Financial Order](#financial-order).<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialHistory.userWaitToWithdraw`.<br>- Performable when `isCanEarlyWithdraw` is true.<br>- `isCanEarlyWithdraw = history.isCanEarlyWithdraw \|\| product.isCanEarlyWithdraw`| ["earlyWithdraw",<br>product.uuid,<br>"0", <br>history.orderId] |
+|  [withdrawReward](#withdrawreward)  | `DemandDeposit` / <br>FinancialProduct | - Withdraw all interest to given financial wallet.<br>- amount is fixed to "0" for all.<br>- Cannot withdraw if current time is earlier then `FinancialProduct.userWaitToWithdraw`.<br>- Performable when `isCanWithdrawReward` is true.<br>- `isCanWithdrawReward = history.isCanWithdrawReward \|\| product.isCanWithdrawReward`| ["withdrawReward", product.uuid,<br>"0",<br>""] |
+|  [withdrawBonus](#withdrawbonus)  | - / FinancialBonus | - Withdraw bonus to given financial wallet.<br>- Performable when `FinancialBonus.isAlreadyWithdrawn` is false.| ["withdrawBonus", bonus.uuid,<br>"0"] |
 
 Below code snippet shows a pattern to use `callAbiFunctionTransaction()` for those operations.
  ```swift
@@ -600,7 +607,6 @@ print("kind: \(TransactionExplainKind.getKind(value: item.explain.kind)), produc
     return
  }
 
- // Find wallet by currency and tokenAddress in giving list.
 let wallet = findWallet(from: privateWallets, currency: product.currency, tokenAddress: product.tokenAddress)
 guard let wallet = wallet else{
     return
@@ -642,7 +648,6 @@ if(!product.isCanDeposit){
   return
 }
 
- // Find wallet by currency and tokenAddress in giving list.
 let wallet = findWallet(from: privateWallets, currency: product.currency, tokenAddress: product.tokenAddress)
 guard let wallet = wallet else{
     return
@@ -672,8 +677,12 @@ let isCanWithdraw = history.isCanWithdraw || product.isCanWithdraw
 if(!isCanWithdraw){
     return
 }
-let msInFuture = getMsInFuture(history.userWaitToWithdraw)
-if(msInFuture <= 0){
+let secInFuture = getSecInFuture(history.userWaitToWithdraw)
+if(secInFuture <= 0){
+    return
+}
+let wallet = findWallet(from: privateWallets, currency: product.currency, tokenAddress: product.tokenAddress)
+guard let wallet = wallet else{
     return
 }
 let args: [Any] = [
@@ -692,19 +701,24 @@ Wallets.shared.callAbiFunctionTransaction(
             transactionFee: "0",// fixed to "0"
             pinSecret: pinSecret){ result in ... }
 
-/** Get remain time in ms */
-func getMsInFuture(_ deadline: Int)-> Int{
+/** Get remain time in sec */
+func getSecInFuture(_ deadline: Int) -> Int{
     return deadline - Int(Date().timeIntervalSince1970)
 }
 ```
  [↑ Transaction Operations ↑](#transaction-operations)
 #### Withdraw - DemandDeposit
 ```swift
-if(!product.isCanWithdraw){
+let isCanWithdraw = history.isCanWithdraw || product.isCanWithdraw
+if(!isCanWithdraw){
     return
 }
-let msInFuture = getMsInFuture(product.userWaitToWithdraw)
-if(msInFuture <= 0){
+let secInFuture = getSecInFuture(product.userWaitToWithdraw)
+if(secInFuture <= 0){
+    return
+}
+let wallet = findWallet(from: privateWallets, currency: product.currency, tokenAddress: product.tokenAddress)
+guard let wallet = wallet else{
     return
 }
 let args: [Any] = [
@@ -731,8 +745,12 @@ let isCanEarlyWithdraw = history.isCanEarlyWithdraw || product.isCanEarlyWithdra
 if(!isCanEarlyWithdraw){
     return
 }
-let msInFuture = getMsInFuture(history.userWaitToWithdraw)
-if(msInFuture <= 0){
+let secInFuture = getSecInFuture(history.userWaitToWithdraw)
+if(secInFuture <= 0){
+    return
+}
+let wallet = findWallet(from: privateWallets, currency: product.currency, tokenAddress: product.tokenAddress)
+guard let wallet = wallet else{
     return
 }
 let args: [Any] = [
@@ -755,11 +773,16 @@ Wallets.shared.callAbiFunctionTransaction(
  [↑ Transaction Operations ↑](#transaction-operations)
 #### withdrawReward
 ```swift
-if(!product.isCanWithdrawReward){
+let isCanWithdrawReward = history.isCanWithdrawReward || product.isCanWithdrawReward
+if(!isCanWithdrawReward){
     return
 }
-let msInFuture = getMsInFuture(product.userWaitToWithdraw)
-if(msInFuture <= 0){
+let secInFuture = getSecInFuture(product.userWaitToWithdraw)
+if(secInFuture <= 0){
+    return
+}
+let wallet = findWallet(from: privateWallets, currency: product.currency, tokenAddress: product.tokenAddress)
+guard let wallet = wallet else{
     return
 }
 let args: [Any] = [
@@ -782,6 +805,10 @@ Wallets.shared.callAbiFunctionTransaction(
 #### withdrawBonus
 ```swift
 if(bonus.isAlreadyWithdrawn){
+    return
+}
+let wallet = findWallet(from: privateWallets, currency: bouns.currency, tokenAddress: bouns.tokenAddress)
+guard let wallet = wallet else{
     return
 }
 let args: [Any] = [
