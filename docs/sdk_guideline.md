@@ -28,7 +28,8 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 
 ### Installation
 
-- CocoaPods `1.1.0+` is required to build `CYBAVOWallet 1.2.0+`  
+- CocoaPods `1.9.3+` is required to build `CYBAVOWallet 1.2.451+`  
+- Suggest using Xcode 14
 - specify in your `Podfile`:
 
     ```sh
@@ -39,7 +40,18 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
     use_frameworks!
 
     target '<Your Target Name>' do
-        pod 'CYBAVOWallet', '~> 1.2.0'
+        pod 'CYBAVOWallet', '~> 1.2.451'
+    end
+    
+    post_install do |installer|
+      installer.pods_project.build_configurations.each do |config|
+        config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+      end
+      installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+          config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+        end
+      end
     end
     ```
 
