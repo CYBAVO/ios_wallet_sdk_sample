@@ -276,6 +276,9 @@ Wallets.shared.createTransaction(fromWalletId: walletId,
 |  InverseProfitSharingCurrency  | `kind`  |- enum: `FinancialProductKind`<br>- If InverseProfitSharingCurrency is set to **Disable**, `kind` would be `DemandDeposit`(2) ,<br>otherwise, `kind` would be `FixedDeposit`(1).|
 
  #### Get Financial Product Lists
+- Following chart shows the flow of processing FinancialProduct.
+<img src="images/sdk_guideline/financial_product_flow.png" alt="drawing"/> 
+
 - You can get financial product list by `FinancialProductListKind`:
  ```swift
 /**
@@ -378,6 +381,9 @@ func getDateStr(_ timestamp: Int) -> String{
 |  withdraw<br>earlyWithdraw  | `FixedDeposit`  | - Remove the `Depositing` history.<br>- Add one `Withdraw` history.<br>- Add one `WithdrawReward` history. |
 |  withdraw  | `DemandDeposit`  | - Add one `Withdraw` history.<br>- Remove the `Depositing` history if no `userDeposit` and `userReward` left.<br>- Or update the existing `Depositing` history. |
 |  withdrawReward  | `DemandDeposit`  | - Add one `WithdrawReward` history.<br>- Remove the `Depositing` history if no `userDeposit` and `userReward` left.<br>- Or update the existing `Depositing` history. |
+
+- Following chart shows the flow of processing FinancialHistory.
+<img src="images/sdk_guideline/financial_history_flow.png" alt="drawing"/> 
 
 - You can get financial history list by `FinancialHistoryListKind` or `FinancialProduct.uuid`. 
  ```swift
@@ -498,6 +504,11 @@ Wallets.shared.getFinancialOrder(productUuid: history.productUuid, orderId: hist
 ### Financial Bonus
 - CPC financial product also has rebate mechanism, if the user meet the requirement, ex. the user's referrer deposit a finance product, the user will have a `FinancialBonus` in his / her financial list.
 - User can perform `withdrawBonus` with `uuid` if `isAlreadyWithdrawn` is false.
+
+- Following chart shows the flow of processing FinancialBonus.
+<img src="images/sdk_guideline/financial_bonus_flow.png" alt="drawing"/> 
+
+
 ```swift
 Wallets.shared.getFinancialBonusList(){ result in
         switch result{
@@ -586,7 +597,11 @@ For another example, for a HW-USDT financial product
 required wallets are
 1. CPSC wallet (`currency`: 99999999995, `tokenAddress`: "").
 2. CPSC-ETH wallet(`mapToPublicCurrency`: 60, `mapToPublicTokenAddress`: "").
-3. CPSC-USDT wallet(`mapToPublicCurrency`: 60, `mapToPublicTokenAddress`: "0x456...").
+3. CPSC-USDT wallet(`mapToPublicCurrency`: 60, `mapToPublicTokenAddress`: "0x456...").  
+
+Following chart shows the flow of checking wallets.
+
+<img src="images/sdk_guideline/financial_product_check_wallet_flow.png" alt="drawing"/>
 
 #### Transaction Explain
 - Perform those operations may create [Transaction History](#transaction-history) for inner transfer, those transaction will have `explain` property with additional information, you can use `explain` to make the UI more clearer.
