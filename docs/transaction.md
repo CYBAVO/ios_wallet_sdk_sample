@@ -54,12 +54,12 @@ public func getCurrencyTraits(currency: Int, tokenAddress: String, tokenVersion:
 
     ```swift
     public protocol GetCurrencyTraitsResult {
-
-        var granularity: String { get } // EPI-777: withdraw must be multiples of granularity
-
-        var existentialDeposit: String { get } // The minimum balance after transaction (ALGO, DOT, KSM)
-
-        var minimumAccountBalance: String { get } // The minimum balance after transaction (XLM, FLOW)
+        /* EPI-777: withdraw must be multiples of granularity. */
+        var granularity: String { get }
+        /* The minimum balance after transaction (ALGO, DOT, KSM). */
+        var existentialDeposit: String { get }
+        /* The minimum balance after transaction (XLM, FLOW) */
+        var minimumAccountBalance: String { get }
     }
     ```
 
