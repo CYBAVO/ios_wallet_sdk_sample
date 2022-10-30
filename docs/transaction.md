@@ -54,12 +54,12 @@ public func getCurrencyTraits(currency: Int, tokenAddress: String, tokenVersion:
 
     ```swift
     public protocol GetCurrencyTraitsResult {
-
-        var granularity: String { get } // EPI-777: withdraw must be multiples of granularity
-
-        var existentialDeposit: String { get } // The minimum balance after transaction (ALGO, DOT, KSM)
-
-        var minimumAccountBalance: String { get } // The minimum balance after transaction (XLM, FLOW)
+        /* EPI-777: withdraw must be multiples of granularity. */
+        var granularity: String { get }
+        /* The minimum balance after transaction (ALGO, DOT, KSM). */
+        var existentialDeposit: String { get }
+        /* The minimum balance after transaction (XLM, FLOW) */
+        var minimumAccountBalance: String { get }
     }
     ```
 
@@ -89,14 +89,14 @@ public func estimateTransaction(currency: Int, tokenAddress: String, amount: Str
 
     ```swift
     public protocol EstimateTransactionResult {
-
-        var tranasctionAmout: String { get } // Estimated total amount to transaction
-
-        var platformFee: String { get } // Estimated platform fee of transaction
-
-        var blockchainFee: String { get } // Estimated blockchain fee of transaction
-
-        var withdrawMin: String { get } // Minimum transfer amount for private chain
+        /* Estimated total amount to transaction */
+        var tranasctionAmout: String { get } 
+        /* Estimated platform fee of transaction. */
+        var platformFee: String { get } 
+        /* Estimated blockchain fee of transaction. */
+        var blockchainFee: String { get } 
+        /* Minimum transfer amount for private chain. */
+        var withdrawMin: String { get } 
     }
     ```
 
@@ -161,9 +161,11 @@ public func createTransaction(actionToken: String = "", signature: String = "", 
 
 ## Transaction Detail
 
+- There are two APIs for retriving transaction histories: `getHistory()` and `getUserHistory()`.
+
 ### getHistory
 
-- Call this API to get the transaction history.
+- You can use `getHistory()` to get transaction histories of a certern wallet.
 
 ```swift
 /// Get transaction history from
@@ -182,7 +184,7 @@ public func createTransaction(actionToken: String = "", signature: String = "", 
 ///     - end_time {Int} - End of time period to query, in Unix timestamp
 ///       - ex: ["direction": Direction.OUT, "pending": true, "start_time": 1632387959]
 ///   - completion: asynchronous callback
-public func getHistory(currency: Int, tokenAddress: String, walletAddress: String, start: Int, count: Int, crosschain: Int = 1, filters: [String : Any] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetAddressHistoryResult>)
+public func getHistory(currency: Int, tokenAddress: String, walletAddress: String, start: Int, count: Int, crosschain: Int = 1, filters: [String : Any] = [:], completion: @escaping CYBAVOWallet.Callback<CYBAVOWallet.GetHistoryResult>)
 ```
 
 - Paging query: you can utilize `start` and `count` to fulfill paging query.  
@@ -193,16 +195,16 @@ public func getHistory(currency: Int, tokenAddress: String, walletAddress: Strin
 
     ```swift
     public protocol Transaction {
-
-        var txid: String { get } // transaction ID
+        /* transaction ID. */
+        var txid: String { get }  
 
         var pending: Bool { get }
 
         var success: Bool { get }
-
-        var dropped: Bool { get } // Is transaction dropped by the blockchain
-
-        var replaced: Bool { get } // Is transaction replaced by another transaction
+        /* Is transaction dropped by the blockchain. */
+        var dropped: Bool { get } 
+        /* Is transaction replaced by another transaction. */
+        var replaced: Bool { get } 
     
         ...
     }
@@ -212,6 +214,71 @@ public func getHistory(currency: Int, tokenAddress: String, walletAddress: Strin
 
 - If the Tx's final state is `Success` or `Pending`, you could call `getTransactionInfo` to check the information about this Tx on the blockchain.
 
+### getUserHistory
+- ⚠️ `getUserHistory()` and `TransactionType` are only available on `CYBAVOWallet (1.2.490)` and later.
+- You can also use `getUserHistory()` to retrive all transaction histories of the user.
+```swift
+  /// Get transaction history of the user
+  ///
+  /// - Parameters:
+  ///   - start: Query start offset
+  ///   - count: Query count returned
+  ///   - filters: Filter parameters:
+  ///                 type (TransactionType, [TransactionType]) - Transaction history types
+  ///                 pending (Boolean) - Pending state of transactions
+  ///                 success (Boolean) - Success state of transactions
+  ///                 start_time (Long) - Start of time period to query, in Unix timestamp
+  ///                 end_time (Long) - End of time period to query, in Unix timestamp
+  ///                 currency (Long, Integer) - Currency of the transaction
+  ///                 token_address (String) - Token Contract Address of the transaction
+  ///   - completion: Asynchronized callback
+  public func getUserHistory(start: Int, count: Int, filters: [String: Any], completion: @escaping Callback<GetHistoryResult>)
+```
+- Since the result may include transactions from public chain, private chain and different currency. For the returned `Transaction`, there are three fields you can refer to.
+```swift
+public protocol Transaction {
+        /* Currency of the transaction. */
+        var currency: Int { get } 
+        /* Token contract address of the transaction. */
+        var tokenAddress: String { get }
+        /**
+           Type of the transaction.
+           Only available in the result of getUserHistory()
+           Please refer to TransactionType for the definition.
+        */
+        var type: TransactionType { get }
+    
+        ...
+    }
+```
+### Enumeration - TransactionType
+
+- Enumeration Cases
+
+| Case  | Raw Value | Description |
+| ----  | ----  | ---- |
+|	Unknown	|	0	| 	Default value when no data available.	|
+|	MainDeposit	|	1	| Deposit on public chain.		| 
+|	MainWithdraw	|	2	| Withdraw on public chain.		| 
+|	PrivDeposit	|	3	| Deposit on private chain, including inner transfer and deposit to private chain (mint).		| 
+|	PrivWithdraw	|	4	| Withdraw on private chain, including inner transfer and withdraw to public chain (burn).		| 
+|	PrivOuterDeposit	|	5	| When deposit from public chain to private chain, the history of public chain.		| 
+|	PrivOuterWithdraw	|	6	| When withdraw from private chain to public chain, the history of private chain.		| 
+|	PrivProductDeposit	|	7	| Deposit financial product.		| 
+|	PrivProductWithdraw	|	8	| Withdraw, earlyWithdraw financial product.		| 
+|	PrivProductReward	|	9	| WithdrawReward financial product.		| 
+
+- Instance Properties
+
+| Property  |  Description |
+| ----  | ----  | 
+|	var name: String	|	Name of the enum.	|
+
+- Type Methods
+
+| Method | Description |
+| ----  | ----  | 
+| static func getType(value: Int) -> TransactionType  | Returns the enum of the value,<br>return `Unknown` if cannot find a matched enum.  | 
 ### getTransactionInfo
 
 - Check the information about the Tx on the blockchain.
@@ -241,15 +308,14 @@ The user needs to create another Tx with higher Tx fee and the same nonce to rep
   public protocol Transaction {
 
       var txid: String { get }
-      
-      var replaceable: Bool { get } // Is transaction replaceable
-
-      var replaced: Bool { get } // Is transaction replaced by another transaction
-
-      var replaceTxid: String { get } // TXID of replacement of this transaction if {@link #replaced} == true
-
-      var nonce: Int { get } // Nonce of transaction, only valid on ETH, same nonce means replacements
-      
+      /* Is transaction replaceable. */
+      var replaceable: Bool { get } 
+      /* Is transaction replaced by another transaction. */
+      var replaced: Bool { get } 
+      /* TXID of replacement of this transaction if replaced == true */
+      var replaceTxid: String { get } 
+      /* Nonce of transaction, only valid on ETH, same nonce means replacements */
+      var nonce: Int { get } 
       ...
   }
   ```
