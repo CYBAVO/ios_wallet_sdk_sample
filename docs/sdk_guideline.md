@@ -44,7 +44,7 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
     end
   ```
 
-- ⚠️ From `CYBAVOWallet 1.2.488`, please put following `post_install` hook in the Podfile.
+- ⚠️ From `CYBAVOWallet 1.2.497`, please put following `post_install` hook in the Podfile.
 
   ```sh
   post_install do |installer|
