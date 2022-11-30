@@ -28,7 +28,8 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
 
 ### Installation
 
-- CocoaPods `1.1.0+` is required to build `CYBAVOWallet 1.2.0+`  
+- CocoaPods `1.9.3+` is required to build `CYBAVOWallet 1.2.451+`  
+- Suggest using Xcode 14
 - specify in your `Podfile`:
 
     ```sh
@@ -39,16 +40,27 @@ Please contact **CYBAVO** to get your `endPoint` and `apiCode`.
     use_frameworks!
 
     target '<Your Target Name>' do
-        pod 'CYBAVOWallet', '~> 1.2.0'
+        pod 'CYBAVOWallet', '~> 1.2.451'
     end
-    ```
+  ```
 
+- ⚠️ From `CYBAVOWallet 1.2.497`, please put following `post_install` hook in the Podfile.
+
+  ```sh
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+      end
+    end
+  end
+  ```
+  
 - Then, run the following command:  
 
     ```shell
     pod install
     ```
-
 ### Setup
 
 - Add the following code in your `AppDelegate.swift`, or your WalletSDK Manager.
