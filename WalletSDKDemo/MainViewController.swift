@@ -143,7 +143,7 @@ class MainViewController: UIViewController {
     }
     
     func renewSession() {
-        GIDSignIn.sharedInstance().signInSilently()
+        GIDSignIn.sharedInstance.restorePreviousSignIn()
     }
     
     func showUIBySignInState(state: SignInState) {
@@ -167,7 +167,7 @@ class MainViewController: UIViewController {
             ToastView.instance.showToast(content: "Invalid session. Please login again.", duration: 2.0)
             print("SessionInvalid")
             self.dismiss(animated: false)
-            GIDSignIn.sharedInstance().signOut()
+            GIDSignIn.sharedInstance.signOut()
             showSignIn()
         default:
             showSignIn()

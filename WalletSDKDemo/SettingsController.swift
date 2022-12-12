@@ -38,10 +38,11 @@ class SettingsController : UITableViewController {
                 }
                 
                 if let user = user as? GIDGoogleUser {
-                    self.nameLabel.text = user.profile.name
-                    self.emailLabel.text = user.profile.email
-                    
-                    self.getData(from: user.profile.imageURL(withDimension: 50)) { data, response, error in
+                    self.nameLabel.text = user.profile?.name
+                    self.emailLabel.text = user.profile?.email
+
+                    guard let imageUrl = user.profile?.imageURL(withDimension: 50) else { return }
+                    self.getData(from: imageUrl) { data, response, error in
                         guard let data = data, error == nil else { return }
                         DispatchQueue.main.async() {
                             self.avatarImageView.image = UIImage(data: data)
@@ -56,7 +57,7 @@ class SettingsController : UITableViewController {
     @IBAction func onSignOut(_ sender: Any) {
         let alert = UIAlertController(title: "Sign out", message: "Are you sure you want to sign out?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {action in
-            GIDSignIn.sharedInstance().signOut()
+            GIDSignIn.sharedInstance.signOut()
             Auth.shared.signOut()
             self.dismiss(animated: true)
         }))

@@ -340,7 +340,6 @@
 				BF8B1C9321D5C88A00C593C2 /* Frameworks */,
 				BF8B1C9421D5C88A00C593C2 /* Resources */,
 				92B85A13D0F926104E22D3C1 /* [CP] Embed Pods Frameworks */,
-				4637E12DBCFA47D6B346E862 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -463,23 +462,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4637E12DBCFA47D6B346E862 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WalletSDKDemo/Pods-WalletSDKDemo-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		5D461930148810ED23952611 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
