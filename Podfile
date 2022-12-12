@@ -9,7 +9,7 @@ target 'WalletSDKDemo' do
   use_frameworks!
 
   # Pods for WalletSDKDemo
-  pod 'GoogleSignIn', '4.4.0'
+  pod 'GoogleSignIn', '~> 6.2.0'
   pod 'SwiftEventBus', :tag => '5.1.0', :git => 'https://github.com/cesarferreira/SwiftEventBus.git'
   pod 'Toast-Swift', '~> 4.0.0'
   pod 'CYBAVOWallet', '~> 1.2.0'
@@ -21,11 +21,11 @@ target 'WalletSDKDemo' do
   end
 end
 
-# Required from CYBAVOWallet 1.2.497
-# post_install do |installer|
-#   installer.pods_project.targets.each do |target|
-#      target.build_configurations.each do |config|
-#         config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-#      end
-#   end
-# end
+# Required for CYBAVOWallet 1.2.497+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+    end
+  end
+end

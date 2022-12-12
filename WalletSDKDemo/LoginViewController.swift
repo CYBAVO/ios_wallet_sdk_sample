@@ -12,14 +12,13 @@ import SwiftEventBus
 import CYBAVOWallet
 import AuthenticationServices
 
-class LoginViewController: UIViewController, GIDSignInUIDelegate, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+class LoginViewController: UIViewController, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    
     @IBOutlet weak var signInButton: GIDSignInButton!
     @IBOutlet weak var appleAuthView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        GIDSignIn.sharedInstance().uiDelegate = self
         
         if #available(iOS 13.0, *) {
             let authorizationAppleIDButton: ASAuthorizationAppleIDButton = ASAuthorizationAppleIDButton()
@@ -43,7 +42,31 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, ASAuthorizatio
     }
     
     @IBAction func onSignInClick(_ sender: Any) {
-        GIDSignIn.sharedInstance().signIn()
+        let config = GIDConfiguration(clientID: GIDSignIn_ClientID)
+        GIDSignIn.sharedInstance.signIn(with: config, presenting: self) { user, error in
+
+            if let error = error {
+                print("Google signin delegate error: \(error.localizedDescription)")
+                SwiftEventBus.post("google_signed_in_failed")
+                return
+            }
+
+            if let user = user, let idToken = user.authentication.idToken {
+                // Perform any operations on signed in user here.
+                let userId = user.userID                  // For client-side use only!
+                let idToken = idToken // Safe to send to the server
+                let fullName = user.profile?.name
+                let email = user.profile?.email
+                print("user:\(String(describing: userId)), idToken:\(String(describing: idToken)), fullName:\(String(describing: fullName)), email:\(String(describing: email))")
+
+                let encodedData = try! NSKeyedArchiver.archivedData(withRootObject: user, requiringSecureCoding: false)
+                UserDefaults.standard.setValue(encodedData, forKey: "googlesignin_user")
+                let identity = Identity()
+                identity.provider = "Google"
+                identity.idToken = idToken
+                SwiftEventBus.post("google_signed_in", sender: identity)
+            }
+        }
     }
     
     @available(iOS 13.0, *)
@@ -113,18 +136,6 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, ASAuthorizatio
                 return "\(lastName)\(firstName)"
         }
         return "\(firstName) \(lastName)"
-    }
-}
-
-extension LoginViewController : GIDSignInDelegate {
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        print("GIDSignInDelegate didSignInFor")
-    }
-    func sign(_ signIn: GIDSignIn!, present viewController: UIViewController!) {
-        print("GIDSignInDelegate present")
-    }
-    func sign(_ signIn: GIDSignIn!, dismiss viewController: UIViewController!) {
-        print("GIDSignInDelegate dismiss")
     }
 }
 

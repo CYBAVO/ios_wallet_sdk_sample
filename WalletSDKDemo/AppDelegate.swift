@@ -14,29 +14,10 @@ import CYBAVOWallet
 import UserNotifications
 
 var PushDeviceToken = ""
+let GIDSignIn_ClientID = "MY_GOOGLE_SIGN_IN_WEB_CLI_ID"
 
 @UIApplicationMain
- class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate, UNUserNotificationCenterDelegate {
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        if let error = error {
-            print("Google signin delegate error: \(error.localizedDescription)")
-            SwiftEventBus.post("google_signed_in_failed")
-        } else {
-            // Perform any operations on signed in user here.
-            let userId = user.userID                  // For client-side use only!
-            let idToken = user.authentication.idToken // Safe to send to the server
-            let fullName = user.profile.name
-            let email = user.profile.email
-            print("user:\(String(describing: userId)), idToken:\(String(describing: idToken)), fullName:\(String(describing: fullName)), email:\(String(describing: email))")
-            
-            let encodedData = try! NSKeyedArchiver.archivedData(withRootObject: user, requiringSecureCoding: false)
-            UserDefaults.standard.setValue(encodedData, forKey: "googlesignin_user")
-            let identity = Identity()
-            identity.provider = "Google"
-            identity.idToken = user.authentication.idToken
-            SwiftEventBus.post("google_signed_in", sender: identity)
-        }
-    }
+ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     var window: UIWindow?
 
@@ -49,9 +30,6 @@ var PushDeviceToken = ""
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         
         //redirectLogToDocuments()
-        
-        GIDSignIn.sharedInstance().clientID = "MY_GOOGLE_SIGN_IN_WEB_CLI_ID"
-        GIDSignIn.sharedInstance().delegate = self
         
         initWalletSDK()
 
@@ -132,9 +110,7 @@ var PushDeviceToken = ""
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        return GIDSignIn.sharedInstance().handle(url as URL?,
-                                                 sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-                                                 annotation: options[UIApplication.OpenURLOptionsKey.annotation])
+        return GIDSignIn.sharedInstance.handle(url)
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
