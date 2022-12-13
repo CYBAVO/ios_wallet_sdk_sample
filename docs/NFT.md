@@ -6,6 +6,9 @@
   - [Deposit](#deposit)
   - [Withdraw](#withdraw)
   - [Transaction Detail](#transaction-detail)
+  - [Specific Usage](#specific-usage)
+    - [Solana NFT Tokens](#solana-nft-tokens)
+    - [Withdrawing Solana NFT Tokens](#withdrawing-solana-nft-tokens)
 
 ## NFT Wallet Creation
 
@@ -27,7 +30,7 @@ public func addContractCurrencies(currency: [Int64], contractAddress: [String], 
 
 - How to get a contract address?  
 You can find it on blockchain explorer.  
-Take CryptoKitties for example, you can find its contract address on Etherscan
+Take CryptoKitties for example, you can find its contract address on Etherscan:
 
   ![img](images/sdk_guideline/nft_etherscan_1.png)
 
@@ -37,13 +40,13 @@ Take CryptoKitties for example, you can find its contract address on Etherscan
 
 - Same way as we mentioned in [Wallet Information](wallets.md#wallet-information)
 - Conditions:
-  - `Wallet.isPrivate == false` ➜ it is on public chain
-  - `tokenAddress != ""` ➜ it is a mapped wallet (NFT wallet is also mapped wallet)
-  - `Currency.tokenVersion == 721 || 1155` ➜ it is an NFT wallet
+  - `Wallet.isPrivate == false` ➜ it is on public chain.
+  - `tokenAddress != ""` ➜ it is a mapped wallet (NFT wallet is also mapped wallet).
+  - `Currency.tokenVersion == 721 || 1155` ➜ it is an NFT wallet.
 
 ## Balance
 
-refer to [Balance](wallets.md#getbalances)
+Refer to [Balance](wallets.md#getbalances).
 
 ```swift
 protocol Balance {
@@ -56,8 +59,9 @@ protocol Balance {
 }
 ```
 
-- if ERC-721 (NFT), use `tokens`
-- if ERC-1155 (NFT), use `tokenIdAmounts`
+- For ERC-721 (NFT), use `tokens`.
+- For ERC-1155 (NFT), use `tokenIdAmounts`.
+- For Solana, see [Solana NFT Tokens](#solana-nft-tokens).
 
 - In order to present images, call `getMultipleTokenUri` to get token urls.
   
@@ -73,7 +77,7 @@ protocol Balance {
 
 ### Error Handling
 
-- for ERC-1155
+- For ERC-1155:
 
   ```swift
   /// If ERC-1155 token didn't show in wallet's balance, register token ID manually make them in track
@@ -87,16 +91,51 @@ protocol Balance {
 ## Deposit
 
 - Select a wallet address, create a new one if needed.
-- Generate QR code
+- Generate QR code.
 - Present the QR code for deposit.
 
 ## Withdraw
 
 - The steps are similar to normal transactions. Refer to [Withdraw](transaction.md#withdraw)
 - when `createTransaction()`
-  - for [EIP-721](https://eips.ethereum.org/EIPS/eip-721) , set parameter `amount = tokenId`
-  - for [EIP-1155](https://eips.ethereum.org/EIPS/eip-1155) , set parameter `amount = {token_amount}` and `extras = ["token_id": tokenId]`
+  - For [EIP-721](https://eips.ethereum.org/EIPS/eip-721) , set parameter `amount = tokenId`.
+  - For [EIP-1155](https://eips.ethereum.org/EIPS/eip-1155) , set parameter `amount = tokenIdAmount` and `extras.put("token_id", tokenId)`.
+  - For Solana, see [Withdrawing Solana NFT Tokens](#withdrawing-solana-nft-tokens).
 
 ## Transaction Detail
 
-- The steps are similar to normal transactions. Refer to [getHistory](transaction.md#gethistory)
+- The steps are similar to normal transactions. Refer to [getHistory](transaction.md#gethistory).
+
+## Specific Usage
+- There are specific API usages for some scenarios which related to NFT, you can find them in this section.
+
+### Solana NFT Tokens
+- For retriving Solana NFT tokens, please use `getSolNftTokens()`.
+```swift
+Wallets.shared.getSolNftTokens(walletId: wallet.walletId){ result in
+          switch result {
+            case .success(let result):
+                /**
+                  ex. tokenAddress: E3LybqvWfLus2KWyrYKYieLVeT6ENpE4znqkMZ9CTrPH, balance: 17,
+                      supply: 100, tokenStandard: Unknown
+                */
+                for tokenMeta in result.tokens{
+                    print("tokenAddress: \(tokenMeta.tokenAddress), balance: \(tokenMeta.balance),")
+                    print("supply: \(tokenMeta.supply), tokenStandard: \(tokenMeta.tokenStandard)")
+                }
+                break
+            case .failure(let error):
+                print("setSolTokenAccountTransaction failed\(error)")
+                break
+          }
+      }
+```
+### Withdrawing Solana NFT Tokens
+- For withdrawing Solana NFT tokens, put the selected `TokenMeta.tokenAddress` in extras `sol_token_id` then pass to `createTransaction()`.
+```swift
+let extras: [String:Any] = ["sol_token_id": selectedToken.tokenAddress]
+Wallets.shared.createTransaction(fromWalletId: wallet.walletId, 
+                                 toAddress: toAddress, amount: amount, transactionFee: fee, 
+                                 description: desc, pinSecret: pinSecret, extras:  extras) { result ... }
+```
+- For Solana NFT transactions, the `Transaction.tokenId` is the token address, for fungible asset transaction, this field will be empty.
