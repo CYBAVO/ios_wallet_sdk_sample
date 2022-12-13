@@ -69,6 +69,12 @@ We provide VAULT, wallet, ledger service for cryptocurrency. Trusted by many exc
 4. Open ```CYBAVOWallet.xcworkspace``` in xcode.
 5. Change the `Bundle Identifier` to yours and update signing settings.
 6. Edit `Settings.bundle`/`Root.plist` ➜ `SERVICE_ENDPOINT` to your Wallet Service endpoint.
+    - Test environment:
+        - On-Premises: set `SERVICE_ENDPOINT` = https://mvault.sandbox.cybavo.com/v1/mw
+        - SaaS: set `SERVICE_ENDPOINT` = https://mvault.sandbox.cybavo.com/v1/mw
+    - Production environment:
+        - On-Premises: set `SERVICE_ENDPOINT` = https://`<Your management portal URL>`/v1/mw
+        - SaaS: set `SERVICE_ENDPOINT` = https://appvault.cybavo.com/v1/mw
 7. Edit `Settings.bundle`/`Root.plist` ➜ `SERVICE_API_CODE` to fill in your API Code.
 8. Edit `AppDelegate.swift` ➜ `MY_GOOGLE_SIGN_IN_WEB_CLI_ID` to your Google sign-in client ID **(Optional)**
 9. Now you can run it on your device!
