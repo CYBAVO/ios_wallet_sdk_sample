@@ -7,7 +7,7 @@
   - [Transaction Replacement](#transaction-replacement)
   - [Interact with Smart Contract](#interact-with-smart-contract)
   - [Specific Usage](#specific-usage)
-    - [Solana SignMessage](#solana-signmessage)
+    - [Get Action Token for Sign Message](#get-action-token-for-sign-message)
     - [Solana ATA](#solana-ata)
 
 ## Deposit
@@ -477,24 +477,59 @@ Wallet SDK provides APIs to call [ABI](https://docs.soliditylang.org/en/develop/
 
 ## Specific Usage
 There are specific API usages for some scenarios which related to transaction, you can find them in this section.
-### Solana SignMessage
-Since `signMessage()` of Solana can be used to sign a raw transaction, in order to help the caller be more cautious before signing, it required to get an action token then pass to `signMessage()` to verify.
+### Get Action Token for Sign Message
+In below two cases, `signMessage()` and `walletConnectSignMessage()` can also be used to sign a raw transaction: 
+- Solana Sign Message
+- Legacy Sign Message for EVM Compatible Currency  
+
+In order to help the caller be more cautious before signing, it is required to get an action token then pass to sign message API to verify.  
+- The sample code snippet for `signMessage()`:
 ```swift
 /**
- * 1. Get action token for signMessage,
+ * 1. Get action token for signMessage(),
  * the "message" of getSignMessageActionToken() and signMessage() should be the same.
  */
 Wallets.shared.getSignMessageActionToken(message: message){ result in
     switch result {
         case .success(let result):
-        // 2. Put it in a dictionary and pass to signMessage().
-        var extras: [String:Any] = ["confirmed_action_token": result.actionToken]
-            Wallets.shared.signMessage(walletId: walletId, message: message, currentPinSecret: pinSecret, extras: extras){ result in
+            // 2. Put it in a dictionary and pass to signMessage().
+            var extras: [String:Any] = ["confirmed_action_token": result. actionToken]
+            // Put "legacy" true means legacy sign.
+            extras["legacy"] = true
+
+            Wallets.shared.signMessage(walletId: walletId, message: message, pinSecret: pinSecret, extras: extras){ result in
                 switch result {
                     case .success(let result):
-                      print("signedMessage \(result.signedMessage)")
+                      print("signedMessage: \(result.signedMessage)")
                     case .failure(let error):
                         print("signMessage failed \(error)")
+                }
+            }
+        case .failure(let error):
+            print("getSignMessageActionToken failed \(error)")
+    }
+}
+```
+- The sample code snippet for `walletConnectSignMessage()`, it is very similar to `signMessage()`:
+```swift
+/**
+ * 1. Get action token for walletConnectSignMessage(),
+ * the "message" of getSignMessageActionToken() and walletConnectSignMessage() should be the same.
+ */
+Wallets.shared.getSignMessageActionToken(message: message){ result in
+    switch result {
+        case .success(let result):
+            // 2. Put it in a dictionary and pass to walletConnectSignMessage().
+            var extras: [String:Any] = ["confirmed_action_token": result. actionToken]
+            // Put "legacy" true means legacy sign.
+            extras["legacy"] = true
+
+            Wallets.shared.walletConnectSignMessage(walletId: walletId, message: message, pinSecret: pinSecret, extras: extras){ result in
+                switch result {
+                    case .success(let result):
+                      print("signedMessage: \(result.signedMessage)")
+                    case .failure(let error):
+                        print("walletConnectSignMessage failed \(error)")
                 }
             }
         case .failure(let error):
