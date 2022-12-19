@@ -495,7 +495,7 @@ Wallets.shared.getSignMessageActionToken(message: message){ result in
             // 2. Put it in a dictionary and pass to signMessage().
             var extras: [String:Any] = ["confirmed_action_token": result. actionToken]
             // Put "legacy" true means legacy sign.
-            extras["legacy"] = true;
+            extras["legacy"] = true
 
             Wallets.shared.signMessage(walletId: walletId, message: message, pinSecret: pinSecret, extras: extras){ result in
                 switch result {
@@ -522,7 +522,7 @@ Wallets.shared.getSignMessageActionToken(message: message){ result in
             // 2. Put it in a dictionary and pass to walletConnectSignMessage().
             var extras: [String:Any] = ["confirmed_action_token": result. actionToken]
             // Put "legacy" true means legacy sign.
-            extras["legacy"] = true;
+            extras["legacy"] = true
 
             Wallets.shared.walletConnectSignMessage(walletId: walletId, message: message, pinSecret: pinSecret, extras: extras){ result in
                 switch result {
