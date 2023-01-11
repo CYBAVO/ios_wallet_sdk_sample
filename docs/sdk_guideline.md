@@ -517,7 +517,7 @@ public struct ApiError : Error {
 
     public let message: String
 
-    public let detailMessage: String // // The detailed error message.
+    public let detailMessage: String // The detailed error message.
 
     public var name: String { get }
 
@@ -532,7 +532,7 @@ Auth.shared.signIn(token: identity.idToken, identityProvider: identity.provider)
                 break
             case .failure(let error):
                 if error.code == .ErrRegistrationRequired {
-                    // registration required
+                    // Registration required.
                     self.doSignUp(identity: identity)
                 }
                 self.showSignIn()
