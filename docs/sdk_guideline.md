@@ -511,15 +511,17 @@ There are 2 types of push notification: **Transacion** and **Announcement**.
 ```swift
 public struct ApiError : Error {
 
-    public enum ErrorCode : Int { … } // some error codes we defined
+    public enum ErrorCode : Int { … } // Some error codes we defined.
     
     public let code: CYBAVOWallet.ApiError.ErrorCode
 
     public let message: String
 
+    public let detailMessage: String // // The detailed error message.
+
     public var name: String { get }
 
-    public init(code: CYBAVOWallet.ApiError.ErrorCode, message: String)
+    public init(code: CYBAVOWallet.ApiError.ErrorCode, message: String, detailMessage: String = "")
 }
 ```
  Usage
