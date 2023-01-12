@@ -517,9 +517,11 @@ public struct ApiError : Error {
 
     public let message: String
 
+    public let detailMessage: String
+
     public var name: String { get }
 
-    public init(code: CYBAVOWallet.ApiError.ErrorCode, message: String)
+    public init(code: CYBAVOWallet.ApiError.ErrorCode, message: String, detailMessage: String = "")
 }
 ```
  Usage
