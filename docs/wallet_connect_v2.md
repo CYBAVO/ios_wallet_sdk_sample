@@ -184,10 +184,10 @@
     ```swift
     /// Get supported chain as a map for WalletConnect. The map key is CAIP-2 chain ID.
     /// - Parameters:
-    ///   - Parameter completion: Asynchronized callback
+    ///   - completion: Asynchronized callback
     public func walletConnectGetSupportedChain(completion: @escaping Callback<WalletConnectGetSupportedChainResult>) {
     ```
-4. Approve session proposal with proposer's public key and namespaces, see [Session Approval](https://docs.walletconnect.com/2.0/android/web3wallet/wallet-usage#session-approval).
+4. Approve session proposal with proposal ID and namespaces, see [Session Approval](https://docs.walletconnect.com/2.0/ios/web3wallet/wallet-usage#approve-session).
 
 
 ## Session Request
