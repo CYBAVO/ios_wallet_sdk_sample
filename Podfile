@@ -2,7 +2,7 @@
 platform :ios, '11.0'
 
 source 'https://github.com/CocoaPods/Specs.git'
-source 'https://github.com/CYBAVO/hw-sdk_ios_release.git'
+source 'https://github.com/CYBAVO/hw-sdk-ios-release.git'
 
 target 'WalletSDKDemo' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
@@ -26,6 +26,9 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+
+      # See this: https://developer.apple.com/forums/thread/725300
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
     end
   end
 end
